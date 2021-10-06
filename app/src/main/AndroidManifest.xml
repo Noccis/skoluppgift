@@ -10,6 +10,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HelpWithPicturesApp">
         <activity
+            android:name=".HowToDoItActivity"
+            android:exported="true" />
+        <activity
+            android:name=".ToDoActivity"
+            android:exported="true" />
+        <activity
+            android:name=".WeekdaysActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
