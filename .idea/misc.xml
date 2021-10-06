@@ -3,11 +3,11 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-<<<<<<< HEAD
-        <entry key="..\:/Users/jespe/AndroidStudioProjects/HelpWithPicturesApp/app/src/main/res/layout/activity_main.xml" value="0.16770833333333332" />
-=======
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1381340579710145" />
->>>>>>> 9df005e2f29eb9caf00bd848e13550b21fa2ce25
+        <entry key="..\:/Users/jespe/AndroidStudioProjects/HelpWithPicturesApp/app/src/main/res/layout/activity_how_to_do_it.xml" value="0.553125" />
+        <entry key="..\:/Users/jespe/AndroidStudioProjects/HelpWithPicturesApp/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/jespe/AndroidStudioProjects/HelpWithPicturesApp/app/src/main/res/layout/activity_to_do.xml" value="0.536" />
+        <entry key="..\:/Users/jespe/AndroidStudioProjects/HelpWithPicturesApp/app/src/main/res/layout/activity_weekdays.xml" value="0.536" />
+        <entry key="..\:/Users/jespe/AndroidStudioProjects/HelpWithPicturesApp/app/src/main/res/layout/list_actions.xml" value="0.536" />
       </map>
     </option>
   </component>
