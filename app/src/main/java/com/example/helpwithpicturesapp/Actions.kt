@@ -27,10 +27,15 @@ class ActionsList() {
                                     R.drawable.dammsug,
                                     false
             )
+            val dinner = Actions(
+                                    R.drawable.dinner,
+                                    false
+            )
 
             listOfActions.add(brushTeeth)
             listOfActions.add(clean)
             listOfActions.add(vacumClean)
+            listOfActions.add(dinner)
 
         }
     }
