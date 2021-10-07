@@ -11,13 +11,13 @@ class InstructionList() {
 
 
     init {
-        var i1 = Instructions(
+        val i1 = Instructions(
                                 R.drawable.borstatander,
                                 "Borsta, borsta, borsta, båda uppe och nere"
 
         )
 
-        var i2 = Instructions(
+        val i2 = Instructions(
                                 R.drawable.clean,
                                 "Plocka, plocka, plocka och lägg tillbaka saker på var sin plats"
         )
@@ -25,10 +25,15 @@ class InstructionList() {
                                 R.drawable.dammsug,
                                 "Damsug ordentligt under soffan"
         )
+        val i4 = Instructions(
+                                R.drawable.dinner,
+                                "Äta middag"
+        )
 
         listOfInstructions.add(i1)
         listOfInstructions.add(i2)
         listOfInstructions.add(i3)
+        listOfInstructions.add(i4)
 
 
     }
