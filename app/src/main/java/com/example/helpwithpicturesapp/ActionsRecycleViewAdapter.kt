@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 
 class ActionsRecycleViewAdapter(val context: Context, val actions: List<Actions>):
@@ -16,7 +17,7 @@ RecyclerView.Adapter<ActionsRecycleViewAdapter.ViewHolder>(){
 
     inner class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
 
-        val imageButtonView = itemView.findViewById<ImageButton>(R.id.imageButton)
+        val imageButtonView = itemView.findViewById<ImageView>(R.id.imageButton)
         val checkBoxView = itemView.findViewById<CheckBox>(R.id.checkBox_Button)
         var actionsPosition = 0
 
