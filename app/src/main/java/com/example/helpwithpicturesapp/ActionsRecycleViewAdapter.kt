@@ -9,6 +9,7 @@ import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 
 class ActionsRecycleViewAdapter(val context: Context, val actions: List<Actions>):
 RecyclerView.Adapter<ActionsRecycleViewAdapter.ViewHolder>(){
@@ -37,13 +38,14 @@ RecyclerView.Adapter<ActionsRecycleViewAdapter.ViewHolder>(){
         parent: ViewGroup, viewType: Int): ActionsRecycleViewAdapter.ViewHolder {
         val itemView = layoutInflater.inflate(R.layout.list_actions,parent,false)
 
+
+
         return ViewHolder(itemView)
     }
 
     override fun onBindViewHolder(holder: ActionsRecycleViewAdapter.ViewHolder, position: Int) {
         val actions = actions[position]
 
-        holder.imageButtonView.setImageResource(actions.image)
         holder.checkBoxView.isChecked = actions.checkBox
         holder.actionsPosition = position
 

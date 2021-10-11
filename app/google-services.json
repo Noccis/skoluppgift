@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "654343628737",
+    "project_id": "helpwithpicturesapp-f9c12",
+    "storage_bucket": "helpwithpicturesapp-f9c12.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:654343628737:android:ddaff2e14e93057e023140",
+        "android_client_info": {
+          "package_name": "com.example.helpwithpicturesapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "654343628737-uv8rn45qvfo91eq24fjamjjf74kg342c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAFb83ufB-FUWm7e4ultSMa6509iE-b3cI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "654343628737-uv8rn45qvfo91eq24fjamjjf74kg342c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

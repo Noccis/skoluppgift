@@ -3,25 +3,56 @@ package com.example.helpwithpicturesapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.ImageButton
+import android.widget.ImageView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ToDoActivity : AppCompatActivity() {
 
-    val diffrentActions = ActionsList()
     lateinit var addButton: FloatingActionButton
+    lateinit var recyclerView: RecyclerView
+    lateinit var imageView: ImageView
+    val diffrentInstructions = ActionsList()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
 
 
-        val recyclerView = findViewById<RecyclerView>(R.id.recyclerView)
+        recyclerView = findViewById(R.id.recyclerView)
+        imageView = findViewById(R.id.imageButton)
+
+
+        val db = FirebaseFirestore.getInstance()
+        val newActions = mutableListOf<Actions>()
+        val actionsRef = db.collection("Weekdays").document("Days")
+
+        actionsRef.get().addOnSuccessListener { document ->
+            if(document != null) {
+
+                val image1 = document.getString("brushteeth")
+               // val image2 = document.getString("clean")
+               // val image3 = document.getString("dinner")
+               // val image4 = document.getString("vacumclean")
+                Glide.with(this).load(image1).into(imageView)
+
+
+
+            }
+
+
+        }
+
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val adapter = ActionsRecycleViewAdapter(this,diffrentActions.listOfActions)
+        val adapter = ActionsRecycleViewAdapter(this,diffrentInstructions.listOfActions)
 
         recyclerView.adapter = adapter
 

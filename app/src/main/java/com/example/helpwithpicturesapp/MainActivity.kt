@@ -15,8 +15,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        userSeeInsrtuctionsView = findViewById(R.id.instructions_Tv)
 
+        userSeeInsrtuctionsView = findViewById(R.id.instructions_Tv)
         val nextPageButton = findViewById<Button>(R.id.button_NextPage)
         nextPageButton.setOnClickListener {
             weekdayPage()
