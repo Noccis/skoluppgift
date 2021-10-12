@@ -1,7 +1,8 @@
 package com.example.helpwithpicturesapp
 
-class Actions(
-                var image: Int,
+import com.bumptech.glide.Glide
+
+data class Actions(  var image: String? = null,
                 var checkBox: Boolean = false,
 )
 
@@ -11,24 +12,22 @@ class ActionsList() {
 
         init {
 
-
             val brushTeeth = Actions(
-                                    R.drawable.borstatander,
+                                    "https://firebasestorage.googleapis.com/v0/b/helpwithpicturesapp-f9c12.appspot.com/o/borstatander.jpg?alt=media&token=5efb925b-76d9-48db-98ea-ba6dee1739eb",
                                     false
             )
 
             val clean = Actions(
-                                    R.drawable.clean,
+                                    "https://firebasestorage.googleapis.com/v0/b/helpwithpicturesapp-f9c12.appspot.com/o/clean.jpg?alt=media&token=15355b0b-68ad-4f8f-abbb-9abfa6673388",
                                     false
             )
 
             val vacumClean = Actions(
-
-                                    R.drawable.dammsug,
+                                    "https://firebasestorage.googleapis.com/v0/b/helpwithpicturesapp-f9c12.appspot.com/o/dammsug.jpg?alt=media&token=95e00a58-c822-4a2c-b678-2018d55fb49e",
                                     false
             )
             val dinner = Actions(
-                                    R.drawable.dinner,
+                                    "https://firebasestorage.googleapis.com/v0/b/helpwithpicturesapp-f9c12.appspot.com/o/dinner.jpg?alt=media&token=55f478b8-b416-4345-8629-0b877b676443",
                                     false
             )
 
