@@ -2,7 +2,7 @@ package com.example.helpwithpicturesapp
 
 import com.bumptech.glide.Glide
 
-class Actions(  var image: String? = null,
+data class Actions(  var image: String? = null,
                 var checkBox: Boolean = false,
 )
 

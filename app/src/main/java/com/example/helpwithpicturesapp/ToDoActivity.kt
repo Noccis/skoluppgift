@@ -16,7 +16,6 @@ class ToDoActivity : AppCompatActivity() {
 
     lateinit var addButton: FloatingActionButton
     lateinit var recyclerView: RecyclerView
-    lateinit var imageView: ImageView
     val diffrentInstructions = ActionsList()
 
 
@@ -26,9 +25,9 @@ class ToDoActivity : AppCompatActivity() {
 
 
         recyclerView = findViewById(R.id.recyclerView)
-        imageView = findViewById(R.id.imageButton)
 
 
+/*
         val db = FirebaseFirestore.getInstance()
         val newActions = mutableListOf<Actions>()
         val actionsRef = db.collection("Weekdays").document("Days")
@@ -47,9 +46,11 @@ class ToDoActivity : AppCompatActivity() {
             }
 
 
+
+
         }
 
-
+ */
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         val adapter = ActionsRecycleViewAdapter(this,diffrentInstructions.listOfActions)

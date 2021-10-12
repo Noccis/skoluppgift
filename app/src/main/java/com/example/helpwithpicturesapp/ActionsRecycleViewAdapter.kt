@@ -10,11 +10,14 @@ import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FirebaseFirestore
 
 class ActionsRecycleViewAdapter(val context: Context, val actions: List<Actions>):
 RecyclerView.Adapter<ActionsRecycleViewAdapter.ViewHolder>(){
 
     val layoutInflater = LayoutInflater.from(context)
+    val db = FirebaseFirestore.getInstance()
+    val actionsRef = db.collection("Weekdays").document("Days")
 
     inner class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
 
@@ -45,6 +48,8 @@ RecyclerView.Adapter<ActionsRecycleViewAdapter.ViewHolder>(){
 
     override fun onBindViewHolder(holder: ActionsRecycleViewAdapter.ViewHolder, position: Int) {
         val actions = actions[position]
+        Glide.with(context).load("https://firebasestorage.googleapis.com/v0/b/helpwithpicturesapp-f9c12.appspot.com/o/borstatander.jpg?alt=media&token=5efb925b-76d9-48db-98ea-ba6dee1739eb")
+            .into(holder.imageButtonView)
 
         holder.checkBoxView.isChecked = actions.checkBox
         holder.actionsPosition = position
