@@ -48,8 +48,17 @@ RecyclerView.Adapter<ActionsRecycleViewAdapter.ViewHolder>(){
 
     override fun onBindViewHolder(holder: ActionsRecycleViewAdapter.ViewHolder, position: Int) {
         val actions = actions[position]
-        Glide.with(context).load("https://firebasestorage.googleapis.com/v0/b/helpwithpicturesapp-f9c12.appspot.com/o/borstatander.jpg?alt=media&token=5efb925b-76d9-48db-98ea-ba6dee1739eb")
-            .into(holder.imageButtonView)
+
+        actionsRef.get().addOnSuccessListener { document ->
+            if(document != null) {
+                val image1 = document.getString("brushteeth")
+                val image2 = document.getString("clean")
+
+                Glide.with(context).load(image1).into(holder.imageButtonView)
+                Glide.with(context).load(image2).into(holder.imageButtonView)
+
+            }
+        }
 
         holder.checkBoxView.isChecked = actions.checkBox
         holder.actionsPosition = position
