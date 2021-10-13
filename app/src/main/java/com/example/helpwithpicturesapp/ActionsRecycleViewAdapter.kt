@@ -17,7 +17,7 @@ RecyclerView.Adapter<ActionsRecycleViewAdapter.ViewHolder>(){
 
     val layoutInflater = LayoutInflater.from(context)
     val db = FirebaseFirestore.getInstance()
-    val actionsRef = db.collection("Weekdays").document("Days")
+    val actionsRef = db.collection("Weekday").document("Days")
 
     inner class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
 
@@ -47,20 +47,11 @@ RecyclerView.Adapter<ActionsRecycleViewAdapter.ViewHolder>(){
     }
 
     override fun onBindViewHolder(holder: ActionsRecycleViewAdapter.ViewHolder, position: Int) {
-        val actions = actions[position]
+        val action = actions[position]
 
-        actionsRef.get().addOnSuccessListener { document ->
-            if(document != null) {
-                val image1 = document.getString("brushteeth")
-                val image2 = document.getString("clean")
 
-                Glide.with(context).load(image1).into(holder.imageButtonView)
-                Glide.with(context).load(image2).into(holder.imageButtonView)
-
-            }
-        }
-
-        holder.checkBoxView.isChecked = actions.checkBox
+        Glide.with(context).load(action.imageId).into(holder.imageButtonView)
+        holder.checkBoxView.isChecked = action.checkBox
         holder.actionsPosition = position
 
 
