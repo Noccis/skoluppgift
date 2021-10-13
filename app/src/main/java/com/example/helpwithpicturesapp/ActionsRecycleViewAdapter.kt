@@ -17,7 +17,7 @@ RecyclerView.Adapter<ActionsRecycleViewAdapter.ViewHolder>(){
 
     val layoutInflater = LayoutInflater.from(context)
     val db = FirebaseFirestore.getInstance()
-    val actionsRef = db.collection("Weekdays").document("Days")
+    val actionsRef = db.collection("Weekday").document("Days")
 
     inner class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
 

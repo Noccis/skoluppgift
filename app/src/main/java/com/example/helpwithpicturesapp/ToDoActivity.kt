@@ -30,7 +30,7 @@ class ToDoActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
 
         val db = FirebaseFirestore.getInstance()
-        val actionsRef = db.collection("Weekdays").document("monday")
+        val actionsRef = db.collection("Actions").document("K0TPFYF40iP72uhnRt4K")
 
 
 /*
@@ -56,16 +56,16 @@ class ToDoActivity : AppCompatActivity() {
             if(snapshot != null) {
                 Log.d(TAG,"1. onCreate: database changed!")
 
-                val newAction = snapshot.toObject(Weekday::class.java)
+                val newAction = snapshot.toObject(Actions::class.java)
                 Log.d(TAG, "2. onCreate: ${newAction}")
                 if (newAction != null) {
-                    diffrentInstructions.add(newAction)
+                    action.add(newAction)
                 }
 
             }
 
         }
-        Log.d(TAG,"3 .onCreate: ${diffrentInstructions.size}")
+        Log.d(TAG,"3 .onCreate: ${action.size}")
 
 
 
