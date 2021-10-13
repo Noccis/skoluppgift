@@ -29,48 +29,37 @@ class ToDoActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
 
-        val db = FirebaseFirestore.getInstance()
-        val actionsRef = db.collection("Actions").document("K0TPFYF40iP72uhnRt4K")
-/*
-        val db = FirebaseFirestore.getInstance()
-        val newActions = mutableListOf<Actions>()
-        val actionsRef = db.collection("Weekdays").document("Days")
 
-        actionsRef.get().addOnSuccessListener { document ->
-            if(document != null) {
-
-                val image1 = document.getString("brushteeth")
-               // val image2 = document.getString("clean")
-               // val image3 = document.getString("dinner")
-               // val image4 = document.getString("vacumclean")
-                Glide.with(this).load(image1).into(imageView)
-
-           }
-
+        /*
+db.collection("Weekday").document("monday").get()
+    .addOnSuccessListener { snapshot ->
+        if (snapshot != null) {
+            val monday = snapshot.toObject(Weekday::class.java)
+            if (monday != null) {
+                Log.d("ffs", "Hurra! ${monday.name} har färgId ${monday.color}")
+                dayTextView.text = monday.name
+                dayTextView.setBackgroundColor(monday.color)
+            }
         }
+
+    }
 
  */
-        actionsRef.get().addOnSuccessListener { snapshot ->
-            if(snapshot != null) {
-                Log.d(TAG,"1. onCreate: database changed!")
 
-                val newAction = snapshot.toObject(Actions::class.java)
-                Log.d(TAG, "2. onCreate: ${newAction}")
-                if (newAction != null) {
-                    action.add(newAction)
+        val db = FirebaseFirestore.getInstance()
+        //val actionsRef = db.collection("Actions").document("K0TPFYF40iP72uhnRt4K")
+
+
+
+        db.collection("Actions").document("K0TPFYF40iP72uhnRt4K")
+            .addSnapshotListener { snapshot, e ->
+                if(snapshot != null) {
+                    val brushTeeth = snapshot.toObject(Actions::class.java)
+                    if(brushTeeth != null) {
+
+                    }
                 }
-
             }
-
-        }
-        Log.d(TAG,"3 .onCreate: ${action.size}")
-
-
-
-
-
-
-
 
 
 
@@ -95,11 +84,23 @@ class ToDoActivity : AppCompatActivity() {
     }
 
 
-
-
-
-
-
-
-
 }
+/*
+        val db = FirebaseFirestore.getInstance()
+        val newActions = mutableListOf<Actions>()
+        val actionsRef = db.collection("Weekdays").document("Days")
+
+        actionsRef.get().addOnSuccessListener { document ->
+            if(document != null) {
+
+                val image1 = document.getString("brushteeth")
+               // val image2 = document.getString("clean")
+               // val image3 = document.getString("dinner")
+               // val image4 = document.getString("vacumclean")
+                Glide.with(this).load(image1).into(imageView)
+
+           }
+
+        }
+
+ */
