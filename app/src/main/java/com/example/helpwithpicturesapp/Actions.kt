@@ -3,7 +3,7 @@ package com.example.helpwithpicturesapp
 import com.bumptech.glide.Glide
 
 data class Actions(  var documentName: String? = null, // här kan man sätta dokument ID. ska vi ha det namnet?
-                     var imageId: Int = 0,
+                     var imageId: String? = null,
                      var checkBox: Boolean = false,
                      var imageText: String? = null,
 ) {
