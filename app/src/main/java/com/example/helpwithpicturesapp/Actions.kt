@@ -2,12 +2,19 @@ package com.example.helpwithpicturesapp
 
 import com.bumptech.glide.Glide
 
-data class Actions(  var image: String? = null,
-                var checkBox: Boolean = false,
-)
+data class Actions(  var documentName: String? = null, // här kan man sätta dokument ID. ska vi ha det namnet?
+                     var imageId: String? = null,
+                     var checkBox: Boolean = false,
+                     var imageText: String? = null,
+) {
 
+    val listOfActionSteps = mutableListOf<ActionSteps>()
+}
 
+// Den här klassen nedan behöver tas bort och ersättas med listOfActions i Weekday klassen
+/*
 class ActionsList() {
+
     var listOfActions: MutableList<Actions> = mutableListOf()
 
         init {
@@ -38,4 +45,6 @@ class ActionsList() {
 
         }
     }
+
+ */
 
