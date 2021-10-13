@@ -28,6 +28,9 @@ class ToDoActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
 
+        val db = FirebaseFirestore.getInstance()
+        val actionsRef = db.collection("Weekdays").document("Måndag")
+
 
 /*
         val db = FirebaseFirestore.getInstance()
@@ -43,12 +46,7 @@ class ToDoActivity : AppCompatActivity() {
                // val image4 = document.getString("vacumclean")
                 Glide.with(this).load(image1).into(imageView)
 
-
-
-            }
-
-
-
+           }
 
         }
 
