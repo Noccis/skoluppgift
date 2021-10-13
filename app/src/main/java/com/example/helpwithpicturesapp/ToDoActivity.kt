@@ -32,7 +32,18 @@ class ToDoActivity : AppCompatActivity() {
         val db = FirebaseFirestore.getInstance()
         val actionsRef = db.collection("Actions").document("K0TPFYF40iP72uhnRt4K")
 
+        val monday = Weekday(color = R.color.monday)
 
+
+
+        db.collection("Weekday").document("monday").set(monday
+        )
+            .addOnSuccessListener { documentReference ->
+                Log.d("ffs", "hell yes!")
+            }
+            .addOnFailureListener { e ->
+                Log.w("ffs", "Error adding document", e)
+            }
 /*
         val db = FirebaseFirestore.getInstance()
         val newActions = mutableListOf<Actions>()
