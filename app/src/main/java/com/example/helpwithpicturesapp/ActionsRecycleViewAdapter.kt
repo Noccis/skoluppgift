@@ -47,11 +47,11 @@ RecyclerView.Adapter<ActionsRecycleViewAdapter.ViewHolder>(){
     }
 
     override fun onBindViewHolder(holder: ActionsRecycleViewAdapter.ViewHolder, position: Int) {
-        val actions = actions[position]
+        val action = actions[position]
 
 
-        Glide.with(context).load(actions.imageId).into(holder.imageButtonView)
-        holder.checkBoxView.isChecked = actions.checkBox
+        Glide.with(context).load(action.imageId).into(holder.imageButtonView)
+        holder.checkBoxView.isChecked = action.checkBox
         holder.actionsPosition = position
 
 

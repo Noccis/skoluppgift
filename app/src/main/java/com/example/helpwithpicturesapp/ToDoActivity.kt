@@ -16,9 +16,10 @@ class ToDoActivity : AppCompatActivity() {
 
     lateinit var addButton: FloatingActionButton
     lateinit var recyclerView: RecyclerView
-    val diffrentInstructions = mutableListOf<Actions>()
-    val db = FirebaseFirestore.getInstance()
-    val actionsRef = db.collection("Weekdays").document("Days")
+    val diffrentInstructions = mutableListOf<Weekday>()
+    val action = mutableListOf<Actions>()
+    val TAG = "!!!"
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -29,7 +30,7 @@ class ToDoActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
 
         val db = FirebaseFirestore.getInstance()
-        val actionsRef = db.collection("Weekdays").document("Måndag")
+        val actionsRef = db.collection("Weekdays").document("monday")
 
 
 /*
@@ -51,6 +52,21 @@ class ToDoActivity : AppCompatActivity() {
         }
 
  */
+        actionsRef.get().addOnSuccessListener { snapshot ->
+            if(snapshot != null) {
+                Log.d(TAG,"1. onCreate: database changed!")
+
+                val newAction = snapshot.toObject(Weekday::class.java)
+                Log.d(TAG, "2. onCreate: ${newAction}")
+                if (newAction != null) {
+                    diffrentInstructions.add(newAction)
+                }
+
+            }
+
+        }
+        Log.d(TAG,"3 .onCreate: ${diffrentInstructions.size}")
+
 
 
 
@@ -65,7 +81,7 @@ class ToDoActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val adapter = ActionsRecycleViewAdapter(this,diffrentInstructions)
+        val adapter = ActionsRecycleViewAdapter(this,action)
 
         recyclerView.adapter = adapter
 
