@@ -31,8 +31,6 @@ class ToDoActivity : AppCompatActivity() {
 
         val db = FirebaseFirestore.getInstance()
         val actionsRef = db.collection("Actions").document("K0TPFYF40iP72uhnRt4K")
-
-
 /*
         val db = FirebaseFirestore.getInstance()
         val newActions = mutableListOf<Actions>()
