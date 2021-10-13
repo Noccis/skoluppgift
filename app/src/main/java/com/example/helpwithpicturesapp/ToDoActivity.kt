@@ -47,19 +47,10 @@ db.collection("Weekday").document("monday").get()
  */
 
         val db = FirebaseFirestore.getInstance()
-        //val actionsRef = db.collection("Actions").document("K0TPFYF40iP72uhnRt4K")
+        val actionsRef = db.collection("Actions").document("K0TPFYF40iP72uhnRt4K")
 
 
 
-        db.collection("Actions").document("K0TPFYF40iP72uhnRt4K")
-            .addSnapshotListener { snapshot, e ->
-                if(snapshot != null) {
-                    val brushTeeth = snapshot.toObject(Actions::class.java)
-                    if(brushTeeth != null) {
-
-                    }
-                }
-            }
 
 
 
