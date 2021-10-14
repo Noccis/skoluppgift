@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -16,9 +17,10 @@ class ToDoActivity : AppCompatActivity() {
 
     lateinit var addButton: FloatingActionButton
     lateinit var recyclerView: RecyclerView
-    val diffrentInstructions = mutableListOf<Weekday>()
+   // val diffrentInstructions = mutableListOf<Weekday>()
     val action = mutableListOf<Actions>()
     val TAG = "!!!"
+
 
 
 
@@ -29,8 +31,69 @@ class ToDoActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
 
+
         val db = FirebaseFirestore.getInstance()
-        val actionsRef = db.collection("Actions").document("K0TPFYF40iP72uhnRt4K")
+        val actionsRef = db.collection("Actions").document("breakfast")
+
+        
+        actionsRef.get().addOnSuccessListener { snapshot ->
+            if(snapshot != null) {
+                Log.d(TAG,"1. onCreate: database changed!")
+
+                val newAction = snapshot.toObject(Actions::class.java)
+                Log.d(TAG, "2. onCreate: ${newAction}")
+                if (newAction != null) {
+                    action.add(newAction)
+                }
+                recyclerView.adapter?.notifyDataSetChanged()
+
+            }
+
+        }
+        Log.d(TAG,"3 .onCreate: ${action.size}")
+
+
+
+
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        val adapter = ActionsRecycleViewAdapter(this,action)
+
+        recyclerView.adapter = adapter
+
+        addButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
+        addButton.setOnClickListener {
+            val intent = Intent(this,UserCreateAndEditActivity::class.java)
+            startActivity(intent)
+        }
+
+
+
+
+
+    }
+
+
+}
+/*
+db.collection("Weekday").document("monday").get()
+  .addOnSuccessListener { snapshot ->
+      if (snapshot != null) {
+          val monday = snapshot.toObject(Weekday::class.java)
+          if (monday != null) {
+              Log.d("ffs", "Hurra! ${monday.name} har färgId ${monday.color}")
+              dayTextView.text = monday.name
+              dayTextView.setBackgroundColor(monday.color)
+          }
+      }
+
+  }
+
+*/
+
+
+
+
 /*
         val db = FirebaseFirestore.getInstance()
         val newActions = mutableListOf<Actions>()
@@ -50,56 +113,3 @@ class ToDoActivity : AppCompatActivity() {
         }
 
  */
-        actionsRef.get().addOnSuccessListener { snapshot ->
-            if(snapshot != null) {
-                Log.d(TAG,"1. onCreate: database changed!")
-
-                val newAction = snapshot.toObject(Actions::class.java)
-                Log.d(TAG, "2. onCreate: ${newAction}")
-                if (newAction != null) {
-                    action.add(newAction)
-                }
-
-            }
-
-        }
-        Log.d(TAG,"3 .onCreate: ${action.size}")
-
-
-
-
-
-
-
-
-
-
-
-
-
-        recyclerView.layoutManager = LinearLayoutManager(this)
-
-        val adapter = ActionsRecycleViewAdapter(this,action)
-
-        recyclerView.adapter = adapter
-
-        addButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
-        addButton.setOnClickListener {
-            // Add new instruction
-        }
-
-
-
-
-
-    }
-
-
-
-
-
-
-
-
-
-}
