@@ -8,20 +8,21 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.ImageButton
 import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 
-class ActionsRecycleViewAdapter(val context: Context, val actions: List<Actions>):
-RecyclerView.Adapter<ActionsRecycleViewAdapter.ViewHolder>(){
+class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions>):
+    RecyclerView.Adapter<ActionsRecycleViewAdapter.ViewHolder>(){
 
     val layoutInflater = LayoutInflater.from(context)
-    val db = FirebaseFirestore.getInstance()
-    val actionsRef = db.collection("Weekday").document("Days")
+
 
     inner class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
 
         val imageButtonView = itemView.findViewById<ImageView>(R.id.imageButton)
+        val imageText = itemView.findViewById<TextView>(R.id.imageText)
         val checkBoxView = itemView.findViewById<CheckBox>(R.id.checkBox_Button)
         var actionsPosition = 0
 
@@ -47,17 +48,18 @@ RecyclerView.Adapter<ActionsRecycleViewAdapter.ViewHolder>(){
     }
 
     override fun onBindViewHolder(holder: ActionsRecycleViewAdapter.ViewHolder, position: Int) {
-        val action = actions[position]
+        val action = action[position]
 
 
         Glide.with(context).load(action.imageId).into(holder.imageButtonView)
         holder.checkBoxView.isChecked = action.checkBox
         holder.actionsPosition = position
+        holder.imageText.text = action.imageText
 
 
     }
 
     override fun getItemCount(): Int {
-        return actions.size
+        return action.size
     }
 }

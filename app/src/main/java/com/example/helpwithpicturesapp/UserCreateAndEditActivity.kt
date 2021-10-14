@@ -27,5 +27,3 @@ class UserCreateAndEditActivity(storage: Any) : AppCompatActivity() {
     }
 }
 
-
-
