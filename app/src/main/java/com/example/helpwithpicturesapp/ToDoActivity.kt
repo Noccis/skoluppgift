@@ -36,6 +36,10 @@ class ToDoActivity : AppCompatActivity() {
         recyclerView.adapter = myAdapter
 
         EventChangeListener()
+
+
+
+
         addButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
         addButton.setOnClickListener {
             val intent = Intent(this,UserCreateAndEditActivity::class.java)
@@ -69,5 +73,31 @@ class ToDoActivity : AppCompatActivity() {
                     })
 
         }
+
+    fun getUserUploadPicture() {
+        val userAction1 = Actions(
+            "UserAction",
+            "https://firebasestorage.googleapis.com/v0/b/helpwithpicturesapp-f9c12.appspot.com/o/UploadedPictures%2F2021_10_15_07_15_42?alt=media&token=0eccc707-adf6-4574-9152-f327ec007ac9",
+            false,
+            "")
+
+        val db = FirebaseFirestore.getInstance()
+        val userUploadAction = db.collection("Actions").document("UserUpload").set(userAction1)
+        Log.d(TAG, "1. onCreate: Gör det")
+        userUploadAction.get().addOnSuccessListener { doucmentSnapShot -> // doucumentSnapShot == ger Listener ett namn
+            for (document in doucmentSnapShot.documents) { // Går igenom ett dokument i taget
+
+                val newUserAction = document.toObject(Actions::class.java) // Addar nytt item till ItemFolder i Firebase
+
+                if(newUserAction != null) {
+                    action.add(newUserAction)
+                    Log.d(TAG, "2. onCreate: ${newUserAction}")
+                }
+            }
+            Log.d(TAG, "3. onCreate: efter get")
+
+            Log.d(TAG,"onCreate: ${action.size}")
+    }
+
 }
 
