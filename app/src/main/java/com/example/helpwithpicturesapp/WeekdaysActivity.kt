@@ -1,5 +1,6 @@
 package com.example.helpwithpicturesapp
 
+
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,17 +17,15 @@ class WeekdaysActivity : AppCompatActivity() {
     lateinit var sundayButton: Button
     var monday = 1
     var tuesday = 2
-    var wednesday= 3
+    var wednesday = 3
     var thursday = 4
     var friday = 5
     var saturday = 6
     var sunday = 7
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weekdays)
-
         mondayButton = findViewById(R.id.måndag_Button)
         mondayButton.setOnClickListener {
             val intent = Intent(this, ToDoActivity::class.java)
@@ -74,5 +73,5 @@ class WeekdaysActivity : AppCompatActivity() {
 
     }
 
+    }
 
-}

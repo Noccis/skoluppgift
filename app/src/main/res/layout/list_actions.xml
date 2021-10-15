@@ -28,8 +28,8 @@
 
             <ImageView
                 android:id="@+id/imageButton"
-                android:layout_width="200dp"
-                android:layout_height="200dp"
+                android:layout_width="219dp"
+                android:layout_height="162dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="parent"
@@ -38,8 +38,8 @@
 
             <CheckBox
                 android:id="@+id/checkBox_Button"
-                android:layout_width="100dp"
-                android:layout_height="match_parent"
+                android:layout_width="112dp"
+                android:layout_height="94dp"
                 android:layout_gravity="right"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="50dp"
