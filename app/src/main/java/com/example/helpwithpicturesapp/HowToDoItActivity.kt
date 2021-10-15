@@ -36,7 +36,7 @@ class HowToDoItActivity : AppCompatActivity() {
         }
 
 
-    val actionsPosition = intent.getIntExtra(ACTIONS_POSITION_KEY, POSITION_NOT_SET)
+        val actionsPosition = intent.getIntExtra(ACTIONS_POSITION_KEY, POSITION_NOT_SET)
 
         if(actionsPosition != POSITION_NOT_SET) {
             displayInstruction(actionsPosition)
@@ -47,7 +47,7 @@ class HowToDoItActivity : AppCompatActivity() {
     }
 
     fun displayInstruction(position: Int) {
-       val i = diffrentInstructions.listOfInstructions[position]
+        val i = diffrentInstructions.listOfInstructions[position]
         imageView.setImageResource(i.image)
         textView.setText(i.userInstructions)
 
