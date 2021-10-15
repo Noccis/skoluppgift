@@ -1,5 +1,6 @@
 package com.example.helpwithpicturesapp
 
+import android.app.Notification
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -23,7 +24,6 @@ class ToDoActivity : AppCompatActivity() {
 
 
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
@@ -31,9 +31,18 @@ class ToDoActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
 
+        val userAction1 = Actions(
+            "UserAction",
+            "https://firebasestorage.googleapis.com/v0/b/helpwithpicturesapp-f9c12.appspot.com/o/UploadedPictures%2F2021_10_15_07_15_42?alt=media&token=0eccc707-adf6-4574-9152-f327ec007ac9",
+            false,
+            "")
 
         val db = FirebaseFirestore.getInstance()
         val actionsRef = db.collection("Actions").document("breakfast")
+        val userUploadAction = db.collection("Actions").document().set(userAction1)
+
+
+
 
         
         actionsRef.get().addOnSuccessListener { snapshot ->
