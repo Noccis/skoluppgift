@@ -12,113 +12,55 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.*
 
 class ToDoActivity : AppCompatActivity() {
 
     lateinit var addButton: FloatingActionButton
     lateinit var recyclerView: RecyclerView
-   // val diffrentInstructions = mutableListOf<Weekday>()
     val action = mutableListOf<Actions>()
+    lateinit var db : FirebaseFirestore
+    lateinit var myAdapter : ActionsRecycleViewAdapter
     val TAG = "!!!"
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
 
-
         recyclerView = findViewById(R.id.recyclerView)
-
-        val userAction1 = Actions(
-            "UserAction",
-            "https://firebasestorage.googleapis.com/v0/b/helpwithpicturesapp-f9c12.appspot.com/o/UploadedPictures%2F2021_10_15_07_15_42?alt=media&token=0eccc707-adf6-4574-9152-f327ec007ac9",
-            false,
-            "")
-
-        val db = FirebaseFirestore.getInstance()
-        val actionsRef = db.collection("Actions").document("breakfast")
-        val userUploadAction = db.collection("Actions").document().set(userAction1)
-
-
-
-
-        
-        actionsRef.get().addOnSuccessListener { snapshot ->
-            if(snapshot != null) {
-                Log.d(TAG,"1. onCreate: database changed!")
-
-                val newAction = snapshot.toObject(Actions::class.java)
-                Log.d(TAG, "2. onCreate: ${newAction}")
-                if (newAction != null) {
-                    action.add(newAction)
-                }
-                recyclerView.adapter?.notifyDataSetChanged()
-
-            }
-
-        }
-        Log.d(TAG,"3 .onCreate: ${action.size}")
-
-
-
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val adapter = ActionsRecycleViewAdapter(this,action)
+        myAdapter = ActionsRecycleViewAdapter(this, action)
+        recyclerView.setHasFixedSize(true)
+        recyclerView.adapter = myAdapter
 
-        recyclerView.adapter = adapter
-
-        addButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
-        addButton.setOnClickListener {
-            val intent = Intent(this,UserCreateAndEditActivity::class.java)
-            startActivity(intent)
-        }
-
-
-
-
+        EventChangeListener()
 
     }
 
+        fun EventChangeListener() {
 
-}
-/*
-db.collection("Weekday").document("monday").get()
-  .addOnSuccessListener { snapshot ->
-      if (snapshot != null) {
-          val monday = snapshot.toObject(Weekday::class.java)
-          if (monday != null) {
-              Log.d("ffs", "Hurra! ${monday.name} har färgId ${monday.color}")
-              dayTextView.text = monday.name
-              dayTextView.setBackgroundColor(monday.color)
-          }
-      }
+            db = FirebaseFirestore.getInstance()
+            db.collection("Actions").orderBy("order", Query.Direction.ASCENDING).
+                    addSnapshotListener(object : EventListener<QuerySnapshot>{
 
-  }
+                        override fun onEvent(
+                            value: QuerySnapshot?,
+                            error: FirebaseFirestoreException?
+                        ) {
+                            if (error != null) {
+                                Log.d("Firestore error", error.message.toString())
+                                return
+                            }
 
-*/
+                            for ( dc: DocumentChange in value?.documentChanges!!){
+                                if (dc.type == DocumentChange.Type.ADDED){
+                                    action.add(dc.document.toObject(Actions::class.java))
+                                }
+                            }
+                           myAdapter.notifyDataSetChanged()
+                        }
+                    })
 
-
-
-
-/*
-        val db = FirebaseFirestore.getInstance()
-        val newActions = mutableListOf<Actions>()
-        val actionsRef = db.collection("Weekdays").document("Days")
-
-        actionsRef.get().addOnSuccessListener { document ->
-            if(document != null) {
-
-                val image1 = document.getString("brushteeth")
-               // val image2 = document.getString("clean")
-               // val image3 = document.getString("dinner")
-               // val image4 = document.getString("vacumclean")
-                Glide.with(this).load(image1).into(imageView)
-
-           }
-
-        }
-
- */
+        }        }
