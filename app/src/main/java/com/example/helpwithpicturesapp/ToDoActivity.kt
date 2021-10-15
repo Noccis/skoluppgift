@@ -1,5 +1,6 @@
 package com.example.helpwithpicturesapp
 
+import android.app.Notification
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -21,11 +22,13 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var db : FirebaseFirestore
     lateinit var myAdapter : ActionsRecycleViewAdapter
     val TAG = "!!!"
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
 
         recyclerView = findViewById(R.id.recyclerView)
+
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         myAdapter = ActionsRecycleViewAdapter(this, action)
