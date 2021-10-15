@@ -19,13 +19,19 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var addButton: FloatingActionButton
     lateinit var recyclerView: RecyclerView
     val action = mutableListOf<Actions>()
-    lateinit var db : FirebaseFirestore
-    lateinit var myAdapter : ActionsRecycleViewAdapter
-    val TAG = "!!!"
-
+    lateinit var db: FirebaseFirestore
+    lateinit var myAdapter: ActionsRecycleViewAdapter
+    var decision: Int? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
+
+        val intent = intent
+
+
+        decision = intent.getIntExtra(Constants.DAY_CHOSEN, 0)
+
+
 
         recyclerView = findViewById(R.id.recyclerView)
 
@@ -38,36 +44,35 @@ class ToDoActivity : AppCompatActivity() {
         EventChangeListener()
         addButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
         addButton.setOnClickListener {
-            val intent = Intent(this,UserCreateAndEditActivity::class.java)
+            val intent = Intent(this, UserCreateAndEditActivity::class.java)
             startActivity(intent)
         }
 
     }
 
-        fun EventChangeListener() {
+    fun EventChangeListener() {
 
             db = FirebaseFirestore.getInstance()
-            db.collection("Actions").orderBy("order", Query.Direction.ASCENDING).
-                    addSnapshotListener(object : EventListener<QuerySnapshot>{
+            db.collection("Monday").orderBy("order", Query.Direction.ASCENDING).addSnapshotListener(object : EventListener<QuerySnapshot> {
 
-                        override fun onEvent(
-                            value: QuerySnapshot?,
-                            error: FirebaseFirestoreException?
-                        ) {
-                            if (error != null) {
-                                Log.d("Firestore error", error.message.toString())
-                                return
-                            }
-
-                            for ( dc: DocumentChange in value?.documentChanges!!){
-                                if (dc.type == DocumentChange.Type.ADDED){
-                                    action.add(dc.document.toObject(Actions::class.java))
-                                }
-                            }
-                           myAdapter.notifyDataSetChanged()
+                    override fun onEvent(
+                        value: QuerySnapshot?,
+                        error: FirebaseFirestoreException?
+                    ) {
+                        if (error != null) {
+                            Log.d("Firestore error", error.message.toString())
+                            return
                         }
-                    })
 
-        }
+                        for (dc: DocumentChange in value?.documentChanges!!) {
+                            if (dc.type == DocumentChange.Type.ADDED) {
+                                action.add(dc.document.toObject(Actions::class.java))
+                            }
+                        }
+                        myAdapter.notifyDataSetChanged()
+                    }
+                })
+
+
+    }
 }
-
