@@ -26,6 +26,7 @@ class HowToDoItActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_how_to_do_it)
 
+
         imageView = findViewById(R.id.imageView)
         textView = findViewById(R.id.userSeeInstructions_Tv)
         previousButton = findViewById(R.id.prevoius_Button)
