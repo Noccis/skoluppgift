@@ -1,5 +1,6 @@
 package com.example.helpwithpicturesapp
 
+import android.content.Context
 import android.content.Intent
 import android.content.Intent.*
 import android.view.LayoutInflater
@@ -12,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 
-class ActionsRecycleViewAdapter(val context: MutableList<String>, val action: List<Actions>):
+class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions>):
     RecyclerView.Adapter<ActionsRecycleViewAdapter.ViewHolder>(){
 
     val layoutInflater = LayoutInflater.from(context)

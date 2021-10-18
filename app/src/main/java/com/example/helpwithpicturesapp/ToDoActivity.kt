@@ -17,6 +17,7 @@ class ToDoActivity : AppCompatActivity() {
     val action = mutableListOf<Actions>()
     lateinit var db: FirebaseFirestore
     lateinit var myAdapter: ActionsRecycleViewAdapter
+
     val TAG = "!!!"
     var decision = 0
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -255,6 +256,7 @@ class ToDoActivity : AppCompatActivity() {
         }
 
     }
+
 
 
 }
