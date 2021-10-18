@@ -6,6 +6,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.core.view.get
@@ -39,15 +40,21 @@ class ToDoActivity : AppCompatActivity() {
         recyclerView.adapter = myAdapter
 
         EventChangeListener()
+
+
+
+
         addButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
         addButton.setOnClickListener {
             val intent = Intent(this, UserCreateAndEditActivity::class.java)
             startActivity(intent)
         }
+        getUserUploadPicture()
 
     }
 
     fun EventChangeListener() {
+
 
 
         if (decision == 1) {
@@ -228,6 +235,7 @@ class ToDoActivity : AppCompatActivity() {
         }
 
     }
+
 
 }
 

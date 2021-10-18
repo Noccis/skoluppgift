@@ -9,9 +9,13 @@ import java.net.URI
 import android.R
 import android.app.ProgressDialog
 import android.content.Context
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.widget.Toast
+import com.google.firebase.firestore.core.DatabaseInfo
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -21,11 +25,9 @@ class UserCreateAndEditActivity: AppCompatActivity() {
     lateinit var binding: ActivityUserCreateAndEditBinding
     lateinit var imageUri: Uri
 
+
+
     lateinit var userUploadImageView: ImageView
-
-
-
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,14 +35,16 @@ class UserCreateAndEditActivity: AppCompatActivity() {
         binding = ActivityUserCreateAndEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-       // userUploadImageView.setImageURI(Uri.parse("file://mnt/sdcard/d2.jpg"))
-
-        binding.selectImgeButton.setOnClickListener {
+        binding.selectImageButton.setOnClickListener {
             selectImage()
         }
 
         binding.uploadButton.setOnClickListener {
             uploadImage()
+        }
+
+        binding.getImageButton.setOnClickListener {
+            getImage()
         }
 
     }
@@ -98,6 +102,31 @@ class UserCreateAndEditActivity: AppCompatActivity() {
             }
 
 
+    }
+    fun getImage() {
+        val progressDialog = ProgressDialog(this)
+        progressDialog.setMessage("Fetching image......")
+        progressDialog.setCancelable(false)
+        progressDialog.show()
+
+        val imageName = binding.userNameOfImageEt.text.toString()
+
+        val storageRef = FirebaseStorage.getInstance().getReference("UploadedPictures/$imageName.jpg")
+        val localfile = File.createTempFile("tempImage","jpg")
+        storageRef.getFile(localfile).addOnSuccessListener {
+
+            if(progressDialog.isShowing)
+                progressDialog.dismiss()
+
+            val bitmap = BitmapFactory.decodeFile(localfile.absolutePath)
+            binding.userImageView.setImageBitmap(bitmap)
+
+        }
+            .addOnFailureListener{
+                if(progressDialog.isShowing)
+                    progressDialog.dismiss()
+                Toast.makeText(this,"Failed to retrive the image", Toast.LENGTH_SHORT).show()
+            }
     }
 }
 
