@@ -15,13 +15,13 @@ class WeekdaysActivity : AppCompatActivity() {
     lateinit var fridayButton: Button
     lateinit var saturdayButton: Button
     lateinit var sundayButton: Button
-    var monday = 1
-    var tuesday = 2
-    var wednesday = 3
-    var thursday = 4
-    var friday = 5
-    var saturday = 6
-    var sunday = 7
+    var monday = "monday"
+    var tuesday = "tuesday"
+    var wednesday = "wednesday"
+    var thursday = "thursday"
+    var friday = "friday"
+    var saturday = "saturday"
+    var sunday = "sunday"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
