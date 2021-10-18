@@ -1,5 +1,6 @@
 package com.example.helpwithpicturesapp
 
+
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -14,46 +15,63 @@ class WeekdaysActivity : AppCompatActivity() {
     lateinit var fridayButton: Button
     lateinit var saturdayButton: Button
     lateinit var sundayButton: Button
-
-
+    var monday = 1
+    var tuesday = 2
+    var wednesday = 3
+    var thursday = 4
+    var friday = 5
+    var saturday = 6
+    var sunday = 7
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weekdays)
         mondayButton = findViewById(R.id.måndag_Button)
         mondayButton.setOnClickListener {
-            toDoActivityPage()
+            val intent = Intent(this, ToDoActivity::class.java)
+            intent.putExtra(Constants.DAY_CHOSEN, monday)
+            startActivity(intent)
         }
+
         tuesdayButton = findViewById(R.id.tisdag_Button)
         tuesdayButton.setOnClickListener {
-            toDoActivityPage()
+            val intent = Intent(this, ToDoActivity::class.java)
+            intent.putExtra(Constants.DAY_CHOSEN, tuesday)
+            startActivity(intent)
         }
+
         wednesdayButton = findViewById(R.id.onsdag_Button)
         wednesdayButton.setOnClickListener {
-            toDoActivityPage()
+            val intent = Intent(this, ToDoActivity::class.java)
+            intent.putExtra(Constants.DAY_CHOSEN, wednesday)
+            startActivity(intent)
         }
         thursdayButton = findViewById(R.id.torsdag_Button)
         thursdayButton.setOnClickListener {
-            toDoActivityPage()
+            val intent = Intent(this, ToDoActivity::class.java)
+            intent.putExtra(Constants.DAY_CHOSEN, thursday)
+            startActivity(intent)
         }
         fridayButton = findViewById(R.id.fredag_Button)
         fridayButton.setOnClickListener {
-            toDoActivityPage()
+            val intent = Intent(this, ToDoActivity::class.java)
+            intent.putExtra(Constants.DAY_CHOSEN, friday)
+            startActivity(intent)
         }
         saturdayButton = findViewById(R.id.lördag_Button)
         saturdayButton.setOnClickListener {
-            toDoActivityPage()
+            val intent = Intent(this, ToDoActivity::class.java)
+            intent.putExtra(Constants.DAY_CHOSEN, saturday)
+            startActivity(intent)
         }
         sundayButton = findViewById(R.id.söndag_Button)
         sundayButton.setOnClickListener {
-            toDoActivityPage()
+            val intent = Intent(this, ToDoActivity::class.java)
+            intent.putExtra(Constants.DAY_CHOSEN, sunday)
+            startActivity(intent)
         }
 
     }
 
-    fun toDoActivityPage() {
-        val intent = Intent(this,ToDoActivity::class.java)
-        startActivity(intent)
     }
 
-}
