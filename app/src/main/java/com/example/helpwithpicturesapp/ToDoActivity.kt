@@ -55,7 +55,7 @@ class ToDoActivity : AppCompatActivity() {
             val intent = Intent(this, UserCreateAndEditActivity::class.java)
             startActivity(intent)
         }
-       // getUserUploadPicture()
+
 
     }
 
