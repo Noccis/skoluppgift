@@ -32,8 +32,8 @@ class UserCreateAndEditActivity: AppCompatActivity() {
     val imageRef = Firebase.storage.reference
 
     lateinit var recyclerView: RecyclerView
-    lateinit var imageViewUpload: ImageView
-    lateinit var uploadButton: Button
+    lateinit var uploadImageView: ImageView
+
 
 
 
@@ -42,15 +42,16 @@ class UserCreateAndEditActivity: AppCompatActivity() {
         binding = ActivityUserCreateAndEditBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
+        recyclerView = findViewById(R.id.recyclerView)
+       // uploadButton = findViewById(R.id.uploadButton)
 
 
 
 
         listFiles()
     }
-    /*
 
+/*
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
@@ -78,7 +79,9 @@ class UserCreateAndEditActivity: AppCompatActivity() {
         }
     }
 
-     */
+ */
+
+
 
 
 

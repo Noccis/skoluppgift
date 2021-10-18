@@ -13,7 +13,12 @@ class ImageAdapter(
 ): RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
 
     inner class ImageViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        val imageViewUpload = itemView.findViewById<ImageView>(R.id.imageViewUpload)
+        val recyclerViewImageView = itemView.findViewById<ImageView>(R.id.imageViewUpload)
+        val uploadButton = itemView.findViewById<Button>(R.id.uploadButton)
+        val downloadButton = itemView.findViewById<Button>(R.id.downloadButton)
+        val deleteButton = itemView.findViewById<Button>(R.id.deleteButton)
+
+        val uploadImageView = itemView.findViewById<ImageView>(R.id.uploadImageView)
 
     }
 
@@ -27,7 +32,11 @@ class ImageAdapter(
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
        val url = urls[position]
 
-        Glide.with(holder.itemView).load(url).into(holder.imageViewUpload)
+        Glide.with(holder.itemView).load(url).into(holder.recyclerViewImageView)
+        holder.uploadButton
+        holder.downloadButton
+        holder.deleteButton
+        holder.uploadImageView
     }
 
     override fun getItemCount(): Int {
