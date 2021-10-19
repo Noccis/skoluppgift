@@ -1,21 +1,14 @@
 package com.example.helpwithpicturesapp
 
 
-import android.app.Notification
 import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.view.get
+
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.*
 
@@ -51,6 +44,7 @@ class ToDoActivity : AppCompatActivity() {
             val intent = Intent(this, UserCreateAndEditActivity::class.java)
             startActivity(intent)
         }
+
 
 
     }
