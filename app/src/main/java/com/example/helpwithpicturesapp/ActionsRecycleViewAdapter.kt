@@ -33,6 +33,8 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions>)
                 intent.putExtra(ACTIONS_POSITION_KEY, actionsPosition)
                 context.startActivity(intent)
             }
+            
+
         }
 
     }
