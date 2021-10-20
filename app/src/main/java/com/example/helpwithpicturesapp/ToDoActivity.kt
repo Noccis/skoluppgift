@@ -6,6 +6,7 @@ import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.TextView
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,6 +43,7 @@ class ToDoActivity : AppCompatActivity() {
         addButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
         addButton.setOnClickListener {
             val intent = Intent(this, UserCreateAndEditActivity::class.java)
+            intent.putExtra(Constants.DAY_CHOSEN, decision)
             startActivity(intent)
         }
 

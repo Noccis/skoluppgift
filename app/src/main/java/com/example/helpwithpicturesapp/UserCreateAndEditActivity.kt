@@ -1,6 +1,7 @@
 package com.example.helpwithpicturesapp
 
 import android.app.Activity
+import android.app.Notification
 import android.content.Intent
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
@@ -8,11 +9,13 @@ import android.os.Bundle
 import android.widget.ImageView
 import com.example.helpwithpicturesapp.databinding.ActivityUserCreateAndEditBinding
 import android.net.Uri
+import android.util.Log
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.CoroutineScope
@@ -28,15 +31,23 @@ const val REQUEST_CODE_IMAGE_PICK = 0
 
 class UserCreateAndEditActivity: AppCompatActivity() {
 
+    val TAG = "!!!"
+
     var curFile: Uri? = null
     val imageRef = Firebase.storage.reference
+    val uniqeString = UUID.randomUUID().toString()
+    val db = FirebaseFirestore.getInstance()
+    val userAction = mutableListOf<Actions>()
+
+
+
 
     lateinit var recyclerView: RecyclerView
     lateinit var uploadButton: Button
     lateinit var downloadButton: Button
     lateinit var deleteButton: Button
     lateinit var imgeViewButton: ImageButton
-
+    lateinit var saveButton: Button
 
 
 
@@ -46,12 +57,13 @@ class UserCreateAndEditActivity: AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_create_and_edit)
 
-
         recyclerView = findViewById(R.id.recyclerView)
         uploadButton = findViewById(R.id.uploadButton)
         downloadButton = findViewById(R.id.downloadButton)
         deleteButton = findViewById(R.id.deleteButton)
+        saveButton = findViewById(R.id.saveButton)
         imgeViewButton = findViewById(R.id.imageViewButton)
+
 
 
         imgeViewButton.setOnClickListener {
@@ -61,14 +73,14 @@ class UserCreateAndEditActivity: AppCompatActivity() {
             }
         }
         uploadButton.setOnClickListener {
-            uploadImageToStorage("myImage")
+            uploadImageToStorage("uniqeString")
         }
 
         downloadButton.setOnClickListener {
-           downLoadImage("myImage")
+           downLoadImage("uniqeString")
         }
         deleteButton.setOnClickListener {
-            deleteImage("myImage")
+            deleteImage("uniqeString")
         }
 
 
@@ -98,7 +110,7 @@ class UserCreateAndEditActivity: AppCompatActivity() {
         try {
 
             val maxDownloadSize = 5L * 1024 * 1024
-            val bytes = imageRef.child("UploadedPictures/$filename").getBytes(maxDownloadSize).await()
+            val bytes = imageRef.child("UploadedPictures/$uniqeString").getBytes(maxDownloadSize).await()
             val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
             withContext(Dispatchers.Main) {
                 imgeViewButton.setImageBitmap(bmp)
@@ -127,12 +139,52 @@ class UserCreateAndEditActivity: AppCompatActivity() {
 
     }
 
+   /*
+    private fun uuploadImageToStorage(filename: String) {
+        val ref = imageRef.child("UploadedPictures/$uniqeString")
+        if (curFile != null) {
+            val uploadTask = ref.putFile(curFile)
+        }
+    }
+    */
+
     private fun uploadImageToStorage(filename: String) = CoroutineScope(Dispatchers.IO).launch {
         try {
 
             curFile?.let {
-                imageRef.child("UploadedPictures/$filename").putFile(it).await()
-                Toast.makeText(this@UserCreateAndEditActivity,"Bilden är sparad",Toast.LENGTH_SHORT).show()
+                val uploadTask = imageRef.child("UploadedPictures/$uniqeString").putFile(it)
+
+                val urlTask = uploadTask.continueWithTask { task ->
+                    if (!task.isSuccessful) {
+                        task.exception?.let {
+                            throw it
+                        }
+                    }
+                    imageRef.child("UploadedPictures/$uniqeString").downloadUrl
+                }.addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        val downloadUri = task.result
+                        Toast.makeText(this@UserCreateAndEditActivity,"Bilden är sparad",Toast.LENGTH_SHORT).show()
+
+                        val action = Actions(null, downloadUri.toString(),false,"test")
+
+                        db.collection("Weekday").document(dayView.toString()).collection(dayView.toString()).add(action)
+
+
+
+
+                        Log.d(TAG, "uploadImageToStorage: ${downloadUri}")
+
+                    } else {
+                        // Handle failures
+                        // ...
+                    }
+                }
+
+                
+
+
+
             }
 
         } catch (e: Exception) {
@@ -140,9 +192,10 @@ class UserCreateAndEditActivity: AppCompatActivity() {
                 Toast.makeText(this@UserCreateAndEditActivity,e.message,Toast.LENGTH_SHORT).show()
             }
         }
+
+
+
     }
-
-
 
 
 
@@ -175,6 +228,8 @@ class UserCreateAndEditActivity: AppCompatActivity() {
         }
 
     }
+
+
 
 
 
