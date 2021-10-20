@@ -6,6 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.ktx.storage
+import java.util.*
 
 class WeekdaysActivity : AppCompatActivity() {
 
@@ -23,10 +26,7 @@ class WeekdaysActivity : AppCompatActivity() {
     var friday = "friday"
     var saturday = "saturday"
     var sunday = "sunday"
-
-    val db = FirebaseFirestore.getInstance()
-
-    val weekdayMonday = db.collection("Weekday").document("monday").collection("monday").toString()
+    var currentDayIndex = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,8 +36,6 @@ class WeekdaysActivity : AppCompatActivity() {
         mondayButton.setOnClickListener {
             val intent = Intent(this, ToDoActivity::class.java)
             intent.putExtra(Constants.DAY_CHOSEN, monday)
-
-            intent.putExtra("Monday", weekdayMonday)
 
             startActivity(intent)
         }

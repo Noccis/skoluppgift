@@ -37,7 +37,7 @@ class UserCreateAndEditActivity: AppCompatActivity() {
     val imageRef = Firebase.storage.reference
     val uniqeString = UUID.randomUUID().toString()
     val db = FirebaseFirestore.getInstance()
-    val userAction = mutableListOf<Actions>()
+
 
 
 
@@ -168,9 +168,7 @@ class UserCreateAndEditActivity: AppCompatActivity() {
 
                         val action = Actions(null, downloadUri.toString(),false,"test")
 
-                        db.collection("Weekday").document(dayView.toString()).collection(dayView.toString()).add(action)
-
-
+                        db.collection("Weekday").document("monday").collection("monday").add(action)
 
 
                         Log.d(TAG, "uploadImageToStorage: ${downloadUri}")
@@ -196,6 +194,7 @@ class UserCreateAndEditActivity: AppCompatActivity() {
 
 
     }
+
 
 
 
