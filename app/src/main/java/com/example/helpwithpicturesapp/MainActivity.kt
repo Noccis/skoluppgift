@@ -27,7 +27,11 @@ val db = Firebase.firestore
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
+        val button2 = findViewById<Button>(R.id.button2)
+        button2.setOnClickListener {
+            val intent = Intent(this , WeekdaysActivity::class.java)
+            startActivity(intent)
+        }
 
         userSeeInsrtuctionsView = findViewById(R.id.instructions_Tv)
        // val nextPageButton = findViewById<Button>(R.id.loginButton)
