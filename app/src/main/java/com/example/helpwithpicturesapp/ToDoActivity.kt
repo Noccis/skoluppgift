@@ -1,21 +1,20 @@
 package com.example.helpwithpicturesapp
 
 
-import android.app.Notification
 import android.content.Intent
 import android.graphics.Color
+import android.media.MediaPlayer
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
-import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.view.get
+
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.firebase.firestore.*
 
@@ -28,9 +27,16 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var myAdapter: ActionsRecycleViewAdapter
     var decision = ""
     lateinit var dayTextView : TextView
+    lateinit var rewardImageView: ImageView
+    private var shortAnimationDuration: Int = 400
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
+
+        rewardImageView = findViewById(R.id.rewardImageView)
+        rewardImageView.visibility = View.GONE
 
         dayTextView = findViewById(R.id.dayTextView)
         decision = intent.getStringExtra(Constants.DAY_CHOSEN).toString()
@@ -51,9 +57,11 @@ class ToDoActivity : AppCompatActivity() {
             val intent = Intent(this, UserCreateAndEditActivity::class.java)
             startActivity(intent)
         }
-       // getUserUploadPicture()
+
+
 
     }
+
         fun EventChangeListener() {
 
             when (decision) {
@@ -111,6 +119,32 @@ class ToDoActivity : AppCompatActivity() {
 
         }
 
+    fun reward () {
+        fadeIn()
+        rewardSound()
+        Handler(Looper.getMainLooper()).postDelayed({
+            hideReward()
+        }, 1000)
+    }
+    private fun fadeIn() {
+        rewardImageView.apply {
+            alpha = 0f
+            visibility = View.VISIBLE
+
+            animate()
+                .alpha(1f)
+                .setDuration(shortAnimationDuration.toLong())
+                .setListener(null)
+        }
+    }
+
+    private fun rewardSound() {
+        val mediaPlayer = MediaPlayer.create(this, R.raw.ra)
+        mediaPlayer.start()
+    }
+    private fun hideReward () {
+        rewardImageView.visibility = View.GONE
+    }
 
 }
 
