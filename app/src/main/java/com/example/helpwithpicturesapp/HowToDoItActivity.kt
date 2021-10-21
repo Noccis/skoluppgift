@@ -54,7 +54,7 @@ class HowToDoItActivity : AppCompatActivity() {
 
     fun eventChangeListener (){
         db = FirebaseFirestore.getInstance()
-        db.collection("ActionSteps").document("brushteeth").collection("brushteeth")
+        db.collection("ActionSteps").document("brushteeth").collection("steps")
             .orderBy("order", Query.Direction.ASCENDING)
             .addSnapshotListener(object : EventListener<QuerySnapshot> {
 
