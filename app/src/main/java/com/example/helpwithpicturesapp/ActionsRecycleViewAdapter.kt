@@ -33,6 +33,17 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions>)
                 intent.putExtra(ACTIONS_POSITION_KEY, actionsPosition)
                 context.startActivity(intent)
             }
+            checkBoxView.setOnClickListener {
+
+                action[actionsPosition].checkBox = checkBoxView.isChecked
+                if (action[actionsPosition].checkBox) {
+
+                    val toDoActivity = context as ToDoActivity
+                    toDoActivity.reward()
+                }
+            }
+
+
         }
 
     }
