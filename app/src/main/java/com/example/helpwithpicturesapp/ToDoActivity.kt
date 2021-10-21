@@ -9,8 +9,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+
 import android.view.View
 import android.widget.ImageView
+
 import android.widget.TextView
 
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,9 +29,9 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var myAdapter: ActionsRecycleViewAdapter
     var decision = ""
     lateinit var dayTextView : TextView
+
     lateinit var rewardImageView: ImageView
     private var shortAnimationDuration: Int = 400
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,6 +57,7 @@ class ToDoActivity : AppCompatActivity() {
         addButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
         addButton.setOnClickListener {
             val intent = Intent(this, UserCreateAndEditActivity::class.java)
+            intent.putExtra(Constants.DAY_CHOSEN, decision)
             startActivity(intent)
         }
 
