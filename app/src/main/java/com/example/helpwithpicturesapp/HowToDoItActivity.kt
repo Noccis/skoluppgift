@@ -1,6 +1,8 @@
 package com.example.helpwithpicturesapp
 
 import android.content.Intent
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -35,6 +37,8 @@ class HowToDoItActivity : AppCompatActivity() {
         myAdapter = HowToDoItRecycleViewAdapter(this, actionStep)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = myAdapter
+
+
 
         val previousButton = findViewById<Button>(R.id.previous_Button)
         previousButton.setOnClickListener {
