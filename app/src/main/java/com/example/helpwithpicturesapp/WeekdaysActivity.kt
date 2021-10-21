@@ -26,7 +26,9 @@ class WeekdaysActivity : AppCompatActivity() {
     var friday = "friday"
     var saturday = "saturday"
     var sunday = "sunday"
-    var currentDayIndex = 0
+
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,9 +36,9 @@ class WeekdaysActivity : AppCompatActivity() {
         setContentView(R.layout.activity_weekdays)
         mondayButton = findViewById(R.id.måndag_Button)
         mondayButton.setOnClickListener {
+
             val intent = Intent(this, ToDoActivity::class.java)
             intent.putExtra(Constants.DAY_CHOSEN, monday)
-
             startActivity(intent)
         }
 

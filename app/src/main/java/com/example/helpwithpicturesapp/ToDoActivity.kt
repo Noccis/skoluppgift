@@ -22,6 +22,8 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var myAdapter: ActionsRecycleViewAdapter
     var decision = ""
     lateinit var dayTextView : TextView
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
