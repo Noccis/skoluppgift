@@ -197,7 +197,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
             }
             withContext(Dispatchers.Main) {
                recyclerView.adapter?.notifyDataSetChanged()
-                Log.d(TAG, "listFiles: ")
+
 
             }
 

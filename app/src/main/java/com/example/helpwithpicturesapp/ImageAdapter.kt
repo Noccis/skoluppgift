@@ -22,7 +22,6 @@ class ImageAdapter(val activity: UserCreateAndEditActivity,
 
         init {
             recyclerViewImageViewButton.setOnClickListener {
-               // sätt bilden i activity med hjälpav url
              activity.setImage(url)
             }
         }
