@@ -11,6 +11,7 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -35,6 +36,8 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     val uniqeString = UUID.randomUUID().toString()
     val db = FirebaseFirestore.getInstance()
     var decision = ""
+    val userImageUrl = mutableListOf<String>()
+
 
 
     lateinit var recyclerView: RecyclerView
@@ -57,7 +60,11 @@ class UserCreateAndEditActivity : AppCompatActivity() {
 
         decision = intent.getStringExtra(Constants.DAY_CHOSEN).toString()
 
-
+        val imageAdapter = ImageAdapter(this, userImageUrl)
+        recyclerView.apply {
+            adapter = imageAdapter
+            layoutManager = LinearLayoutManager(this@UserCreateAndEditActivity)
+        }
 
         imgeViewButton.setOnClickListener {
             Intent(Intent.ACTION_GET_CONTENT).also {
@@ -183,17 +190,14 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         try {
 
             val images = imageRef.child("UploadedPictures/").listAll().await()
-            val userImageUrl = mutableListOf<String>()
+
             for (image in images.items) {
                 val url = image.downloadUrl.await()
                 userImageUrl.add(url.toString())
             }
             withContext(Dispatchers.Main) {
-                val imageAdapter = ImageAdapter(userImageUrl)
-                recyclerView.apply {
-                    adapter = imageAdapter
-                    layoutManager = LinearLayoutManager(this@UserCreateAndEditActivity)
-                }
+               recyclerView.adapter?.notifyDataSetChanged()
+                Log.d(TAG, "listFiles: ")
 
             }
 
@@ -204,6 +208,9 @@ class UserCreateAndEditActivity : AppCompatActivity() {
             }
         }
 
+    }
+    fun setImage(url: String){
+        Glide.with(this).load(url).into(imgeViewButton)
     }
 
 

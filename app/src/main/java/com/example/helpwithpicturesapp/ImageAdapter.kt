@@ -12,17 +12,18 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
 
-class ImageAdapter(
+class ImageAdapter(val activity: UserCreateAndEditActivity,
     val urls: List<String>
 ): RecyclerView.Adapter<ImageAdapter.ImageViewHolder>() {
 
     inner class ImageViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val recyclerViewImageViewButton = itemView.findViewById<ImageButton>(R.id.recyclerViewImageButton)
-
+        var url =""
 
         init {
             recyclerViewImageViewButton.setOnClickListener {
-
+               // sätt bilden i activity med hjälpav url
+             activity.setImage(url)
             }
         }
 
@@ -37,9 +38,9 @@ class ImageAdapter(
     }
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
-       val url = urls[position]
+       holder.url = urls[position]
 
-        Glide.with(holder.itemView).load(url).into(holder.recyclerViewImageViewButton)
+        Glide.with(holder.itemView).load(holder.url).into(holder.recyclerViewImageViewButton)
     }
 
     override fun getItemCount(): Int {
