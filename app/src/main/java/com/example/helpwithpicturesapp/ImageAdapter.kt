@@ -15,10 +15,7 @@ class ImageAdapter(
 
     inner class ImageViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val recyclerViewImageViewButton = itemView.findViewById<ImageButton>(R.id.recyclerViewImageButton)
-        //var uploadButton = itemView.findViewById<Button>(R.id.uploadButton)
-       // var downloadButton: Button
-       // var deleteButton: Button
-       // var imgeView: ImageView
+
 
     }
 
