@@ -1,13 +1,16 @@
 package com.example.helpwithpicturesapp
 
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageButton
 import android.widget.ImageView
+import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+
 
 class ImageAdapter(
     val urls: List<String>
@@ -17,7 +20,14 @@ class ImageAdapter(
         val recyclerViewImageViewButton = itemView.findViewById<ImageButton>(R.id.recyclerViewImageButton)
 
 
+        init {
+            recyclerViewImageViewButton.setOnClickListener {
+
+            }
+        }
+
     }
+
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
@@ -35,4 +45,7 @@ class ImageAdapter(
     override fun getItemCount(): Int {
         return urls.size
     }
+
+
+
 }

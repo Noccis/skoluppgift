@@ -23,7 +23,7 @@ import java.lang.Exception
 import java.util.*
 
 const val REQUEST_CODE_IMAGE_PICK = 0
-const val REQUEST_CODE_IMAGEBUTTON_PICK = 0
+
 
 
 class UserCreateAndEditActivity : AppCompatActivity() {
