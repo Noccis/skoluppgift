@@ -27,6 +27,9 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions>)
 
 
         init {
+
+
+
             imageButtonView.setOnClickListener{
 
                 val intent = Intent(context,HowToDoItActivity::class.java)
@@ -69,7 +72,6 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions>)
 
 
     }
-
     override fun getItemCount(): Int {
         return action.size
     }

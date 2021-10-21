@@ -49,6 +49,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore-ktx:23.0.4'
     testImplementation 'junit:junit:4.+'
 
+
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
     implementation 'androidx.recyclerview:recyclerview:1.2.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-core:1.4.1'

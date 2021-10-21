@@ -1,6 +1,7 @@
 package com.example.helpwithpicturesapp
 
 
+import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.media.MediaPlayer
@@ -11,14 +12,21 @@ import android.os.Looper
 import android.util.Log
 
 import android.view.View
+import android.widget.EditText
 import android.widget.ImageView
 
 import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
+import androidx.recyclerview.widget.ItemTouchHelper
 
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.*
+import com.google.firebase.firestore.EventListener
+import java.util.*
 
 class ToDoActivity : AppCompatActivity() {
 
@@ -32,6 +40,7 @@ class ToDoActivity : AppCompatActivity() {
 
     lateinit var rewardImageView: ImageView
     private var shortAnimationDuration: Int = 400
+    lateinit var deletedCard : Actions
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,7 +60,6 @@ class ToDoActivity : AppCompatActivity() {
         myAdapter = ActionsRecycleViewAdapter(this, action)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = myAdapter
-
         EventChangeListener()
 
         addButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
@@ -60,10 +68,67 @@ class ToDoActivity : AppCompatActivity() {
             intent.putExtra(Constants.DAY_CHOSEN, decision)
             startActivity(intent)
         }
+        val itemTouchHelper = ItemTouchHelper(simpleCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+    }
+
+        var simpleCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP.or(ItemTouchHelper.DOWN),ItemTouchHelper.LEFT. or (ItemTouchHelper.RIGHT)){
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                var startPosition = viewHolder.adapterPosition
+                var endPosition = target.adapterPosition
+                Collections.swap(action, startPosition, endPosition)
+                recyclerView.adapter?.notifyItemMoved(startPosition,endPosition)
+                return true
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                var position = viewHolder.adapterPosition
+                when (direction){
+                    ItemTouchHelper.LEFT -> {
+                        deletedCard= action.get(position)
+                        action.removeAt(position)
+                        myAdapter.notifyItemRemoved(position)
+
+                        Snackbar.make(recyclerView, "The card is deleted", Snackbar.LENGTH_LONG)
+                            .setAction("Undo", View.OnClickListener {
+                            action.add(position, deletedCard)
+                            myAdapter.notifyItemInserted(position)
+                        }).show()
+                        }
+
+                    ItemTouchHelper.RIGHT -> {
+                        var imageText = TextView(this@ToDoActivity)
+                        imageText.text= action[position].toString()
+
+                        val builder = AlertDialog.Builder(this@ToDoActivity)
+                        builder.setTitle("Update an Item")
+                        builder.setCancelable(true)
+                        builder.setView(imageText)
+
+                        builder.setNegativeButton("cancel" , DialogInterface.OnClickListener { dialog, which ->
+                            action.clear()
+                            action.addAll(action)
+                            recyclerView.adapter!!.notifyDataSetChanged()
+                        })
+                        builder.setPositiveButton("update", DialogInterface.OnClickListener { dialog, which ->
+                            action.set(position, Actions(imageText.text as String))
+                            recyclerView.adapter!!.notifyItemChanged(position)
+                        })
+
+                        builder.show()
+                    }
+                }
+
+            }
 
 
 
     }
+
 
         fun EventChangeListener() {
 
