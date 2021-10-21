@@ -1,6 +1,8 @@
 package com.example.helpwithpicturesapp
 
 import android.content.Intent
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -36,6 +38,8 @@ class HowToDoItActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = myAdapter
 
+
+
         val previousButton = findViewById<Button>(R.id.previous_Button)
         previousButton.setOnClickListener {
             val intent = Intent(this, ToDoActivity::class.java)
@@ -50,7 +54,7 @@ class HowToDoItActivity : AppCompatActivity() {
 
     fun eventChangeListener (){
         db = FirebaseFirestore.getInstance()
-        db.collection("ActionSteps").document("brushteeth").collection("brushteeth")
+        db.collection("ActionSteps").document("brushteeth").collection("steps")
             .orderBy("order", Query.Direction.ASCENDING)
             .addSnapshotListener(object : EventListener<QuerySnapshot> {
 

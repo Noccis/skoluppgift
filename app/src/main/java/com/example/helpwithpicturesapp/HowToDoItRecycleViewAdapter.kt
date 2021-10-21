@@ -1,6 +1,8 @@
 package com.example.helpwithpicturesapp
 
 import android.content.Context
+import android.graphics.ColorMatrix
+import android.graphics.ColorMatrixColorFilter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +23,26 @@ class HowToDoItRecycleViewAdapter (val context: Context, val actionStep: List<Ac
         val imageText = itemView.findViewById<TextView>(R.id.howToTextView)
         val checkBoxView = itemView.findViewById<CheckBox>(R.id.howToCheckBox)
         var actionsPosition = 0
+
+        init {
+            checkBoxView.setOnClickListener {
+
+                actionStep[actionsPosition].checkBox = checkBoxView.isChecked
+                if (actionStep[actionsPosition].checkBox) {
+
+                    // Variabler för att göra ActionSteps gråa när man klickar på dom.
+                    val grey = ColorMatrix()
+                    grey.setSaturation(0F)
+                    val greyfilter = ColorMatrixColorFilter(grey)
+
+                    imageView.colorFilter = greyfilter
+
+
+                } else {
+                    imageView.colorFilter = null
+                }
+            }
+        }
 
     }
 
