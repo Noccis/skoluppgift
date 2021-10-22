@@ -29,11 +29,11 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions>)
         init {
 
 
-
             imageButtonView.setOnClickListener{
 
                 val intent = Intent(context,HowToDoItActivity::class.java)
                 intent.putExtra(ACTIONS_POSITION_KEY, actionsPosition)
+                intent.putExtra("ActionChosen", action[actionsPosition].documentName)
                 context.startActivity(intent)
             }
             checkBoxView.setOnClickListener {

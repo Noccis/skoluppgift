@@ -25,6 +25,7 @@ class HowToDoItActivity : AppCompatActivity() {
     val actionStep = mutableListOf<ActionSteps>()
     lateinit var db: FirebaseFirestore
     lateinit var myAdapter: HowToDoItRecycleViewAdapter
+    var actionId = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,6 +38,8 @@ class HowToDoItActivity : AppCompatActivity() {
         myAdapter = HowToDoItRecycleViewAdapter(this, actionStep)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = myAdapter
+
+        actionId = intent.getStringExtra("ActionChosen").toString()
 
 
 
@@ -53,7 +56,7 @@ class HowToDoItActivity : AppCompatActivity() {
 
     fun eventChangeListener (){
         db = FirebaseFirestore.getInstance()
-        db.collection("ActionSteps").document("brushteeth").collection("steps")
+        db.collection("ActionSteps").document(actionId).collection("steps")
             .orderBy("order", Query.Direction.ASCENDING)
             .addSnapshotListener(object : EventListener<QuerySnapshot> {
 
