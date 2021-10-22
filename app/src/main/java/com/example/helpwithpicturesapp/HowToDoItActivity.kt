@@ -42,8 +42,7 @@ class HowToDoItActivity : AppCompatActivity() {
 
         val previousButton = findViewById<Button>(R.id.previous_Button)
         previousButton.setOnClickListener {
-            val intent = Intent(this, ToDoActivity::class.java)
-            startActivity(intent)
+            finish()
         }
 
 
