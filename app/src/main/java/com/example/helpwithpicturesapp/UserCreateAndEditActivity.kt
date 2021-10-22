@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.net.Uri
 import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,7 +27,6 @@ import java.util.*
 const val REQUEST_CODE_IMAGE_PICK = 0
 
 
-
 class UserCreateAndEditActivity : AppCompatActivity() {
 
     val TAG = "!!!"
@@ -37,14 +37,16 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     val db = FirebaseFirestore.getInstance()
     var decision = ""
     val userImageUrl = mutableListOf<String>()
-
+    var choosenImageUrl: String? = null
+    var choosenText: String? = null
 
 
     lateinit var recyclerView: RecyclerView
-    lateinit var recyclerViewImageButton: ImageButton
     lateinit var uploadButton: Button
     lateinit var deleteButton: Button
     lateinit var storeButton: Button
+    lateinit var saveButton: Button
+    lateinit var editText: EditText
     lateinit var imgeViewButton: ImageButton
 
 
@@ -56,6 +58,8 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         uploadButton = findViewById(R.id.uploadButton)
         storeButton = findViewById(R.id.storeButton)
         deleteButton = findViewById(R.id.deleteButton)
+        saveButton = findViewById(R.id.saveButton)
+        editText = findViewById(R.id.userEditText)
         imgeViewButton = findViewById(R.id.imageViewButton)
 
         decision = intent.getStringExtra(Constants.DAY_CHOSEN).toString()
@@ -86,7 +90,18 @@ class UserCreateAndEditActivity : AppCompatActivity() {
             deleteImage("uniqeString")
         }
 
+        saveButton.setOnClickListener {
+            storeAction()
+        }
+
+
+
     }
+
+        override fun onResume() {
+            recyclerView.adapter?.notifyDataSetChanged()
+            super.onResume()
+        }
 
     private fun deleteImage(filename: String) = CoroutineScope(Dispatchers.IO).launch {
         try {
@@ -104,29 +119,6 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         }
 
     }
-        /*
-    private fun downLoadImage(filename: String) = CoroutineScope(Dispatchers.IO).launch {
-        try {
-
-            val maxDownloadSize = 5L * 1024 * 1024
-            val bytes =
-                imageRef.child("UploadedPictures/$uniqeString").getBytes(maxDownloadSize).await()
-            val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-            withContext(Dispatchers.Main) {
-                imgeViewButton.setImageBitmap(bmp)
-            }
-
-
-        } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(this@UserCreateAndEditActivity, e.message, Toast.LENGTH_SHORT).show()
-            }
-
-        }
-
-    }
-
-         */
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -160,16 +152,13 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                         val downloadUri = task.result
                         Toast.makeText(this@UserCreateAndEditActivity, "Bilden är sparad", Toast.LENGTH_SHORT).show()
 
-                        val action = Actions(null, downloadUri.toString(), false, "test")
+                        val action = Actions(null, downloadUri.toString(), false, "text")
                         db.collection("Weekday").document(decision).collection(decision).add(action)
 
 
 
                         Log.d(TAG, "uploadImageToStorage: ${downloadUri}")
 
-                    } else {
-                        // Handle failures
-                        // ...
                     }
                 }
 
@@ -178,12 +167,27 @@ class UserCreateAndEditActivity : AppCompatActivity() {
 
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
-                Toast.makeText(this@UserCreateAndEditActivity, e.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@UserCreateAndEditActivity, "Error", Toast.LENGTH_SHORT).show()
             }
         }
 
 
     }
+
+    fun storeAction() {
+        val storageImage = Actions(null, choosenImageUrl, false,"test")
+        db.collection("Weekday").document(decision).collection(decision).add(storageImage)
+            .addOnCompleteListener { task ->
+                if(task.isSuccessful) {
+                    Log.d(TAG, "storeAction: $storageImage")
+                    Toast.makeText(this@UserCreateAndEditActivity,"Bilden är tillagd i listan",Toast.LENGTH_SHORT).show()
+                }
+
+            }
+
+    }
+
+
 
 
     private fun listFiles() = CoroutineScope(Dispatchers.IO).launch {
@@ -196,22 +200,61 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                 userImageUrl.add(url.toString())
             }
             withContext(Dispatchers.Main) {
-               recyclerView.adapter?.notifyDataSetChanged()
+                recyclerView.adapter?.notifyDataSetChanged()
 
 
             }
 
-
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
-                Toast.makeText(this@UserCreateAndEditActivity, e.message, Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@UserCreateAndEditActivity, "Error", Toast.LENGTH_SHORT).show()
             }
         }
 
     }
-    fun setImage(url: String){
+
+    fun setImage(url: String) {
+        choosenImageUrl = url // adressen kommer in
         Glide.with(this).load(url).into(imgeViewButton)
     }
+    fun setInstructionText(text: String) {
+        choosenText = text
+        Glide.with(this).load(text).into(imgeViewButton)
+
+    }
+
+    
+
+
+
+
+
+
+
+    /*
+
+  private fun downLoadImage(filename: String) = CoroutineScope(Dispatchers.IO).launch {
+      try {
+
+          val maxDownloadSize = 5L * 1024 * 1024
+          val bytes =
+              imageRef.child("UploadedPictures/$uniqeString").getBytes(maxDownloadSize).await()
+          val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+          withContext(Dispatchers.Main) {
+              imgeViewButton.setImageBitmap(bmp)
+          }
+
+
+      } catch (e: Exception) {
+          withContext(Dispatchers.Main) {
+              Toast.makeText(this@UserCreateAndEditActivity, e.message, Toast.LENGTH_SHORT).show()
+          }
+
+      }
+
+  }
+
+       */
 
 
 }
