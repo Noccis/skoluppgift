@@ -38,7 +38,6 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     var decision = ""
     val userImageUrl = mutableListOf<String>()
     var choosenImageUrl: String? = null
-    var choosenText: String? = null
 
 
     lateinit var recyclerView: RecyclerView
@@ -175,7 +174,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     }
 
     fun storeAction() {
-        val storageImage = Actions(null, choosenImageUrl, false,"test")
+        val storageImage = Actions(null, choosenImageUrl, false,editText.text.toString())
         db.collection("Weekday").document(decision).collection(decision).add(storageImage)
             .addOnCompleteListener { task ->
                 if(task.isSuccessful) {
@@ -217,11 +216,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         choosenImageUrl = url // adressen kommer in
         Glide.with(this).load(url).into(imgeViewButton)
     }
-    fun setInstructionText(text: String) {
-        choosenText = text
-        Glide.with(this).load(text).into(imgeViewButton)
 
-    }
 
     
 
