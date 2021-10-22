@@ -151,7 +151,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                         val downloadUri = task.result
                         Toast.makeText(this@UserCreateAndEditActivity, "Bilden är sparad", Toast.LENGTH_SHORT).show()
 
-                        val action = Actions(null, downloadUri.toString(), false, "text")
+                        val action = Actions(null, downloadUri.toString(), false, editText.text.toString())
                         db.collection("Weekday").document(decision).collection(decision).add(action)
 
 
