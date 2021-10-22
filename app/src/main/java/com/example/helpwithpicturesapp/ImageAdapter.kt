@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.ImageView
 import androidx.core.app.ActivityCompat.startActivityForResult
@@ -18,11 +19,13 @@ class ImageAdapter(val activity: UserCreateAndEditActivity,
 
     inner class ImageViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         val recyclerViewImageViewButton = itemView.findViewById<ImageButton>(R.id.recyclerViewImageButton)
-        var url =""
+        var url = ""
 
         init {
             recyclerViewImageViewButton.setOnClickListener {
              activity.setImage(url)
+
+
             }
         }
 

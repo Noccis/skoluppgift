@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.net.Uri
 import android.util.Log
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,6 +38,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     var decision = ""
     val userImageUrl = mutableListOf<String>()
     var choosenImageUrl: String? = null
+    var choosenText: String? = null
 
 
     lateinit var recyclerView: RecyclerView
@@ -44,6 +46,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     lateinit var deleteButton: Button
     lateinit var storeButton: Button
     lateinit var saveButton: Button
+    lateinit var editText: EditText
     lateinit var imgeViewButton: ImageButton
 
 
@@ -56,6 +59,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         storeButton = findViewById(R.id.storeButton)
         deleteButton = findViewById(R.id.deleteButton)
         saveButton = findViewById(R.id.saveButton)
+        editText = findViewById(R.id.userEditText)
         imgeViewButton = findViewById(R.id.imageViewButton)
 
         decision = intent.getStringExtra(Constants.DAY_CHOSEN).toString()
@@ -105,8 +109,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
             imageRef.child("UploadedPictures/$filename").delete().await()
             withContext(Dispatchers.Main) {
                 Toast.makeText(
-                    this@UserCreateAndEditActivity, "Bilden är raderad", Toast.LENGTH_SHORT
-                ).show()
+                    this@UserCreateAndEditActivity, "Bilden är raderad", Toast.LENGTH_SHORT).show()
             }
 
         } catch (e: Exception) {
@@ -149,7 +152,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                         val downloadUri = task.result
                         Toast.makeText(this@UserCreateAndEditActivity, "Bilden är sparad", Toast.LENGTH_SHORT).show()
 
-                        val action = Actions(null, downloadUri.toString(), false, "test")
+                        val action = Actions(null, downloadUri.toString(), false, "text")
                         db.collection("Weekday").document(decision).collection(decision).add(action)
 
 
@@ -172,16 +175,19 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     }
 
     fun storeAction() {
-        val storageImage = Actions(null, choosenImageUrl, false, "test")
+        val storageImage = Actions(null, choosenImageUrl, false,"test")
         db.collection("Weekday").document(decision).collection(decision).add(storageImage)
             .addOnCompleteListener { task ->
                 if(task.isSuccessful) {
+                    Log.d(TAG, "storeAction: $storageImage")
                     Toast.makeText(this@UserCreateAndEditActivity,"Bilden är tillagd i listan",Toast.LENGTH_SHORT).show()
                 }
 
             }
 
     }
+
+
 
 
     private fun listFiles() = CoroutineScope(Dispatchers.IO).launch {
@@ -211,6 +217,16 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         choosenImageUrl = url // adressen kommer in
         Glide.with(this).load(url).into(imgeViewButton)
     }
+    fun setInstructionText(text: String) {
+        choosenText = text
+        Glide.with(this).load(text).into(imgeViewButton)
+
+    }
+
+    
+
+
+
 
 
 
