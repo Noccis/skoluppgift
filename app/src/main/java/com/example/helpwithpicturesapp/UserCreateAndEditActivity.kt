@@ -36,6 +36,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     var decision = ""
     val userImageUrl = mutableListOf<String>()
     var choosenImageUrl: String? = null
+    var actionId = ""
 
 
     lateinit var recyclerView: RecyclerView
@@ -65,6 +66,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         backImage = findViewById(R.id.backImage)
 
         decision = intent.getStringExtra(Constants.DAY_CHOSEN).toString()
+        actionId = intent.getStringExtra(INSTRUCTIONS_POSITION_KEY).toString()
 
         recyclerView.layoutManager= gridLayoutManager
         recyclerView.setHasFixedSize(true)
@@ -84,7 +86,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
             }
         }
 
-        uploadButton.setOnClickListener {
+       uploadButton.setOnClickListener {
             uploadImageToStorage("uniqeString")
         }
 
@@ -136,7 +138,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     }
 
 
-    private fun uploadImageToStorage(filename: String) = CoroutineScope(Dispatchers.IO).launch {
+   private fun uploadImageToStorage(filename: String) = CoroutineScope(Dispatchers.IO).launch {
         try {
 
             curFile?.let {
@@ -155,7 +157,11 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                         Toast.makeText(this@UserCreateAndEditActivity, "Bilden är sparad", Toast.LENGTH_SHORT).show()
 
                         val action = Actions(null, downloadUri.toString(), false, editText.text.toString())
+                        val actionsteps = ActionSteps(null,downloadUri.toString(),false,editText.text.toString() )
                         db.collection("Weekday").document(decision).collection(decision).add(action)
+                        db.collection("Weekday").document(decision).collection(decision).document(actionId)
+                            .collection(actionId).add(actionsteps)
+
 
 
 

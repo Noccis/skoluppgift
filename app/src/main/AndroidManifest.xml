@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HelpWithPicturesApp">
         <activity
+            android:name=".CreateAndEditActionSteps"
+            android:exported="false" />
+        <activity
             android:name=".UserCreateAndEditActivity"
             android:exported="false" />
         <activity

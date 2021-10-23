@@ -57,7 +57,7 @@ class ToDoActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        myAdapter = ActionsRecycleViewAdapter(this, action)
+        myAdapter = ActionsRecycleViewAdapter(this, action , decision)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = myAdapter
         EventChangeListener()
