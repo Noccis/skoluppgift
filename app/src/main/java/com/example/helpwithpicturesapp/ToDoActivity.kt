@@ -62,7 +62,7 @@ class ToDoActivity : AppCompatActivity() {
         recyclerView.adapter = myAdapter
         EventChangeListener()
 
-        addButton = findViewById<FloatingActionButton>(R.id.floatingActionButton)
+        addButton = findViewById(R.id.floatingActionButton)
         addButton.setOnClickListener {
             val intent = Intent(this, UserCreateAndEditActivity::class.java)
             intent.putExtra(Constants.DAY_CHOSEN, decision)
