@@ -6,10 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.net.Uri
 import android.util.Log
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.Toast
+import android.widget.*
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
@@ -41,12 +39,15 @@ class UserCreateAndEditActivity : AppCompatActivity() {
 
 
     lateinit var recyclerView: RecyclerView
+    private var gridLayoutManager : GridLayoutManager? = null
     lateinit var uploadButton: Button
     lateinit var deleteButton: Button
     lateinit var storeButton: Button
     lateinit var saveButton: Button
     lateinit var editText: EditText
     lateinit var imgeViewButton: ImageButton
+    lateinit var imageAdapter: ImageAdapter
+    lateinit var backImage : ImageView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,19 +55,26 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user_create_and_edit)
 
         recyclerView = findViewById(R.id.recyclerView)
+        gridLayoutManager = GridLayoutManager(applicationContext, 2,LinearLayoutManager.VERTICAL, false)
         uploadButton = findViewById(R.id.uploadButton)
         storeButton = findViewById(R.id.storeButton)
         deleteButton = findViewById(R.id.deleteButton)
         saveButton = findViewById(R.id.saveButton)
         editText = findViewById(R.id.userEditText)
         imgeViewButton = findViewById(R.id.imageViewButton)
+        backImage = findViewById(R.id.backImage)
 
         decision = intent.getStringExtra(Constants.DAY_CHOSEN).toString()
 
-        val imageAdapter = ImageAdapter(this, userImageUrl)
-        recyclerView.apply {
-            adapter = imageAdapter
-            layoutManager = LinearLayoutManager(this@UserCreateAndEditActivity)
+        recyclerView.layoutManager= gridLayoutManager
+        recyclerView.setHasFixedSize(true)
+
+        imageAdapter = ImageAdapter(this, userImageUrl)
+
+        recyclerView.adapter = imageAdapter
+
+        backImage.setOnClickListener {
+            finish()
         }
 
         imgeViewButton.setOnClickListener {
@@ -84,7 +92,6 @@ class UserCreateAndEditActivity : AppCompatActivity() {
             listFiles()
         }
 
-
         deleteButton.setOnClickListener {
             deleteImage("uniqeString")
         }
@@ -92,11 +99,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         saveButton.setOnClickListener {
             storeAction()
         }
-
-
-
     }
-
         override fun onResume() {
             recyclerView.adapter?.notifyDataSetChanged()
             super.onResume()
@@ -174,20 +177,25 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     }
 
     fun storeAction() {
-        val storageImage = Actions(null, choosenImageUrl, false,editText.text.toString())
-        db.collection("Weekday").document(decision).collection(decision).add(storageImage)
-            .addOnCompleteListener { task ->
-                if(task.isSuccessful) {
-                    Log.d(TAG, "storeAction: $storageImage")
-                    Toast.makeText(this@UserCreateAndEditActivity,"Bilden är tillagd i listan",Toast.LENGTH_SHORT).show()
+        val storageImage = Actions(null, choosenImageUrl, false, editText.text.toString())
+        if (choosenImageUrl != null && editText.text.toString() != "" ) {
+            db.collection("Weekday").document(decision).collection(decision).add(storageImage)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        Log.d(TAG, "storeAction: $storageImage")
+                        Toast.makeText(
+                            this@UserCreateAndEditActivity,
+                            "Bilden och instruktionen är tillagda i listan",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
-
-            }
-
+        } else Toast.makeText(
+            this@UserCreateAndEditActivity,
+            "Välj en bild och skriv instruktionen",
+            Toast.LENGTH_SHORT
+        ).show()
     }
-
-
-
 
     private fun listFiles() = CoroutineScope(Dispatchers.IO).launch {
         try {

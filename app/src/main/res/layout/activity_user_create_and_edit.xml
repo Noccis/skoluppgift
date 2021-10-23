@@ -8,23 +8,21 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
-        android:layout_width="276dp"
-        android:layout_height="429dp"
-        android:layout_marginTop="248dp"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_marginTop="24dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewButton"
-        app:layout_constraintVertical_bias="0.642"
+        app:layout_constraintTop_toBottomOf="@+id/userEditText"
+        app:layout_constraintVertical_bias="0.0"
         tools:listitem="@layout/item_image" />
 
     <Button
         android:id="@+id/uploadButton"
-        android:layout_width="167dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="31dp"
-        android:layout_marginTop="11dp"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
         android:text="Ladda upp bild"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageViewButton"
@@ -32,26 +30,21 @@
 
     <Button
         android:id="@+id/storeButton"
-        android:layout_width="167dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="44dp"
-        android:layout_marginEnd="2dp"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
         android:text="Lagrade bilder"
-        app:layout_constraintBottom_toTopOf="@+id/deleteButton"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.937"
         app:layout_constraintStart_toEndOf="@+id/imageViewButton"
         app:layout_constraintTop_toBottomOf="@+id/uploadButton" />
 
     <Button
         android:id="@+id/deleteButton"
-        android:layout_width="167dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="42dp"
-        android:layout_marginEnd="1dp"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
         android:text="Ta bort bild"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.923"
         app:layout_constraintStart_toEndOf="@+id/imageViewButton"
         app:layout_constraintTop_toBottomOf="@+id/storeButton" />
 
@@ -59,43 +52,46 @@
         android:id="@+id/imageViewButton"
         android:layout_width="202dp"
         android:layout_height="201dp"
-        android:layout_marginStart="12dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="14dp"
-        app:layout_constraintBottom_toTopOf="@+id/saveButton"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.155"
+        app:layout_constraintTop_toBottomOf="@+id/backImage"
+        tools:ignore="SpeakableTextPresentCheck"
         tools:srcCompat="@tools:sample/avatars" />
 
     <Button
         android:id="@+id/saveButton"
-        android:layout_width="167dp"
-        android:layout_height="58dp"
-        android:layout_marginStart="28dp"
-        android:layout_marginEnd="2dp"
+        android:layout_width="150dp"
+        android:layout_height="60dp"
+        android:layout_marginTop="8dp"
         android:text="Lägg till i listan"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toEndOf="@+id/imageViewButton"
         app:layout_constraintTop_toBottomOf="@+id/deleteButton" />
 
     <EditText
         android:id="@+id/userEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="19dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="182dp"
-        android:layout_marginBottom="6dp"
+        android:layout_width="180dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="16dp"
         android:ems="10"
         android:hint="Instruktion till bilden"
         android:inputType="textPersonName"
-        app:layout_constraintBottom_toTopOf="@+id/recyclerView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.069"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewButton"
-        app:layout_constraintVertical_bias="0.472" />
+        app:layout_constraintTop_toBottomOf="@+id/imageViewButton" />
+
+    <ImageView
+        android:id="@+id/backImage"
+        android:layout_width="78dp"
+        android:layout_height="27dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintEnd_toStartOf="@+id/uploadButton"
+        app:layout_constraintHorizontal_bias="0.098"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_back" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

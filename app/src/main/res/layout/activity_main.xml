@@ -19,8 +19,9 @@
     <androidx.cardview.widget.CardView
         android:layout_width="358dp"
         android:layout_height="225dp"
-        android:layout_marginTop="124dp"
-        app:cardCornerRadius="5dp"
+        android:layout_marginTop="60dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.301"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,10 +76,10 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="152dp"
+        android:layout_marginTop="124dp"
         android:text="Button"
         app:layout_constraintEnd_toStartOf="@+id/instructions_Tv"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.761"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
