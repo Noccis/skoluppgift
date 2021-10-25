@@ -11,9 +11,10 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.DocumentId
 
 
-class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions>):
+class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> , val decision : String ):
     RecyclerView.Adapter<ActionsRecycleViewAdapter.ViewHolder>(){
 
     val layoutInflater = LayoutInflater.from(context)
@@ -27,13 +28,12 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions>)
 
 
         init {
-
-
             imageButtonView.setOnClickListener{
-
                 val intent = Intent(context,HowToDoItActivity::class.java)
                 intent.putExtra(ACTIONS_POSITION_KEY, actionsPosition)
-                intent.putExtra("ActionChosen", action[actionsPosition].documentName)
+                intent.putExtra(Constants.DAY_CHOSEN, decision)
+                intent.putExtra(ACTION_LOCATION, action[actionsPosition].documentName)
+                //intent.putExtra("ActionChosen", action[actionsPosition].documentName)
                 context.startActivity(intent)
             }
             checkBoxView.setOnClickListener {

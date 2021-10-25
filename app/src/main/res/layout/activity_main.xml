@@ -4,25 +4,30 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/bgimage3"
     tools:context=".MainActivity">
 
     <TextView
         android:id="@+id/instructions_Tv"
         android:layout_width="181dp"
         android:layout_height="82dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="16dp"
         android:text="Instructions"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.565"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
         android:layout_width="358dp"
         android:layout_height="225dp"
-        android:layout_marginTop="124dp"
-        app:cardCornerRadius="5dp"
+        app:cardBackgroundColor="@color/monday"
+        android:layout_marginStart="100dp"
+        android:layout_marginTop="60dp"
+        android:layout_marginEnd="100dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="50dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.301"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/instructions_Tv">
 
@@ -38,34 +43,55 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:ems="10"
-                android:hint="Namn"
+                android:elevation="2dp"
+                android:ems="12"
+                android:backgroundTint="@color/black"
+                android:hint="E-mail "
                 android:inputType="textPersonName"
-                android:minHeight="48dp" />
+                android:minHeight="48dp"
+                android:textColor="@color/black"
+                android:textColorHighlight="#F3ECEC"
+                android:textColorLink="#F1EDED"
+                android:textColorHint="@color/white"/>
 
             <EditText
                 android:id="@+id/textPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:ems="10"
+                android:elevation="2dp"
+                android:ems="12"
+                android:backgroundTint="@color/black"
                 android:hint="Lösenord"
                 android:inputType="textPersonName"
-                android:minHeight="48dp" />
+                android:minHeight="48dp"
+                android:password="true"
+                android:textColor="@color/black"
+                android:textColorHighlight="#F3ECEC"
+                android:textColorLink="#F1EDED"
+                android:textColorHint="@color/white"/>
 
             <Button
                 android:id="@+id/loginButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Logga in" />
+                android:backgroundTint="@color/tuesday"
+                android:text="Logga in"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:cornerRadius="10dp" />
 
             <Button
                 android:id="@+id/createButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Skapa användare" />
+                android:textColor="@color/white"
+                android:backgroundTint="@color/tuesday"
+                android:text="Skapa användare"
+                android:textStyle="bold"
+                app:cornerRadius="10dp"/>
 
         </LinearLayout>
 
@@ -75,10 +101,10 @@
         android:id="@+id/button2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="152dp"
+        android:layout_marginTop="96dp"
         android:text="Button"
         app:layout_constraintEnd_toStartOf="@+id/instructions_Tv"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.612"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

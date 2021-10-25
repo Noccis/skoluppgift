@@ -30,10 +30,10 @@
 
             <ImageView
                 android:id="@+id/imageButton"
-                android:layout_width="219dp"
-                android:layout_height="162dp"
-                android:layout_marginTop="8dp"
+                android:layout_width="169dp"
+                android:layout_height="130dp"
                 android:layout_gravity="center_vertical"
+                android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toStartOf="@+id/guideline2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -41,8 +41,8 @@
 
             <CheckBox
                 android:id="@+id/checkBox_Button"
-                android:layout_width="112dp"
-                android:layout_height="94dp"
+                android:layout_width="100dp"
+                android:layout_height="79dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="50dp"
                 android:layout_marginEnd="10dp"
