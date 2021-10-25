@@ -51,7 +51,7 @@ class CreateAndEditActionSteps : AppCompatActivity() {
         setContentView(R.layout.activity_create_and_edit_action_steps)
 
         recyclerView = findViewById(R.id.recyclerView)
-        gridLayoutManager = GridLayoutManager(applicationContext, 2,LinearLayoutManager.VERTICAL, false)
+        gridLayoutManager = GridLayoutManager(applicationContext, 3,LinearLayoutManager.VERTICAL, false)
         uploadButton = findViewById(R.id.uploadButton)
         storeButton = findViewById(R.id.storeButton)
         deleteButton = findViewById(R.id.deleteButton)

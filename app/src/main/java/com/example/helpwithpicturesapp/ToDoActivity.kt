@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.media.MediaPlayer
+import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
@@ -44,7 +45,7 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var lockButton : ImageView
     lateinit var passCard : CardView
     lateinit var editPassword : EditText
-    private var longtAnimationDuration: Int = 2000
+    private var longAnimationDuration: Int = 2000
     lateinit var lock : Button
     lateinit var unlock : Button
     var password = ""
@@ -58,7 +59,6 @@ class ToDoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_to_do)
 
         password = intent.getStringExtra(Constants.PASSWORD).toString()
-
         editPassword = findViewById(R.id.editPassword)
         passCard = findViewById(R.id.passCard)
         passCard.visibility = View.GONE
@@ -70,8 +70,8 @@ class ToDoActivity : AppCompatActivity() {
         lockButton = findViewById(R.id.lockButton)
         lockButton.setOnClickListener {
             lockEditing()
-
         }
+
         rewardImageView = findViewById(R.id.rewardImageView)
         rewardImageView.visibility = View.GONE
 
@@ -83,7 +83,7 @@ class ToDoActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        myAdapter = ActionsRecycleViewAdapter(this, action , decision)
+        myAdapter = ActionsRecycleViewAdapter(this, action , decision, password)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = myAdapter
         EventChangeListener()
@@ -95,10 +95,11 @@ class ToDoActivity : AppCompatActivity() {
             intent.putExtra(Constants.DAY_CHOSEN, decision)
             startActivity(intent)
         }
+
         val itemTouchHelper = ItemTouchHelper(simpleCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
-    }
 
+    }
         var simpleCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP.or(ItemTouchHelper.DOWN),ItemTouchHelper.LEFT. or (ItemTouchHelper.RIGHT)){
             override fun onMove(
                 recyclerView: RecyclerView,
@@ -111,7 +112,6 @@ class ToDoActivity : AppCompatActivity() {
                 recyclerView.adapter?.notifyItemMoved(startPosition,endPosition)
                 return true
             }
-
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 var position = viewHolder.adapterPosition
                 when (direction){
@@ -119,14 +119,12 @@ class ToDoActivity : AppCompatActivity() {
                         deletedCard= action.get(position)
                         action.removeAt(position)
                         myAdapter.notifyItemRemoved(position)
-
                         Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG)
                             .setAction("Ångra", View.OnClickListener {
                             action.add(position, deletedCard)
                             myAdapter.notifyItemInserted(position)
                         }).show()
                         }
-
                     ItemTouchHelper.RIGHT -> {
                         deletedCard= action.get(position)
                         action.removeAt(position)
@@ -138,18 +136,10 @@ class ToDoActivity : AppCompatActivity() {
                                 myAdapter.notifyItemInserted(position)
                             }).show()
                     }
-
                 }
-
             }
-
-
-
     }
-
-
         fun EventChangeListener() {
-
             when (decision) {
                 "monday" -> {
                     dayTextView.text = "Måndag"
@@ -237,7 +227,7 @@ class ToDoActivity : AppCompatActivity() {
         passCard.apply {
             alpha = 0f
             visibility = View.VISIBLE
-            animate().alpha(1f).setDuration(longtAnimationDuration.toLong()).setListener(null)
+            animate().alpha(1f).setDuration(longAnimationDuration.toLong()).setListener(null)
         }
 
         unlock.setOnClickListener {
@@ -247,7 +237,7 @@ class ToDoActivity : AppCompatActivity() {
                 addButton.visibility = View.VISIBLE
                 editPassword.setText("")
             } else {
-                Toast.makeText(this, "Fel Lösenord! ", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Skriv rätt lösenord! ", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -258,7 +248,7 @@ class ToDoActivity : AppCompatActivity() {
                 addButton.visibility = View.GONE
                 editPassword.setText("")
             } else {
-                Toast.makeText(this, "Fel Lösenord! ", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Skriv rätt lösenord! ", Toast.LENGTH_SHORT).show()
             }
         }
         close.setOnClickListener {

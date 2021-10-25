@@ -12,7 +12,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 
-class HowToDoItRecycleViewAdapter (val context: Context, val actionStep: List<ActionSteps>):
+class HowToDoItRecycleViewAdapter (val context: Context, val actionStep: List<ActionSteps> ):
     RecyclerView.Adapter<HowToDoItRecycleViewAdapter.ViewHolder>() {
 
     val layoutInflater = LayoutInflater.from(context)
