@@ -21,8 +21,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var textEmail : EditText
     lateinit var textPassword : EditText
     lateinit var userSeeInsrtuctionsView: TextView
+   lateinit var password : String
     val TAG = "!!!"
-val db = Firebase.firestore
+    val db = Firebase.firestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -34,10 +35,7 @@ val db = Firebase.firestore
         }
 
         userSeeInsrtuctionsView = findViewById(R.id.instructions_Tv)
-       // val nextPageButton = findViewById<Button>(R.id.loginButton)
-        //nextPageButton.setOnClickListener {
-         //   weekdayPage()
-        //}
+
 
         auth = Firebase.auth
 
@@ -57,12 +55,13 @@ val db = Firebase.firestore
 
     fun goToAddActivity() {
         val intent = Intent(this , WeekdaysActivity::class.java)
+        intent.putExtra(Constants.PASSWORD, password)
         startActivity(intent)
     }
 
     fun loginUser() {
         val email = textEmail.text.toString()
-        val password = textPassword.text.toString()
+        password = textPassword.text.toString()
 
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Användarnamn och lösernord måste fyllas i!"

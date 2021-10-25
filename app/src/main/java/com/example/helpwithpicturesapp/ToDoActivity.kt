@@ -1,6 +1,7 @@
 package com.example.helpwithpicturesapp
 
 
+import android.content.ContentValues.TAG
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
@@ -12,11 +13,10 @@ import android.os.Looper
 import android.util.Log
 
 import android.view.View
-import android.widget.EditText
-import android.widget.ImageView
+import android.widget.*
 
-import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.ItemTouchHelper
 
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -24,8 +24,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import java.util.*
 
 class ToDoActivity : AppCompatActivity() {
@@ -37,6 +41,17 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var myAdapter: ActionsRecycleViewAdapter
     var decision = ""
     lateinit var dayTextView : TextView
+    lateinit var lockButton : ImageView
+    lateinit var passCard : CardView
+    lateinit var editPassword : EditText
+    private var longtAnimationDuration: Int = 2000
+    lateinit var lock : Button
+    lateinit var unlock : Button
+    lateinit var users : Users
+    lateinit var auth : FirebaseAuth
+    var password = ""
+    lateinit var close : ImageView
+
 
     lateinit var rewardImageView: ImageView
     private var shortAnimationDuration: Int = 400
@@ -46,6 +61,21 @@ class ToDoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
 
+        password = intent.getStringExtra(Constants.PASSWORD).toString()
+
+        editPassword = findViewById(R.id.editPassword)
+        passCard = findViewById(R.id.passCard)
+        passCard.visibility = View.GONE
+        close = findViewById(R.id.close)
+
+        lock = findViewById(R.id.lock)
+        unlock = findViewById(R.id.unlock)
+
+        lockButton = findViewById(R.id.lockButton)
+        lockButton.setOnClickListener {
+            lockEditing()
+
+        }
         rewardImageView = findViewById(R.id.rewardImageView)
         rewardImageView.visibility = View.GONE
 
@@ -63,6 +93,7 @@ class ToDoActivity : AppCompatActivity() {
         EventChangeListener()
 
         addButton = findViewById(R.id.floatingActionButton)
+        addButton.visibility = View.GONE
         addButton.setOnClickListener {
             val intent = Intent(this, UserCreateAndEditActivity::class.java)
             intent.putExtra(Constants.DAY_CHOSEN, decision)
@@ -93,34 +124,25 @@ class ToDoActivity : AppCompatActivity() {
                         action.removeAt(position)
                         myAdapter.notifyItemRemoved(position)
 
-                        Snackbar.make(recyclerView, "The card is deleted", Snackbar.LENGTH_LONG)
-                            .setAction("Undo", View.OnClickListener {
+                        Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG)
+                            .setAction("Ångra", View.OnClickListener {
                             action.add(position, deletedCard)
                             myAdapter.notifyItemInserted(position)
                         }).show()
                         }
 
                     ItemTouchHelper.RIGHT -> {
-                        var imageText = TextView(this@ToDoActivity)
-                        imageText.text= action[position].toString()
+                        deletedCard= action.get(position)
+                        action.removeAt(position)
+                        myAdapter.notifyItemRemoved(position)
 
-                        val builder = AlertDialog.Builder(this@ToDoActivity)
-                        builder.setTitle("Update an Item")
-                        builder.setCancelable(true)
-                        builder.setView(imageText)
-
-                        builder.setNegativeButton("cancel" , DialogInterface.OnClickListener { dialog, which ->
-                            action.clear()
-                            action.addAll(action)
-                            recyclerView.adapter!!.notifyDataSetChanged()
-                        })
-                        builder.setPositiveButton("update", DialogInterface.OnClickListener { dialog, which ->
-                            action.set(position, Actions(imageText.text as String))
-                            recyclerView.adapter!!.notifyItemChanged(position)
-                        })
-
-                        builder.show()
+                        Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG)
+                            .setAction("Ångra", View.OnClickListener {
+                                action.add(position, deletedCard)
+                                myAdapter.notifyItemInserted(position)
+                            }).show()
                     }
+
                 }
 
             }
@@ -201,7 +223,7 @@ class ToDoActivity : AppCompatActivity() {
 
             animate()
                 .alpha(1f)
-                .setDuration(shortAnimationDuration.toLong())
+                .setDuration(longtAnimationDuration.toLong())
                 .setListener(null)
         }
     }
@@ -213,6 +235,44 @@ class ToDoActivity : AppCompatActivity() {
     private fun hideReward () {
         rewardImageView.visibility = View.GONE
     }
+
+
+    fun lockEditing(){
+        passCard.apply {
+            alpha = 0f
+            visibility = View.VISIBLE
+            animate().alpha(1f).setDuration(shortAnimationDuration.toLong()).setListener(null)
+        }
+
+        unlock.setOnClickListener {
+            val pass = editPassword.text.toString()
+            if ( password == pass) {
+                passCard.visibility = View.GONE
+                addButton.visibility = View.VISIBLE
+                editPassword.setText("")
+            } else {
+                Toast.makeText(this, "Fel Lösenord! ", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        lock.setOnClickListener {
+            val pass = editPassword.text.toString()
+            if ( password == pass) {
+                passCard.visibility = View.GONE
+                addButton.visibility = View.GONE
+                editPassword.setText("")
+            } else {
+                Toast.makeText(this, "Fel Lösenord! ", Toast.LENGTH_SHORT).show()
+            }
+        }
+        close.setOnClickListener {
+
+        }
+
+    }
+
+
+
 
 }
 
