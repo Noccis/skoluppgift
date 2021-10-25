@@ -47,12 +47,8 @@ class ToDoActivity : AppCompatActivity() {
     private var longtAnimationDuration: Int = 2000
     lateinit var lock : Button
     lateinit var unlock : Button
-    lateinit var users : Users
-    lateinit var auth : FirebaseAuth
     var password = ""
     lateinit var close : ImageView
-
-
     lateinit var rewardImageView: ImageView
     private var shortAnimationDuration: Int = 400
     lateinit var deletedCard : Actions
@@ -223,7 +219,7 @@ class ToDoActivity : AppCompatActivity() {
 
             animate()
                 .alpha(1f)
-                .setDuration(longtAnimationDuration.toLong())
+                .setDuration(shortAnimationDuration.toLong())
                 .setListener(null)
         }
     }
@@ -241,7 +237,7 @@ class ToDoActivity : AppCompatActivity() {
         passCard.apply {
             alpha = 0f
             visibility = View.VISIBLE
-            animate().alpha(1f).setDuration(shortAnimationDuration.toLong()).setListener(null)
+            animate().alpha(1f).setDuration(longtAnimationDuration.toLong()).setListener(null)
         }
 
         unlock.setOnClickListener {
@@ -266,14 +262,9 @@ class ToDoActivity : AppCompatActivity() {
             }
         }
         close.setOnClickListener {
-
+            passCard.visibility = View.GONE
         }
-
     }
-
-
-
-
 }
 
 
