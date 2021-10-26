@@ -85,52 +85,67 @@ class ToDoActivity : AppCompatActivity() {
         EventChangeListener()
 
 
-        val itemTouchHelper = ItemTouchHelper(simpleCallback)
-        itemTouchHelper.attachToRecyclerView(recyclerView)
+        // val itemTouchHelper = ItemTouchHelper(simpleCallback)
+        //itemTouchHelper.attachToRecyclerView(recyclerView)
 
-    }
+        val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(
+            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
+            ItemTouchHelper.LEFT
+        ) {
 
-    private var simpleCallback = object : ItemTouchHelper.SimpleCallback(
-        ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), ItemTouchHelper.LEFT) {
+            // private var simpleCallback = object : ItemTouchHelper.SimpleCallback(
+            //    ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), ItemTouchHelper.LEFT) {
 
-        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-                            target: RecyclerView.ViewHolder): Boolean {
+            override fun onMove(
+                recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
 
-            if (addButton.visibility == View.VISIBLE) {
-                var startPosition = viewHolder.adapterPosition
-                var endPosition = target.adapterPosition
-                Collections.swap(action, startPosition, endPosition)
-                recyclerView.adapter?.notifyItemMoved(startPosition, endPosition)
-                return true
-            } else return false
-        }
+                if (addButton.visibility == View.VISIBLE) {
+                    var startPosition = viewHolder.adapterPosition
+                    var endPosition = target.adapterPosition
+                    Collections.swap(action, startPosition, endPosition)
+                    recyclerView.adapter?.notifyItemMoved(startPosition, endPosition)
+                    return true
+                } else return false
+            }
 
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
-            Log.d("!!!", " först $locked")
+                Log.d("!!!", " först $locked")
 
-            val position = viewHolder.adapterPosition
-
-            when (direction) {
-                ItemTouchHelper.LEFT -> {
-                    deletedCard = action.get(position)
-                    when (locked) {
-                        false -> {
-                        action.removeAt(position)
-                        myAdapter.notifyItemRemoved(position)
+                if (addButton.visibility == View.GONE) {
+                    val position = null } else {
+                    val position = viewHolder.adapterPosition
+                    when (direction) {
+                        ItemTouchHelper.LEFT -> {
+                            deletedCard = action.get(position)
+                            action.removeAt(position)
+                            myAdapter.notifyItemRemoved(position)
+                            Snackbar.make(
+                                recyclerView,
+                                "Uppgiften är borttagen",
+                                Snackbar.LENGTH_LONG
+                            )
+                                .setAction("Ångra", View.OnClickListener {
+                                    action.add(position, deletedCard)
+                                    myAdapter.notifyItemInserted(position)
+                                }).show()
+                        }
                     }
-                    }
-                    Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG)
-                        .setAction("Ångra", View.OnClickListener {
-                            action.add(position, deletedCard)
-                            myAdapter.notifyItemInserted(position)
-                        }).show()
                 }
+
             }
         }
 
-    }
 
+                val touchHelper = ItemTouchHelper(itemTouchHelper)
+                touchHelper.attachToRecyclerView(recyclerView)
+                return
+
+
+
+    }
     fun EventChangeListener() {
         when (decision) {
             "monday" -> {
@@ -254,7 +269,9 @@ class ToDoActivity : AppCompatActivity() {
         close.setOnClickListener {
             passCard.visibility = View.GONE
         }
+
     }
+
 }
 
 
