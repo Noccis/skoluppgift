@@ -41,6 +41,7 @@ class ToDoActivity : AppCompatActivity() {
     private var shortAnimationDuration: Int = 400
     lateinit var deletedCard: Actions
     var locked : Boolean  = true
+    var secret : RecyclerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -89,16 +90,12 @@ class ToDoActivity : AppCompatActivity() {
 
     }
 
-    var simpleCallback = object : ItemTouchHelper.SimpleCallback(
-        ItemTouchHelper.UP
-            .or(ItemTouchHelper.DOWN), ItemTouchHelper.LEFT
-    ) {
+    private var simpleCallback = object : ItemTouchHelper.SimpleCallback(
+        ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), ItemTouchHelper.LEFT) {
 
-        override fun onMove(
-            recyclerView: RecyclerView,
-            viewHolder: RecyclerView.ViewHolder,
-            target: RecyclerView.ViewHolder
-        ): Boolean {
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+                            target: RecyclerView.ViewHolder): Boolean {
+
             if (addButton.visibility == View.VISIBLE) {
                 var startPosition = viewHolder.adapterPosition
                 var endPosition = target.adapterPosition
@@ -108,19 +105,21 @@ class ToDoActivity : AppCompatActivity() {
             } else return false
         }
 
-        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int ) {
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
             Log.d("!!!", " först $locked")
-            if (locked){
 
-                return }
+            val position = viewHolder.adapterPosition
 
-            var position = viewHolder.adapterPosition
             when (direction) {
                 ItemTouchHelper.LEFT -> {
                     deletedCard = action.get(position)
-                    action.removeAt(position)
-                    myAdapter.notifyItemRemoved(position)
+                    when (locked) {
+                        false -> {
+                        action.removeAt(position)
+                        myAdapter.notifyItemRemoved(position)
+                    }
+                    }
                     Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG)
                         .setAction("Ångra", View.OnClickListener {
                             action.add(position, deletedCard)
@@ -233,6 +232,8 @@ class ToDoActivity : AppCompatActivity() {
                 editPassword.setText("")
                 locked = false
                 Log.d("!!!", " upplåst $locked")
+
+
             } else {
                 Toast.makeText(this, "Skriv rätt lösenord! ", Toast.LENGTH_SHORT).show()
             }
