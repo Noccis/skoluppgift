@@ -4,6 +4,7 @@ package com.example.helpwithpicturesapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
@@ -28,13 +29,12 @@ class WeekdaysActivity : AppCompatActivity() {
     var saturday = "saturday"
     var sunday = "sunday"
 
-
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weekdays)
+
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+
         mondayButton = findViewById(R.id.måndag_Button)
         mondayButton.setOnClickListener {
 

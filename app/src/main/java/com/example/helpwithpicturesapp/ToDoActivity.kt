@@ -1,36 +1,23 @@
 package com.example.helpwithpicturesapp
 
-
-import android.content.ContentValues.TAG
-import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
 import android.media.MediaPlayer
-import android.opengl.Visibility
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-
 import android.view.View
 import android.widget.*
-
-import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.ItemTouchHelper
-
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import java.util.*
 
 class ToDoActivity : AppCompatActivity() {
@@ -58,18 +45,26 @@ class ToDoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
 
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+
         password = intent.getStringExtra(Constants.PASSWORD).toString()
         editPassword = findViewById(R.id.editPassword)
         passCard = findViewById(R.id.passCard)
         passCard.visibility = View.GONE
         close = findViewById(R.id.close)
-
         lock = findViewById(R.id.lock)
         unlock = findViewById(R.id.unlock)
-
         lockButton = findViewById(R.id.lockButton)
         lockButton.setOnClickListener {
             lockEditing()
+        }
+
+        addButton = findViewById(R.id.floatingActionButton)
+        addButton.visibility = View.GONE
+        addButton.setOnClickListener {
+            val intent = Intent(this, UserCreateAndEditActivity::class.java)
+            intent.putExtra(Constants.DAY_CHOSEN, decision)
+            startActivity(intent)
         }
 
         rewardImageView = findViewById(R.id.rewardImageView)
@@ -80,41 +75,38 @@ class ToDoActivity : AppCompatActivity() {
 
 
         recyclerView = findViewById(R.id.recyclerView)
-
         recyclerView.layoutManager = LinearLayoutManager(this)
-
         myAdapter = ActionsRecycleViewAdapter(this, action , decision, password)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = myAdapter
         EventChangeListener()
 
-        addButton = findViewById(R.id.floatingActionButton)
-        addButton.visibility = View.GONE
-        addButton.setOnClickListener {
-            val intent = Intent(this, UserCreateAndEditActivity::class.java)
-            intent.putExtra(Constants.DAY_CHOSEN, decision)
-            startActivity(intent)
-        }
-
         val itemTouchHelper = ItemTouchHelper(simpleCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
     }
-        var simpleCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP.or(ItemTouchHelper.DOWN),ItemTouchHelper.LEFT. or (ItemTouchHelper.RIGHT)){
+
+        var simpleCallback = object : ItemTouchHelper.SimpleCallback(ItemTouchHelper.UP
+            .or(ItemTouchHelper.DOWN),ItemTouchHelper.LEFT){
+
             override fun onMove(
                 recyclerView: RecyclerView,
                 viewHolder: RecyclerView.ViewHolder,
                 target: RecyclerView.ViewHolder
             ): Boolean {
+                if ( addButton.visibility == View.VISIBLE) {
                 var startPosition = viewHolder.adapterPosition
                 var endPosition = target.adapterPosition
                 Collections.swap(action, startPosition, endPosition)
                 recyclerView.adapter?.notifyItemMoved(startPosition,endPosition)
                 return true
+            } else return false
             }
+
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
                 var position = viewHolder.adapterPosition
-                when (direction){
+                when (direction ){
                     ItemTouchHelper.LEFT -> {
                         deletedCard= action.get(position)
                         action.removeAt(position)
@@ -125,19 +117,9 @@ class ToDoActivity : AppCompatActivity() {
                             myAdapter.notifyItemInserted(position)
                         }).show()
                         }
-                    ItemTouchHelper.RIGHT -> {
-                        deletedCard= action.get(position)
-                        action.removeAt(position)
-                        myAdapter.notifyItemRemoved(position)
-
-                        Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG)
-                            .setAction("Ångra", View.OnClickListener {
-                                action.add(position, deletedCard)
-                                myAdapter.notifyItemInserted(position)
-                            }).show()
-                    }
                 }
             }
+
     }
         fun EventChangeListener() {
             when (decision) {

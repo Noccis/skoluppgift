@@ -110,13 +110,17 @@
                     android:id="@+id/lock"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="låsa" />
+                    android:backgroundTint="#BDEAC2"
+                    android:text="låsa"
+                    android:textColor="@color/black" />
 
                 <Button
                     android:id="@+id/unlock"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:text="låsa upp" />
+                    android:backgroundTint="#BDEAC2"
+                    android:text="låsa upp"
+                    android:textColor="@color/black" />
 
             </LinearLayout>
 

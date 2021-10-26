@@ -13,22 +13,28 @@
         android:theme="@style/Theme.HelpWithPicturesApp">
         <activity
             android:name=".CreateAndEditActionSteps"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/NoActionBarTheme"/>
         <activity
             android:name=".UserCreateAndEditActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/NoActionBarTheme"/>
         <activity
             android:name=".HowToDoItActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/NoActionBarTheme"/>
         <activity
             android:name=".ToDoActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/NoActionBarTheme"/>
         <activity
             android:name=".WeekdaysActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:theme="@style/NoActionBarTheme"/>
         <activity
             android:name=".MainActivity"
-            android:exported="true">
+            android:exported="true"
+            android:theme="@style/NoActionBarTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

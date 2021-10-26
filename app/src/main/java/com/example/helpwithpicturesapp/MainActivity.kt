@@ -24,9 +24,12 @@ class MainActivity : AppCompatActivity() {
    lateinit var password : String
     val TAG = "!!!"
     val db = Firebase.firestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
         val button2 = findViewById<Button>(R.id.button2)
         button2.setOnClickListener {

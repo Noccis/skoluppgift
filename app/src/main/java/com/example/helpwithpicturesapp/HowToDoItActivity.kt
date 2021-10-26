@@ -23,7 +23,6 @@ const val ACTION_LOCATION = "ACTION_LOCATION"
 class HowToDoItActivity : AppCompatActivity() {
 
     lateinit var recyclerView: RecyclerView
-
     val actionStep = mutableListOf<ActionSteps>()
     lateinit var db: FirebaseFirestore
     lateinit var myAdapter: HowToDoItRecycleViewAdapter
@@ -44,6 +43,7 @@ class HowToDoItActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_how_to_do_it)
 
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
         password = intent.getStringExtra(Constants.PASSWORD).toString()
 
