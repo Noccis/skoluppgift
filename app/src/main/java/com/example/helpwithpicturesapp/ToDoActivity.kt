@@ -40,8 +40,6 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var rewardImageView: ImageView
     private var shortAnimationDuration: Int = 400
     lateinit var deletedCard: Actions
-    var locked : Boolean  = true
-    var secret : RecyclerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +47,6 @@ class ToDoActivity : AppCompatActivity() {
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
-        Log.d("!!!", " början $locked")
         password = intent.getStringExtra(Constants.PASSWORD).toString()
         editPassword = findViewById(R.id.editPassword)
         passCard = findViewById(R.id.passCard)
@@ -107,7 +104,6 @@ class ToDoActivity : AppCompatActivity() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
-                Log.d("!!!", " först $locked")
                 if (addButton.visibility == View.VISIBLE) {
                     val position = viewHolder.adapterPosition
                     when (direction) {
@@ -234,9 +230,6 @@ class ToDoActivity : AppCompatActivity() {
                 passCard.visibility = View.GONE
                 addButton.visibility = View.VISIBLE
                 editPassword.setText("")
-                locked = false
-                Log.d("!!!", " upplåst $locked")
-
 
             } else {
                 Toast.makeText(this, "Skriv rätt lösenord! ", Toast.LENGTH_SHORT).show()
@@ -249,8 +242,6 @@ class ToDoActivity : AppCompatActivity() {
                 passCard.visibility = View.GONE
                 addButton.visibility = View.GONE
                 editPassword.setText("")
-                locked = true
-                Log.d("!!!", " låst $locked")
             } else {
                 Toast.makeText(this, "Skriv rätt lösenord! ", Toast.LENGTH_SHORT).show()
             }
