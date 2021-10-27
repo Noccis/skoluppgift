@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
             loginUser()
         }
 
-        //goToAddActivity()
+
     }
 
     fun goToAddActivity() {

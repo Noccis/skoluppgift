@@ -9,10 +9,14 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.firestore.*
+import com.google.firebase.firestore.EventListener
+import java.util.*
 
 const val ACTIONS_POSITION_KEY = "ACTION_KEY"
 const val INSTRUCTIONS_POSITION_KEY = "INSTRUCTION_KEY"
@@ -84,10 +88,58 @@ class HowToDoItActivity : AppCompatActivity() {
         previousButton.setOnClickListener {
             finish()
         }
-
-
-
         eventChangeListener()
+
+
+        val itemTouchHelper = ItemTouchHelper(simpleCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
+
+    }
+
+    private var simpleCallback = object : ItemTouchHelper.SimpleCallback(
+        ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), ItemTouchHelper.LEFT) {
+
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+                            target: RecyclerView.ViewHolder): Boolean {
+
+            if (addButton2.visibility == View.VISIBLE) {
+                var startPosition = viewHolder.adapterPosition
+                var endPosition = target.adapterPosition
+                Collections.swap(actionStep, startPosition, endPosition)
+                recyclerView.adapter?.notifyItemMoved(startPosition, endPosition)
+                return true
+            } else return false
+        }
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+
+
+            if (addButton2.visibility == View.VISIBLE) {
+                val position = viewHolder.adapterPosition
+                when (direction) {
+                    ItemTouchHelper.LEFT -> {
+                        deletedCard = actionStep.get(position)
+                        actionStep.removeAt(position)
+                        myAdapter.notifyItemRemoved(position)
+                        Snackbar.make(
+                            recyclerView,
+                            "Uppgiften är borttagen",
+                            Snackbar.LENGTH_LONG
+                        )
+                            .setAction("Ångra", View.OnClickListener {
+                                actionStep.add(position, deletedCard)
+                                myAdapter.notifyItemInserted(position)
+                            }).show()
+                    }
+
+                }
+
+            } else {
+                val position = null
+                myAdapter.notifyDataSetChanged()
+            }
+
+        }
 
     }
 

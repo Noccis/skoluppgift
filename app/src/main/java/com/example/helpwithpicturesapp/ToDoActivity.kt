@@ -85,21 +85,16 @@ class ToDoActivity : AppCompatActivity() {
         EventChangeListener()
 
 
-        // val itemTouchHelper = ItemTouchHelper(simpleCallback)
-        //itemTouchHelper.attachToRecyclerView(recyclerView)
+        val itemTouchHelper = ItemTouchHelper(simpleCallback)
+        itemTouchHelper.attachToRecyclerView(recyclerView)
 
-        val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(
-            ItemTouchHelper.UP or ItemTouchHelper.DOWN,
-            ItemTouchHelper.LEFT
-        ) {
+    }
 
-            // private var simpleCallback = object : ItemTouchHelper.SimpleCallback(
-            //    ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), ItemTouchHelper.LEFT) {
+            private var simpleCallback = object : ItemTouchHelper.SimpleCallback(
+              ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), ItemTouchHelper.LEFT) {
 
-            override fun onMove(
-                recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder
-            ): Boolean {
+            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder): Boolean {
 
                 if (addButton.visibility == View.VISIBLE) {
                     var startPosition = viewHolder.adapterPosition
@@ -113,9 +108,7 @@ class ToDoActivity : AppCompatActivity() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
                 Log.d("!!!", " först $locked")
-
-                if (addButton.visibility == View.GONE) {
-                    val position = null } else {
+                if (addButton.visibility == View.VISIBLE) {
                     val position = viewHolder.adapterPosition
                     when (direction) {
                         ItemTouchHelper.LEFT -> {
@@ -132,19 +125,15 @@ class ToDoActivity : AppCompatActivity() {
                                     myAdapter.notifyItemInserted(position)
                                 }).show()
                         }
+
                     }
+
+                } else {
+                    val position = null
+                    myAdapter.notifyDataSetChanged()
                 }
 
             }
-        }
-
-
-                val touchHelper = ItemTouchHelper(itemTouchHelper)
-                touchHelper.attachToRecyclerView(recyclerView)
-                return
-
-
-
     }
     fun EventChangeListener() {
         when (decision) {
