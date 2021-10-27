@@ -21,16 +21,12 @@ class MainActivity : AppCompatActivity() {
     lateinit var textEmail : EditText
     lateinit var textPassword : EditText
     lateinit var userSeeInsrtuctionsView: TextView
-   lateinit var password : String
     val TAG = "!!!"
     val db = Firebase.firestore
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
         val button2 = findViewById<Button>(R.id.button2)
         button2.setOnClickListener {
@@ -57,15 +53,11 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun goToAddActivity() {
-        val intent = Intent(this , WeekdaysActivity::class.java)
-        intent.putExtra(Constants.PASSWORD, password)
-        startActivity(intent)
-    }
+
 
     fun loginUser() {
         val email = textEmail.text.toString()
-        password = textPassword.text.toString()
+        val password = textPassword.text.toString()
 
         if (email.isEmpty() || password.isEmpty()) {
             Toast.makeText(this, "Användarnamn och lösernord måste fyllas i!"
@@ -77,7 +69,9 @@ class MainActivity : AppCompatActivity() {
             .addOnCompleteListener  { task ->
                 if ( task.isSuccessful) {
                     Log.d(TAG, "loginUser: Success")
-                    goToAddActivity()
+                    val intent = Intent(this , WeekdaysActivity::class.java)
+                    intent.putExtra(Constants.PASSWORD, password)
+                    startActivity(intent)
                 } else {
                     Log.d(TAG, "loginUser: user not loged in ${task.exception}")
                     Toast.makeText(this, "Användarnamn eller lösernord stämmer inte!"
@@ -106,30 +100,27 @@ class MainActivity : AppCompatActivity() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "creatUser: Success")
-                    if (auth.currentUser != null) {
-                        db.collection("users").document(auth.currentUser!!.uid)
-                            .set(user)
-                            .addOnSuccessListener { documentReference ->
 
-                                Log.d(
-                                    TAG,
-                                    "DocumentSnapshot added with ID: ${auth.currentUser!!.uid}"
-                                )  // här är tillagt userID
-                            }
-                            .addOnFailureListener { e ->
-                                Log.w(TAG, "Error adding document", e)
-                            }
-                        goToAddActivity()
-                    } else {
-                        Log.d(TAG, "creatUser: user not created ${task.exception}")
-                        Toast.makeText(this, "Email addressen finns redan!", Toast.LENGTH_LONG)
-                            .show()
+                    db.collection("users")
+                        .add(user)
+                        .addOnSuccessListener { documentReference ->
+                            Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.w(TAG, "Error adding document", e)
+                        }
+                    val intent = Intent(this , WeekdaysActivity::class.java)
+                    intent.putExtra(Constants.PASSWORD, password)
+                    startActivity(intent)
+                } else {
+                    Log.d(TAG, "creatUser: user not created ${task.exception}")
+                    Toast.makeText(this, "Email addressen finns redan!", Toast.LENGTH_LONG).show()
 
-                    }
                 }
             }
 
     }
 
 }
+
 
