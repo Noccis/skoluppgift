@@ -117,8 +117,14 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         }
 
         startCameraButton.setOnClickListener {
-        checkForPermissions(android.Manifest.permission.CAMERA,"kamera", CAMERA_REQUEST_CODE)
-        startCamera()
+       // checkForPermissions(android.Manifest.permission.CAMERA,"kamera", CAMERA_REQUEST_CODE)
+            if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), CAMERA_REQUEST_CODE)
+                Toast.makeText(this, "Kameran går ej att öppna", Toast.LENGTH_SHORT).show()
+            }else {
+                startCamera()
+            }
+
 
         }
 
@@ -135,29 +141,8 @@ class UserCreateAndEditActivity : AppCompatActivity() {
 
     fun startCamera() {
         val takePicturesIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-        if(takePicturesIntent.resolveActivity(this.packageManager) != null) {
-            startActivityForResult(takePicturesIntent, START_REQUEST_CAMERA)
+        startActivityForResult(takePicturesIntent, START_REQUEST_CAMERA)
 
-        }else {
-            Toast.makeText(this, "Kameran går ej att öppna", Toast.LENGTH_SHORT).show()
-        }
-
-    }
-
-
-    fun checkForPermissions(permission: String, name: String, requestCode: Int) {
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-            when {
-                ContextCompat.checkSelfPermission(applicationContext, permission) == PackageManager.PERMISSION_GRANTED -> {
-                    Toast.makeText(applicationContext, "$name tillåtelse godkänd", Toast.LENGTH_SHORT).show()
-                }
-                shouldShowRequestPermissionRationale(permission) -> showDialog(permission, name, requestCode)
-
-                else -> ActivityCompat.requestPermissions(this, arrayOf(permission), requestCode)
-            }
-
-        }
 
     }
 
@@ -178,23 +163,9 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     }
 
 
-    fun showDialog(permission: String, name: String, requestCode: Int) {
-        val builder = AlertDialog.Builder(this)
-
-        builder.apply {
-            setMessage("Tillåtelse för din $name krävs för detta moment")
-            setTitle("Tillåtelse krävs")
-            setPositiveButton("OK") {dialog, wich ->
-                ActivityCompat.requestPermissions(this@UserCreateAndEditActivity, arrayOf(permission), requestCode)
-            }
-        }
-        val dialog = builder.create()
-        dialog.show()
-
-    }
-
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_IMAGE_PICK) {
             data?.data?.let {
                 curFile = it
@@ -203,13 +174,13 @@ class UserCreateAndEditActivity : AppCompatActivity() {
 
 
         }
-        else if(requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
-            val takenImage = data?.extras?.get("data") as Bitmap
+        if(requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+            val takenImage = data.extras?.get("data") as Bitmap
             imgeViewButton.setImageBitmap(takenImage)
-
-        }else {
-            super.onActivityResult(requestCode, resultCode, data)
+            Log.d(TAG, "onActivityResult: imageput")
         }
+
+
 
 
 
