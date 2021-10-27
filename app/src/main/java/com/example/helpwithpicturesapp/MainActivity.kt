@@ -22,7 +22,10 @@ class MainActivity : AppCompatActivity() {
     lateinit var textPassword : EditText
     lateinit var userSeeInsrtuctionsView: TextView
     val TAG = "!!!"
-val db = Firebase.firestore
+    val db = Firebase.firestore
+
+    var userId = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -52,7 +55,7 @@ val db = Firebase.firestore
             loginUser()
         }
 
-        //goToAddActivity()
+       // goToAddActivity()
     }
 
     fun goToAddActivity() {
@@ -100,22 +103,29 @@ val db = Firebase.firestore
             return
         }
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener  { task ->
-                if ( task.isSuccessful) {
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
                     Log.d(TAG, "creatUser: Success")
-                    db.collection("users")
-                        .add(user)
-                        .addOnSuccessListener { documentReference ->
-                            Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w(TAG, "Error adding document", e)
-                        }
-                    goToAddActivity()
-                } else {
-                    Log.d(TAG, "creatUser: user not created ${task.exception}")
-                    Toast.makeText(this, "Email addressen finns redan!", Toast.LENGTH_LONG).show()
+                    if (auth.currentUser != null) {
+                        db.collection("users").document(auth.currentUser!!.uid)
+                            .set(user)
+                            .addOnSuccessListener { documentReference ->
 
+                                Log.d(
+                                    TAG,
+                                    "DocumentSnapshot added with ID: ${auth.currentUser!!.uid}"
+                                )  // här är tillagt userID
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(TAG, "Error adding document", e)
+                            }
+                        goToAddActivity()
+                    } else {
+                        Log.d(TAG, "creatUser: user not created ${task.exception}")
+                        Toast.makeText(this, "Email addressen finns redan!", Toast.LENGTH_LONG)
+                            .show()
+
+                    }
                 }
             }
 

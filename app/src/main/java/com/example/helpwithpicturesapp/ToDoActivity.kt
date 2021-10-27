@@ -24,6 +24,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.request.transition.Transition
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import java.util.*
@@ -42,9 +44,19 @@ class ToDoActivity : AppCompatActivity() {
     private var shortAnimationDuration: Int = 400
     lateinit var deletedCard : Actions
 
+    var uid = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
+
+        val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+
+        //
+        if (currentUser != null)
+            uid = currentUser!!.uid
+        Log.d("!!!", "onCreate: userId $uid clicked on $decision")
+        //
 
         rewardImageView = findViewById(R.id.rewardImageView)
         rewardImageView.visibility = View.GONE
@@ -163,7 +175,7 @@ class ToDoActivity : AppCompatActivity() {
                 }
             }
                 db = FirebaseFirestore.getInstance()
-            db.collection("Weekday").document(decision).collection(decision)
+                db.collection("Weekday").document(decision).collection(decision)
                 .orderBy("order", Query.Direction.ASCENDING)
                 .addSnapshotListener(object : EventListener<QuerySnapshot> {
 

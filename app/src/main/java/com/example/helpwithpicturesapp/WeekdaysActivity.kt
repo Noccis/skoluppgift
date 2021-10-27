@@ -4,11 +4,15 @@ package com.example.helpwithpicturesapp
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import java.util.*
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+
 
 class WeekdaysActivity : AppCompatActivity() {
 
@@ -27,6 +31,10 @@ class WeekdaysActivity : AppCompatActivity() {
     var saturday = "saturday"
     var sunday = "sunday"
 
+   // var uid = ""
+
+
+
 
 
 
@@ -34,6 +42,24 @@ class WeekdaysActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_weekdays)
+
+
+
+
+       /* val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+
+        if (currentUser != null)
+         uid = currentUser!!.uid
+        Log.d("!!!", "onCreate: userId $uid")
+
+        */
+
+
+
+
+
+
+
         mondayButton = findViewById(R.id.måndag_Button)
         mondayButton.setOnClickListener {
 
@@ -81,6 +107,8 @@ class WeekdaysActivity : AppCompatActivity() {
         }
 
     }
+
+
 
     }
 
