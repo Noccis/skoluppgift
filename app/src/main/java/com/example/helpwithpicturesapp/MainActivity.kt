@@ -100,15 +100,20 @@ class MainActivity : AppCompatActivity() {
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     Log.d(TAG, "creatUser: Success")
+                    if (auth.currentUser != null) {
+                        db.collection("users").document(auth.currentUser!!.uid)
+                            .set(user)
+                            .addOnSuccessListener { documentReference ->
 
-                    db.collection("users")
-                        .add(user)
-                        .addOnSuccessListener { documentReference ->
-                            Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w(TAG, "Error adding document", e)
-                        }
+                                Log.d(
+                                    TAG,
+                                    "DocumentSnapshot added with ID: ${auth.currentUser!!.uid}"
+                                )  // här är tillagt userID
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(TAG, "Error adding document", e)
+                            }
+
                     val intent = Intent(this , WeekdaysActivity::class.java)
                     intent.putExtra(Constants.PASSWORD, password)
                     startActivity(intent)
@@ -121,6 +126,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-}
+}}
 
 
