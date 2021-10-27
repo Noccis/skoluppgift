@@ -1,6 +1,7 @@
 package com.example.helpwithpicturesapp
 
 import android.app.Activity
+import android.app.AlertDialog
 import android.app.Instrumentation
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -30,15 +31,19 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.lang.Exception
+import java.nio.file.attribute.AclEntry
 import java.util.*
 import java.util.jar.Manifest
 
 const val REQUEST_CODE_IMAGE_PICK = 0
-const val REQUEST_CODE_CAMERA = 1
+const val CAMERA_REQUEST_CODE = 1
+const val START_REQUEST_CAMERA = 2
 
 
 
 class UserCreateAndEditActivity : AppCompatActivity() {
+
+
 
     val TAG = "!!!"
 
@@ -89,10 +94,6 @@ class UserCreateAndEditActivity : AppCompatActivity() {
 
         recyclerView.adapter = imageAdapter
 
-        checkForPermission(android.Manifest.permission.CAMERA, "kamera", REQUEST_CODE_CAMERA)
-
-
-
 
 
         backImage.setOnClickListener {
@@ -116,11 +117,8 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         }
 
         startCameraButton.setOnClickListener {
-            val  startCameraIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            if(startCameraIntent.resolveActivity(packageManager) != null) {
-                startActivityForResult(startCameraIntent, REQUEST_CODE_CAMERA)
-
-            }
+        checkForPermissions(android.Manifest.permission.CAMERA,"kamera", CAMERA_REQUEST_CODE)
+        startCamera()
 
         }
 
@@ -135,49 +133,68 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         super.onResume()
     }
 
-    fun checkForPermission(permission: String, name: String, requestCode: Int) {
+    fun startCamera() {
+        val takePicturesIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if(takePicturesIntent.resolveActivity(this.packageManager) != null) {
+            startActivityForResult(takePicturesIntent, START_REQUEST_CAMERA)
+
+        }else {
+            Toast.makeText(this, "Kameran går ej att öppna", Toast.LENGTH_SHORT).show()
+        }
+
+    }
+
+
+    fun checkForPermissions(permission: String, name: String, requestCode: Int) {
         if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 
             when {
                 ContextCompat.checkSelfPermission(applicationContext, permission) == PackageManager.PERMISSION_GRANTED -> {
-                    Toast.makeText(applicationContext,"$name Kameran är upplåst", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "$name tillåtelse godkänd", Toast.LENGTH_SHORT).show()
                 }
-                else -> ActivityCompat.requestPermissions(this, arrayOf(permission), requestCode)
+                shouldShowRequestPermissionRationale(permission) -> showDialog(permission, name, requestCode)
 
+                else -> ActivityCompat.requestPermissions(this, arrayOf(permission), requestCode)
             }
 
         }
 
     }
-
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-
         fun innerCheck(name: String) {
+           if(grantResults.isEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+               Toast.makeText(applicationContext, "$name tillåtelse nekad", Toast.LENGTH_SHORT).show()
 
-            if(grantResults.isNotEmpty() || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Toast.makeText(applicationContext, "$name Tillåtelse till kameran är nekad", Toast.LENGTH_SHORT).show()
-
-            }else {
-                Toast.makeText(applicationContext, "$name Tillåtelse till kameran är godkänd", Toast.LENGTH_SHORT).show()
-            }
-
-
-        }
-
+           }else {
+               Toast.makeText(applicationContext, "$name tillåtelse godkänd", Toast.LENGTH_SHORT).show()
+           }
+       }
         when(requestCode) {
-            REQUEST_CODE_CAMERA -> innerCheck("kamera")
+            CAMERA_REQUEST_CODE -> innerCheck("kamera")
         }
 
     }
 
 
+    fun showDialog(permission: String, name: String, requestCode: Int) {
+        val builder = AlertDialog.Builder(this)
+
+        builder.apply {
+            setMessage("Tillåtelse för din $name krävs för detta moment")
+            setTitle("Tillåtelse krävs")
+            setPositiveButton("OK") {dialog, wich ->
+                ActivityCompat.requestPermissions(this@UserCreateAndEditActivity, arrayOf(permission), requestCode)
+            }
+        }
+        val dialog = builder.create()
+        dialog.show()
+
+    }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_IMAGE_PICK) {
             data?.data?.let {
                 curFile = it
@@ -185,6 +202,13 @@ class UserCreateAndEditActivity : AppCompatActivity() {
             }
 
 
+        }
+        else if(requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK) {
+            val takenImage = data?.extras?.get("data") as Bitmap
+            imgeViewButton.setImageBitmap(takenImage)
+
+        }else {
+            super.onActivityResult(requestCode, resultCode, data)
         }
 
 
