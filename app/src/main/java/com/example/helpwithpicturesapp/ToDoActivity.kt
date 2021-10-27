@@ -16,6 +16,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import java.util.*
@@ -41,9 +43,12 @@ class ToDoActivity : AppCompatActivity() {
     private var shortAnimationDuration: Int = 400
     lateinit var deletedCard: Actions
 
+    var uid = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
+
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
@@ -66,6 +71,7 @@ class ToDoActivity : AppCompatActivity() {
             intent.putExtra(Constants.DAY_CHOSEN, decision)
             startActivity(intent)
         }
+
 
         rewardImageView = findViewById(R.id.rewardImageView)
         rewardImageView.visibility = View.GONE
@@ -137,6 +143,7 @@ class ToDoActivity : AppCompatActivity() {
                 dayTextView.text = "Måndag"
                 dayTextView.setBackgroundColor(Color.parseColor("#92d051"));
             }
+
             "tuesday" -> {
                 dayTextView.text = "Tisdag"
                 dayTextView.setBackgroundColor(Color.parseColor("#92cddd"));
