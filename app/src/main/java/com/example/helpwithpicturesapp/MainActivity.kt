@@ -21,9 +21,9 @@ class MainActivity : AppCompatActivity() {
     lateinit var textEmail : EditText
     lateinit var textPassword : EditText
     lateinit var userSeeInsrtuctionsView: TextView
-
     val TAG = "!!!"
     val db = Firebase.firestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -97,9 +97,10 @@ class MainActivity : AppCompatActivity() {
             return
         }
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener  { task ->
-                if ( task.isSuccessful) {
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
                     Log.d(TAG, "creatUser: Success")
+
                     db.collection("users")
                         .add(user)
                         .addOnSuccessListener { documentReference ->
