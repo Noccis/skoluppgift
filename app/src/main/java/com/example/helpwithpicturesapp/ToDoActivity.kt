@@ -42,14 +42,23 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var rewardImageView: ImageView
     private var shortAnimationDuration: Int = 400
     lateinit var deletedCard: Actions
-
+    lateinit var templateSave : TextView
     var uid = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
 
+        templateSave = findViewById(R.id.saveTemplateText)
+        templateSave.visibility = View.GONE
+// Lägg till templateSave.GONE sen när koden är klar.
+// Här är spara mall koden
+        templateSave.setOnClickListener {
 
+            var dialog = TemplateDialogFragment(this)
+            dialog.show(supportFragmentManager, "templateDialog")
+
+        }
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
         password = intent.getStringExtra(Constants.PASSWORD).toString()
@@ -237,6 +246,7 @@ class ToDoActivity : AppCompatActivity() {
                 passCard.visibility = View.GONE
                 addButton.visibility = View.VISIBLE
                 editPassword.setText("")
+                templateSave.visibility = View.VISIBLE
 
             } else {
                 Toast.makeText(this, "Skriv rätt lösenord! ", Toast.LENGTH_SHORT).show()
@@ -249,12 +259,23 @@ class ToDoActivity : AppCompatActivity() {
                 passCard.visibility = View.GONE
                 addButton.visibility = View.GONE
                 editPassword.setText("")
+                templateSave.visibility = View.GONE
             } else {
                 Toast.makeText(this, "Skriv rätt lösenord! ", Toast.LENGTH_SHORT).show()
             }
         }
         close.setOnClickListener {
             passCard.visibility = View.GONE
+        }
+
+    }
+    public fun saveTemplate(name: String) {
+
+        for (action in action) {
+            db.collection("users").document("test").collection(name).add(action)
+                .addOnSuccessListener {
+                    Log.d("ffs", "saveTemplate fun $action added in $name")
+                }
         }
 
     }
