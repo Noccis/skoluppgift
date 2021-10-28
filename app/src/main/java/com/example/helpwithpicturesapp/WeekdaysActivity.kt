@@ -57,12 +57,12 @@ class WeekdaysActivity : AppCompatActivity() {
 
 
 
-
+        password = intent.getStringExtra(Constants.PASSWORD).toString()
 
         mondayButton = findViewById(R.id.måndag_Button)
         mondayButton.setOnClickListener {
 
-            password = intent.getStringExtra(Constants.PASSWORD).toString()
+
 
             val intent = Intent(this, ToDoActivity::class.java)
             intent.putExtra(Constants.DAY_CHOSEN, monday)
