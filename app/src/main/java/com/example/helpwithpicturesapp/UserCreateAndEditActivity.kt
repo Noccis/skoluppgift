@@ -117,7 +117,6 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         }
 
         startCameraButton.setOnClickListener {
-       // checkForPermissions(android.Manifest.permission.CAMERA,"kamera", CAMERA_REQUEST_CODE)
             if(ActivityCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(this, arrayOf(android.Manifest.permission.CAMERA), CAMERA_REQUEST_CODE)
                 Toast.makeText(this, "Kameran går ej att öppna", Toast.LENGTH_SHORT).show()
@@ -127,7 +126,6 @@ class UserCreateAndEditActivity : AppCompatActivity() {
 
 
         }
-
 
         saveButton.setOnClickListener {
             storeAction()
@@ -160,12 +158,16 @@ class UserCreateAndEditActivity : AppCompatActivity() {
             CAMERA_REQUEST_CODE -> innerCheck("kamera")
         }
 
+
+
+
+
+
     }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
+        Log.d(TAG, "onActivityResult: 1 req$requestCode, res$resultCode, data$data, ${Activity.RESULT_OK}")
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_IMAGE_PICK) {
             data?.data?.let {
                 curFile = it
@@ -174,11 +176,14 @@ class UserCreateAndEditActivity : AppCompatActivity() {
 
 
         }
-        if(requestCode == CAMERA_REQUEST_CODE && resultCode == Activity.RESULT_OK && data != null) {
+        else if(requestCode == START_REQUEST_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
             val takenImage = data.extras?.get("data") as Bitmap
             imgeViewButton.setImageBitmap(takenImage)
-            Log.d(TAG, "onActivityResult: imageput")
+            Log.d(TAG, "onActivityResult: 2  $requestCode, $resultCode, $data")
+        }else {
+            super.onActivityResult(requestCode, resultCode, data)
         }
+
 
 
 
@@ -203,24 +208,14 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                 }.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val downloadUri = task.result
-                        Toast.makeText(
-                            this@UserCreateAndEditActivity,
-                            "Bilden är sparad",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(this@UserCreateAndEditActivity, "Bilden är sparad", Toast.LENGTH_SHORT).show()
 
                         val action =
                             Actions(null, downloadUri.toString(), false, editText.text.toString())
-                        val actionsteps = ActionSteps(
-                            null,
-                            downloadUri.toString(),
-                            false,
-                            editText.text.toString()
+                        val actionsteps = ActionSteps(null, downloadUri.toString(), false, editText.text.toString()
                         )
                         db.collection("Weekday").document(decision).collection(decision).add(action)
-                        db.collection("Weekday").document(decision).collection(decision)
-                            .document(actionId)
-                            .collection(actionId).add(actionsteps)
+                        db.collection("Weekday").document(decision).collection(decision).document(actionId).collection(actionId).add(actionsteps)
 
 
 
@@ -240,8 +235,12 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         }
 
 
-    }
 
+
+
+
+
+    }
     fun storeAction() {
         val storageImage = Actions(null, choosenImageUrl, false, editText.text.toString())
         if (choosenImageUrl != null && editText.text.toString() != "") {
@@ -249,18 +248,10 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Log.d(TAG, "storeAction: $storageImage")
-                        Toast.makeText(
-                            this@UserCreateAndEditActivity,
-                            "Bilden och instruktionen är tillagda i listan",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                        Toast.makeText(this@UserCreateAndEditActivity, "Bilden och instruktionen är tillagda i listan", Toast.LENGTH_SHORT).show()
                     }
                 }
-        } else Toast.makeText(
-            this@UserCreateAndEditActivity,
-            "Välj en bild och skriv instruktionen",
-            Toast.LENGTH_SHORT
-        ).show()
+        } else Toast.makeText(this@UserCreateAndEditActivity, "Välj en bild och skriv instruktionen", Toast.LENGTH_SHORT).show()
     }
 
     private fun listFiles() = CoroutineScope(Dispatchers.IO).launch {
@@ -290,7 +281,6 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         choosenImageUrl = url // adressen kommer in
         Glide.with(this).load(url).into(imgeViewButton)
     }
-
 
     /*
 
