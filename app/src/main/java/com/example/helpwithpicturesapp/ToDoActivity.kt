@@ -42,14 +42,22 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var rewardImageView: ImageView
     private var shortAnimationDuration: Int = 400
     lateinit var deletedCard: Actions
-
+    lateinit var templateSave : TextView
     var uid = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
 
+        templateSave = findViewById(R.id.saveTemplateText)
+// Lägg till templateSave.GONE sen när koden är klar.
+// Här är spara mall koden
+        templateSave.setOnClickListener {
 
+            var dialog = TemplateDialogFragment(this)
+            dialog.show(supportFragmentManager, "templateDialog")
+
+        }
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
         password = intent.getStringExtra(Constants.PASSWORD).toString()
@@ -255,6 +263,16 @@ class ToDoActivity : AppCompatActivity() {
         }
         close.setOnClickListener {
             passCard.visibility = View.GONE
+        }
+
+    }
+    public fun saveTemplate(name: String) {
+
+        for (action in action) {
+            db.collection("users").document("test").collection(name).add(action)
+                .addOnSuccessListener {
+                    Log.d("ffs", "saveTemplate fun $action added in $name")
+                }
         }
 
     }
