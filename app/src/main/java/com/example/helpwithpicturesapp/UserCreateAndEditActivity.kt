@@ -75,7 +75,8 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user_create_and_edit)
 
         recyclerView = findViewById(R.id.recyclerView)
-        gridLayoutManager = GridLayoutManager(applicationContext, 2, LinearLayoutManager.VERTICAL, false)
+
+        gridLayoutManager = GridLayoutManager(applicationContext, 3,LinearLayoutManager.VERTICAL, false)
         uploadButton = findViewById(R.id.uploadButton)
         storeButton = findViewById(R.id.storeButton)
         startCameraButton = findViewById(R.id.startCameraButton)

@@ -22,7 +22,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var textPassword : EditText
     lateinit var userSeeInsrtuctionsView: TextView
     val TAG = "!!!"
-val db = Firebase.firestore
+    val db = Firebase.firestore
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -34,10 +35,7 @@ val db = Firebase.firestore
         }
 
         userSeeInsrtuctionsView = findViewById(R.id.instructions_Tv)
-       // val nextPageButton = findViewById<Button>(R.id.loginButton)
-        //nextPageButton.setOnClickListener {
-         //   weekdayPage()
-        //}
+
 
         auth = Firebase.auth
 
@@ -52,13 +50,10 @@ val db = Firebase.firestore
             loginUser()
         }
 
-        //goToAddActivity()
+
     }
 
-    fun goToAddActivity() {
-        val intent = Intent(this , WeekdaysActivity::class.java)
-        startActivity(intent)
-    }
+
 
     fun loginUser() {
         val email = textEmail.text.toString()
@@ -74,7 +69,9 @@ val db = Firebase.firestore
             .addOnCompleteListener  { task ->
                 if ( task.isSuccessful) {
                     Log.d(TAG, "loginUser: Success")
-                    goToAddActivity()
+                    val intent = Intent(this , WeekdaysActivity::class.java)
+                    intent.putExtra(Constants.PASSWORD, password)
+                    startActivity(intent)
                 } else {
                     Log.d(TAG, "loginUser: user not loged in ${task.exception}")
                     Toast.makeText(this, "Användarnamn eller lösernord stämmer inte!"
@@ -100,18 +97,26 @@ val db = Firebase.firestore
             return
         }
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener  { task ->
-                if ( task.isSuccessful) {
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
                     Log.d(TAG, "creatUser: Success")
-                    db.collection("users")
-                        .add(user)
-                        .addOnSuccessListener { documentReference ->
-                            Log.d(TAG, "DocumentSnapshot added with ID: ${documentReference.id}")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.w(TAG, "Error adding document", e)
-                        }
-                    goToAddActivity()
+                    if (auth.currentUser != null) {
+                        db.collection("users").document(auth.currentUser!!.uid)
+                            .set(user)
+                            .addOnSuccessListener { documentReference ->
+
+                                Log.d(
+                                    TAG,
+                                    "DocumentSnapshot added with ID: ${auth.currentUser!!.uid}"
+                                )  // här är tillagt userID
+                            }
+                            .addOnFailureListener { e ->
+                                Log.w(TAG, "Error adding document", e)
+                            }
+
+                    val intent = Intent(this , WeekdaysActivity::class.java)
+                    intent.putExtra(Constants.PASSWORD, password)
+                    startActivity(intent)
                 } else {
                     Log.d(TAG, "creatUser: user not created ${task.exception}")
                     Toast.makeText(this, "Email addressen finns redan!", Toast.LENGTH_LONG).show()
@@ -121,5 +126,6 @@ val db = Firebase.firestore
 
     }
 
-}
+}}
+
 
