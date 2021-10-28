@@ -50,6 +50,7 @@ class ToDoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_to_do)
 
         templateSave = findViewById(R.id.saveTemplateText)
+        templateSave.visibility = View.GONE
 // Lägg till templateSave.GONE sen när koden är klar.
 // Här är spara mall koden
         templateSave.setOnClickListener {
@@ -245,6 +246,7 @@ class ToDoActivity : AppCompatActivity() {
                 passCard.visibility = View.GONE
                 addButton.visibility = View.VISIBLE
                 editPassword.setText("")
+                templateSave.visibility = View.VISIBLE
 
             } else {
                 Toast.makeText(this, "Skriv rätt lösenord! ", Toast.LENGTH_SHORT).show()
@@ -257,6 +259,7 @@ class ToDoActivity : AppCompatActivity() {
                 passCard.visibility = View.GONE
                 addButton.visibility = View.GONE
                 editPassword.setText("")
+                templateSave.visibility = View.GONE
             } else {
                 Toast.makeText(this, "Skriv rätt lösenord! ", Toast.LENGTH_SHORT).show()
             }
