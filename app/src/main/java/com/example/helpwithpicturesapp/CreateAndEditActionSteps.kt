@@ -54,7 +54,7 @@ class CreateAndEditActionSteps : AppCompatActivity() {
         gridLayoutManager = GridLayoutManager(applicationContext, 3,LinearLayoutManager.VERTICAL, false)
         uploadButton = findViewById(R.id.uploadButton)
         storeButton = findViewById(R.id.storeButton)
-        deleteButton = findViewById(R.id.deleteButton)
+        deleteButton = findViewById(R.id.startCameraButton)
         saveButton = findViewById(R.id.saveButton)
         editText = findViewById(R.id.userEditText)
         imgeViewButton = findViewById(R.id.imageViewButton)

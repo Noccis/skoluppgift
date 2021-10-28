@@ -21,12 +21,14 @@ class ImageAdapter(val activity: UserCreateAndEditActivity,
         val recyclerViewImageViewButton = itemView.findViewById<ImageButton>(R.id.recyclerViewImageButton)
         var url = ""
 
+
         init {
             recyclerViewImageViewButton.setOnClickListener {
              activity.setImage(url)
 
 
             }
+
         }
 
     }
