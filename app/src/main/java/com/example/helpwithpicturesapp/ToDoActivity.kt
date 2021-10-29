@@ -18,8 +18,10 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.ktx.Firebase
 import java.util.*
 
 class ToDoActivity : AppCompatActivity() {
@@ -45,6 +47,7 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var templateSave: TextView
     var uid = ""
     var actionId = " "
+    val auth = Firebase.auth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -276,12 +279,13 @@ class ToDoActivity : AppCompatActivity() {
     }
 
     public fun saveTemplate(name: String) {
+        uid =  auth.currentUser!!.uid
 
         Log.d("ffs", "Calling saveTemplate!")
         for (action in action) {
             if (action != null) {
-               actionId = action.documentName.toString()
-                  // skapa action lista med steps.
+               actionId = action.documentName.toString()        // Laddar upp lokala actions i listan till users egen mall.
+
                 db.collection("users").document(uid).collection(name).add(action)
                     .addOnSuccessListener {
                         Log.d("ffs", "saveTemplate fun $action added in $uid")
@@ -289,7 +293,8 @@ class ToDoActivity : AppCompatActivity() {
 
 
 
-                if (action.steps == true) { //Spara ner alla dokument i steps på datorn.
+                if (action.steps == true) { //Spara ner alla dokument i steps på datorn om steps bool är true.
+
                     val actionSteps = db.collection("users").document(uid).collection("weekday").document(actionId).collection("steps")
                     actionSteps.get().addOnSuccessListener { step ->
                         for (document in step.documents) {
@@ -301,15 +306,21 @@ class ToDoActivity : AppCompatActivity() {
                             }
 
                     }
-                   // for (document in ) {
+                        // SKa den här ligga här eller ett steg längre ner?
+                        for (action in action.listOfActionSteps) {
+
+                            db.collection("users").document(uid).collection(name).document(actionId).collection("steps").add(action)
+                                .addOnSuccessListener {
+                                    Log.d("ffs", "$action added to steps")
+                                }
+
+                        }
 
                     }
-                  //  ladda upp listan i user steps.
-                    // Ladda ner dom först i en lista. Kom ihåg att det är asyncromt, skriv i success listener.
-                    // db.collection("users").document(uid).collection(name).document(actionId).add hur får jag tag på listan från howtodoit?
+
                 }
 
-                
+
             }
 
         }
