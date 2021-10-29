@@ -36,7 +36,7 @@ class HowToDoItActivity : AppCompatActivity() {
     private var longtAnimationDuration: Int = 2000
     lateinit var lock : Button
     lateinit var unlock : Button
-    var password = ""
+    var pinkod = ""
     lateinit var close : ImageView
     lateinit var addButton2 : FloatingActionButton
     lateinit var deletedCard : ActionSteps
@@ -47,7 +47,7 @@ class HowToDoItActivity : AppCompatActivity() {
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
-        password = intent.getStringExtra(Constants.PASSWORD).toString()
+        pinkod = intent.getStringExtra(Constants.PINKOD).toString()
 
         editPassword = findViewById(R.id.editPassword)
         passCard = findViewById(R.id.passCard)
@@ -175,7 +175,7 @@ class HowToDoItActivity : AppCompatActivity() {
 
         unlock.setOnClickListener {
             val pass = editPassword.text.toString()
-            if ( password == pass) {
+            if ( pinkod == pass) {
                 passCard.visibility = View.GONE
                 addButton2.visibility = View.VISIBLE
                 editPassword.setText("")
@@ -186,7 +186,7 @@ class HowToDoItActivity : AppCompatActivity() {
 
         lock.setOnClickListener {
             val pass = editPassword.text.toString()
-            if ( password == pass) {
+            if ( pinkod == pass) {
                 passCard.visibility = View.GONE
                 addButton2.visibility = View.GONE
                 editPassword.setText("")

@@ -21,12 +21,36 @@ class MainActivity : AppCompatActivity() {
     lateinit var textEmail : EditText
     lateinit var textPassword : EditText
     lateinit var userSeeInsrtuctionsView: TextView
+    lateinit var signInButton: Button
+    lateinit var signUpButton: Button
+    lateinit var textPinkod : TextView
+    lateinit var loginButton : Button
+    lateinit var createButton : Button
     val TAG = "!!!"
     val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        signInButton = findViewById(R.id.signInButton)
+        signUpButton = findViewById(R.id.signUpButton)
+        textPinkod = findViewById(R.id.textPinkod)
+        textEmail = findViewById(R.id.textEmail)
+        textPassword = findViewById(R.id.textPassword)
+        createButton = findViewById(R.id.createButton)
+        loginButton = findViewById(R.id.loginButton)
+
+        textPinkod.visibility = View.GONE
+        createButton.visibility = View.GONE
+
+
+        signUpButton.setOnClickListener {
+            signup()
+        }
+        signInButton.setOnClickListener {
+            signin()
+        }
 
         val button2 = findViewById<Button>(R.id.button2)
         button2.setOnClickListener {
@@ -36,24 +60,28 @@ class MainActivity : AppCompatActivity() {
 
         userSeeInsrtuctionsView = findViewById(R.id.instructions_Tv)
 
-
         auth = Firebase.auth
 
-        textEmail = findViewById(R.id.textEmail)
-        textPassword = findViewById(R.id.textPassword)
-
-        val createButton = findViewById<Button>(R.id.createButton)
         createButton.setOnClickListener(::creatUser)
 
-        val loginButton = findViewById<Button>(R.id.loginButton)
         loginButton.setOnClickListener {
             loginUser()
         }
 
-
     }
 
 
+    fun signin() {
+        textPinkod.visibility = View.GONE
+        createButton.visibility = View.GONE
+        loginButton.visibility = View.VISIBLE
+    }
+
+    fun signup() {
+        textPinkod.visibility = View.VISIBLE
+        createButton.visibility = View.VISIBLE
+        loginButton.visibility = View.GONE
+    }
 
     fun loginUser() {
         val email = textEmail.text.toString()
@@ -69,9 +97,28 @@ class MainActivity : AppCompatActivity() {
             .addOnCompleteListener  { task ->
                 if ( task.isSuccessful) {
                     Log.d(TAG, "loginUser: Success")
-                    val intent = Intent(this , WeekdaysActivity::class.java)
-                    intent.putExtra(Constants.PASSWORD, password)
-                    startActivity(intent)
+                    val user = Firebase.auth.currentUser
+                    val email = user?.email.toString()
+                    val usercollection = db.collection("users")
+
+                    val query = usercollection.whereEqualTo("email", email).get()
+                        .addOnSuccessListener {
+                                document ->
+                            if (document != null){
+                                val userdocument = document.toObjects(Usuari::class.java)
+                                val pinkod = userdocument[0].pinkod
+                                Log.i("user_pin",pinkod)
+
+                                val intent =  Intent(this , WeekdaysActivity::class.java)
+                                intent.putExtra(Constants.PINKOD, pinkod)
+                                startActivity(intent)
+
+                            }
+                        }
+                        .addOnFailureListener { exception ->
+                            Log.d(TAG, "Error getting documents: ", exception)
+                        }
+
                 } else {
                     Log.d(TAG, "loginUser: user not loged in ${task.exception}")
                     Toast.makeText(this, "Användarnamn eller lösernord stämmer inte!"
@@ -83,16 +130,17 @@ class MainActivity : AppCompatActivity() {
     fun creatUser(view : View) {
         val email = textEmail.text.toString()
         val password = textPassword.text.toString()
+        val pinkod = textPinkod.text.toString()
 
         val user = hashMapOf(
             "email" to email,
-            "password" to password
+            "pinkod" to pinkod
         )
         Log.d(TAG, "onCreate: KÖrs")
         // Add a new document with a generated ID
 
-        if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Användarnamn och lösernord måste fyllas i!"
+        if (email.isEmpty() || password.isEmpty() || pinkod.isEmpty()) {
+            Toast.makeText(this, "Användarnamn, lösernord & pinkod måste fyllas i!"
                 , Toast.LENGTH_LONG).show()
             return
         }
@@ -114,18 +162,24 @@ class MainActivity : AppCompatActivity() {
                                 Log.w(TAG, "Error adding document", e)
                             }
 
-                    val intent = Intent(this , WeekdaysActivity::class.java)
-                    intent.putExtra(Constants.PASSWORD, password)
-                    startActivity(intent)
-                } else {
-                    Log.d(TAG, "creatUser: user not created ${task.exception}")
-                    Toast.makeText(this, "Email addressen finns redan!", Toast.LENGTH_LONG).show()
+                        val intent = Intent(this , WeekdaysActivity::class.java)
+                        intent.putExtra(Constants.PINKOD, pinkod)
+                        startActivity(intent)
+                    } else {
+                        Log.d(TAG, "creatUser: user not created ${task.exception}")
+                        Toast.makeText(this, "Email addressen finns redan!", Toast.LENGTH_LONG).show()
 
+                    }
                 }
+
             }
 
-    }
+    }}
 
-}}
+data class Usuari( var email: String="", var pinkod: String="", var password: String="")
+
+
+
+
 
 
