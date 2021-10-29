@@ -8,7 +8,8 @@ data class Actions(@DocumentId var documentName: String? = null, // här kan man
                    var checkBox: Boolean = false,
                    var imageText: String? = null,
                    var order : Long? = null,
+                   var steps: Boolean = false
 ) {
 
-    val listOfActionSteps = mutableListOf<ActionSteps>()
+    val listOfActionSteps = mutableListOf<Actions>()
 }

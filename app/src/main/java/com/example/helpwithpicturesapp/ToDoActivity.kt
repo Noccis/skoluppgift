@@ -42,8 +42,9 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var rewardImageView: ImageView
     private var shortAnimationDuration: Int = 400
     lateinit var deletedCard: Actions
-    lateinit var templateSave : TextView
+    lateinit var templateSave: TextView
     var uid = ""
+    var actionId = " "
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,50 +103,54 @@ class ToDoActivity : AppCompatActivity() {
 
     }
 
-            private var simpleCallback = object : ItemTouchHelper.SimpleCallback(
-              ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), ItemTouchHelper.LEFT) {
+    private var simpleCallback = object : ItemTouchHelper.SimpleCallback(
+        ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), ItemTouchHelper.LEFT
+    ) {
 
-            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder): Boolean {
+        override fun onMove(
+            recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
 
-                if (addButton.visibility == View.VISIBLE) {
-                    var startPosition = viewHolder.adapterPosition
-                    var endPosition = target.adapterPosition
-                    Collections.swap(action, startPosition, endPosition)
-                    recyclerView.adapter?.notifyItemMoved(startPosition, endPosition)
-                    return true
-                } else return false
-            }
+            if (addButton.visibility == View.VISIBLE) {
+                var startPosition = viewHolder.adapterPosition
+                var endPosition = target.adapterPosition
+                Collections.swap(action, startPosition, endPosition)
+                recyclerView.adapter?.notifyItemMoved(startPosition, endPosition)
+                return true
+            } else return false
+        }
 
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
-                if (addButton.visibility == View.VISIBLE) {
-                    val position = viewHolder.adapterPosition
-                    when (direction) {
-                        ItemTouchHelper.LEFT -> {
-                            deletedCard = action.get(position)
-                            action.removeAt(position)
-                            myAdapter.notifyItemRemoved(position)
-                            Snackbar.make(
-                                recyclerView,
-                                "Uppgiften är borttagen",
-                                Snackbar.LENGTH_LONG
-                            )
-                                .setAction("Ångra", View.OnClickListener {
-                                    action.add(position, deletedCard)
-                                    myAdapter.notifyItemInserted(position)
-                                }).show()
-                        }
-
+            if (addButton.visibility == View.VISIBLE) {
+                val position = viewHolder.adapterPosition
+                when (direction) {
+                    ItemTouchHelper.LEFT -> {
+                        deletedCard = action.get(position)
+                        action.removeAt(position)
+                        myAdapter.notifyItemRemoved(position)
+                        Snackbar.make(
+                            recyclerView,
+                            "Uppgiften är borttagen",
+                            Snackbar.LENGTH_LONG
+                        )
+                            .setAction("Ångra", View.OnClickListener {
+                                action.add(position, deletedCard)
+                                myAdapter.notifyItemInserted(position)
+                            }).show()
                     }
 
-                } else {
-                    val position = null
-                    myAdapter.notifyDataSetChanged()
                 }
 
+            } else {
+                val position = null
+                myAdapter.notifyDataSetChanged()
             }
+
+        }
     }
+
     fun EventChangeListener() {
         when (decision) {
             "monday" -> {
@@ -269,17 +274,47 @@ class ToDoActivity : AppCompatActivity() {
         }
 
     }
+
     public fun saveTemplate(name: String) {
 
+        Log.d("ffs", "Calling saveTemplate!")
         for (action in action) {
-            db.collection("users").document("test").collection(name).add(action)
-                .addOnSuccessListener {
-                    Log.d("ffs", "saveTemplate fun $action added in $name")
+            if (action != null) {
+               actionId = action.documentName.toString()
+                  // skapa action lista med steps.
+                db.collection("users").document(uid).collection(name).add(action)
+                    .addOnSuccessListener {
+                        Log.d("ffs", "saveTemplate fun $action added in $uid")
+                    }
+
+
+
+                if (action.steps == true) { //Spara ner alla dokument i steps på datorn.
+                    val actionSteps = db.collection("users").document(uid).collection("weekday").document(actionId).collection("steps")
+                    actionSteps.get().addOnSuccessListener { step ->
+                        for (document in step.documents) {
+
+                            val newStep = document.toObject<Actions>(Actions::class.java)
+                            if (newStep != null) {
+                                action.listOfActionSteps.add(newStep)
+                                Log.d("ffs", "document not null and step added to list.")
+                            }
+
+                    }
+                   // for (document in ) {
+
+                    }
+                  //  ladda upp listan i user steps.
+                    // Ladda ner dom först i en lista. Kom ihåg att det är asyncromt, skriv i success listener.
+                    // db.collection("users").document(uid).collection(name).document(actionId).add hur får jag tag på listan från howtodoit?
                 }
+
+                
+            }
+
         }
 
     }
-
 }
 
 
