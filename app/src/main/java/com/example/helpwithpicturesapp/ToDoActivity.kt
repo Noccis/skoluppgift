@@ -49,6 +49,7 @@ class ToDoActivity : AppCompatActivity() {
     var actionId = " "
     val auth = Firebase.auth
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
@@ -293,39 +294,20 @@ class ToDoActivity : AppCompatActivity() {
 
 
 
-                if (action.steps == true) { //Spara ner alla dokument i steps på datorn om steps bool är true.
-
-                    val actionSteps = db.collection("users").document(uid).collection("weekday").document(actionId).collection("steps")
-                    actionSteps.get().addOnSuccessListener { step ->
-                        for (document in step.documents) {
-
-                            val newStep = document.toObject<Actions>(Actions::class.java)
-                            if (newStep != null) {
-                                action.listOfActionSteps.add(newStep)
-                                Log.d("ffs", "document not null and step added to list.")
-                            }
-
-                    }
-                        // SKa den här ligga här eller ett steg längre ner?
-                        for (action in action.listOfActionSteps) {
-
-                            db.collection("users").document(uid).collection(name).document(actionId).collection("steps").add(action)
-                                .addOnSuccessListener {
-                                    Log.d("ffs", "$action added to steps")
-                                }
-
-                        }
-
-                    }
-
-                }
-
+                db.collection("users").document(uid).collection("weekday").document(decision).collection("todo").document(actionId).collection("steps")
 
             }
 
         }
-
+        
     }
+
+
+
+
+
+
+
 }
 
 
