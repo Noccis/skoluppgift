@@ -18,8 +18,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.ktx.Firebase
+import java.lang.reflect.Array.get
 import java.util.*
 
 class ToDoActivity : AppCompatActivity() {
@@ -42,8 +45,11 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var rewardImageView: ImageView
     private var shortAnimationDuration: Int = 400
     lateinit var deletedCard: Actions
-    lateinit var templateSave : TextView
+    lateinit var templateSave: TextView
     var uid = ""
+    var actionId = " "
+    val auth = Firebase.auth
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -108,50 +114,54 @@ class ToDoActivity : AppCompatActivity() {
 
     }
 
-            private var simpleCallback = object : ItemTouchHelper.SimpleCallback(
-              ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), ItemTouchHelper.LEFT) {
+    private var simpleCallback = object : ItemTouchHelper.SimpleCallback(
+        ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), ItemTouchHelper.LEFT
+    ) {
 
-            override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-                target: RecyclerView.ViewHolder): Boolean {
+        override fun onMove(
+            recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
 
-                if (addButton.visibility == View.VISIBLE) {
-                    var startPosition = viewHolder.adapterPosition
-                    var endPosition = target.adapterPosition
-                    Collections.swap(action, startPosition, endPosition)
-                    recyclerView.adapter?.notifyItemMoved(startPosition, endPosition)
-                    return true
-                } else return false
-            }
+            if (addButton.visibility == View.VISIBLE) {
+                var startPosition = viewHolder.adapterPosition
+                var endPosition = target.adapterPosition
+                Collections.swap(action, startPosition, endPosition)
+                recyclerView.adapter?.notifyItemMoved(startPosition, endPosition)
+                return true
+            } else return false
+        }
 
-            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
-                if (addButton.visibility == View.VISIBLE) {
-                    val position = viewHolder.adapterPosition
-                    when (direction) {
-                        ItemTouchHelper.LEFT -> {
-                            deletedCard = action.get(position)
-                            action.removeAt(position)
-                            myAdapter.notifyItemRemoved(position)
-                            Snackbar.make(
-                                recyclerView,
-                                "Uppgiften är borttagen",
-                                Snackbar.LENGTH_LONG
-                            )
-                                .setAction("Ångra", View.OnClickListener {
-                                    action.add(position, deletedCard)
-                                    myAdapter.notifyItemInserted(position)
-                                }).show()
-                        }
-
+            if (addButton.visibility == View.VISIBLE) {
+                val position = viewHolder.adapterPosition
+                when (direction) {
+                    ItemTouchHelper.LEFT -> {
+                        deletedCard = action.get(position)
+                        action.removeAt(position)
+                        myAdapter.notifyItemRemoved(position)
+                        Snackbar.make(
+                            recyclerView,
+                            "Uppgiften är borttagen",
+                            Snackbar.LENGTH_LONG
+                        )
+                            .setAction("Ångra", View.OnClickListener {
+                                action.add(position, deletedCard)
+                                myAdapter.notifyItemInserted(position)
+                            }).show()
                     }
 
-                } else {
-                    val position = null
-                    myAdapter.notifyDataSetChanged()
                 }
 
+            } else {
+                val position = null
+                myAdapter.notifyDataSetChanged()
             }
+
+        }
     }
+
     fun EventChangeListener() {
         when (decision) {
             "monday" -> {
@@ -276,16 +286,67 @@ class ToDoActivity : AppCompatActivity() {
         }
 
     }
-    public fun saveTemplate(name: String) {
 
+    fun saveTemplate(name: String) {
+        uid = auth.currentUser!!.uid
+
+        Log.d("ffs", "Calling saveTemplate!")
         for (action in action) {
-            db.collection("users").document("test").collection(name).add(action)
-                .addOnSuccessListener {
-                    Log.d("ffs", "saveTemplate fun $action added in $name")
-                }
+            if (action != null) {               // Ta bort detta?
+                actionId = action.documentName.toString()
+
+                db.collection("users").document(uid).collection("weekday")
+                    .document(name).collection("action")
+                    .add(action)                    // Laddar upp lokala actions i listan till users egen mall.
+                    .addOnSuccessListener {
+                        Log.d("ffs", "saveTemplate fun $action added ")
+
+
+                        db.collection("users").document(uid).collection("weekday")
+                            .document(decision).collection("action").document(actionId).collection("steps")
+                            .orderBy("order", Query.Direction.ASCENDING).get()
+                            .addOnSuccessListener {documents ->
+
+                                Log.d("ffs", "step succes")
+                                val stepList = mutableListOf<Actions>()     // temporär lista för att ladda ner och upp steps
+                                for (document in documents) {
+
+                                    stepList.add(document.toObject(Actions::class.java))
+
+                                    Log.d("ffs", "A step was added! Tjoho!")
+
+                                }
+
+                                //Hur får man in så den här väntar tills istan är klar?
+
+                                for (action in stepList) {
+
+                                    db.collection("users").document(uid).collection("weekday")
+                                        .document(name).collection("action").document(actionId)
+                                        .collection("steps")
+                                        .add(action)                    // Laddar upp lokala actions i listan till users egen mall.
+                                        .addOnSuccessListener {
+                                            Log.d("ffs", "saveTemplate fun $action step added in $uid")
+                                        }
+
+
+                                }
+
+
+                            }
+                    }
+
+
+
+
+
+
+            }
+
         }
 
     }
+
 
 }
 

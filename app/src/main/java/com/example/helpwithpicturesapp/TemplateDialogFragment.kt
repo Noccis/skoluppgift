@@ -36,6 +36,7 @@ class TemplateDialogFragment(val activity: ToDoActivity) : DialogFragment() {
 
             Log.d("ffs", "Spara funkar")
             // spara mall
+            dismiss()
         }
 
 
