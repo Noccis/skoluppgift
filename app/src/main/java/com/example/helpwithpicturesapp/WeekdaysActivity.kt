@@ -32,6 +32,7 @@ class WeekdaysActivity : AppCompatActivity() {
     var friday = "friday"
     var saturday = "saturday"
     var sunday = "sunday"
+    var uid = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,13 +45,13 @@ class WeekdaysActivity : AppCompatActivity() {
 
 
 
-       /* val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+        val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
         if (currentUser != null)
          uid = currentUser!!.uid
-        Log.d("!!!", "onCreate: userId $uid")
+        Log.d("!!!", "onCreate: weekdays userId $uid")
 
-        */
+
 
 
 
