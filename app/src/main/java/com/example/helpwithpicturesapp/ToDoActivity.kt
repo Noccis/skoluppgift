@@ -290,25 +290,25 @@ class ToDoActivity : AppCompatActivity() {
     fun saveTemplate(name: String) {
         uid = auth.currentUser!!.uid
 
-      //  Log.d("ffs", "Calling saveTemplate!")
         for (action in action) {
             if (action != null) {               // Ta bort detta?
-             //   actionId = action.documentName.toString()
+
+                actionId = action.documentName.toString()
 
                 db.collection("users").document(uid).collection("weekday")
-                    .document(name).collection("action")
-                    .add(action)                    // Laddar upp lokala actions i listan till users egen mall.
+                    .document(name).collection("action").document(actionId)
+                    .set(action)                    // Laddar upp lokala actions i listan till users egen mall.
                     .addOnSuccessListener {
-                     //   Log.d("ffs", "saveTemplate MAINaction fun $action added ")
+                   //    Log.d("ffs", "saveTemplate MAINaction fun actionId: $actionId  ${action.documentName} added ")
 
                         actionId = action.documentName.toString()
 
                         db.collection("users").document(uid).collection("weekday")
-                            .document("monday").collection("action").document("clean").collection("steps").get()
+                            .document(decision).collection("action").document(actionId).collection("steps").get()
                           //  .orderBy("order", Query.Direction.ASCENDING).get()
                             .addOnSuccessListener {documents ->
 
-                                Log.d("ffs", "step succesuser: $uid, document size ${documents.documents.size}")
+                            //    Log.d("ffs", "step succes dag: ${decision} actionid: $actionId document size ${documents.documents.size}")
 
                                 val stepList = mutableListOf<Actions>()     // temporär lista för att ladda ner och upp steps
                                 for (document in documents.documents) {
@@ -320,12 +320,10 @@ class ToDoActivity : AppCompatActivity() {
                                     }
 
 
-                                    Log.d("ffs", "A step was added! Tjoho!")
+                                //   Log.d("ffs", "A step was added! Tjoho! ${newStep!!.documentName}")
 
 
                                 }
-
-                                //Hur får man in så den här väntar tills istan är klar?
 
                                 for (step in stepList) {
 
@@ -334,10 +332,10 @@ class ToDoActivity : AppCompatActivity() {
                                         .collection("steps")
                                         .add(step)                    // Laddar upp lokala actions i listan till users egen mall.
                                         .addOnSuccessListener {
-                                            Log.d("ffs", "saveSTEP fun ${step.documentName} step added in $uid Mallnamn:$name, action ID: $actionId")
+                                      //     Log.d("ffs", "saveSTEP fun ${step.documentName} step added in $uid Mallnamn:$name, action ID: $actionId")
                                         }
                                         .addOnFailureListener {
-                                            Log.d("ffs", "$it add step funkar inte")
+                                     //      Log.d("ffs", "$it add step funkar inte")
                                         }
 
 
