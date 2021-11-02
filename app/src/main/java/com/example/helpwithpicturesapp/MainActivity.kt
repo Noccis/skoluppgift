@@ -10,6 +10,7 @@ import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -21,17 +22,27 @@ class MainActivity : AppCompatActivity() {
     lateinit var textEmail : EditText
     lateinit var textPassword : EditText
     lateinit var userSeeInsrtuctionsView: TextView
+
     lateinit var signInButton: Button
     lateinit var signUpButton: Button
     lateinit var textPinkod : TextView
     lateinit var loginButton : Button
     lateinit var createButton : Button
+
+    val authid = ""
     val TAG = "!!!"
     val db = Firebase.firestore
+
+    val week = listOf<String>("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")
+
+
+    val actionsList = mutableListOf<Actions>()
+    val actionsRef = db.collection("Actions")
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         signInButton = findViewById(R.id.signInButton)
         signUpButton = findViewById(R.id.signUpButton)
@@ -51,7 +62,6 @@ class MainActivity : AppCompatActivity() {
         signInButton.setOnClickListener {
             signin()
         }
-
         val button2 = findViewById<Button>(R.id.button2)
         button2.setOnClickListener {
             val intent = Intent(this , WeekdaysActivity::class.java)
@@ -62,7 +72,15 @@ class MainActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
+
         createButton.setOnClickListener(::creatUser)
+
+        textEmail = findViewById(R.id.textEmail)
+        textPassword = findViewById(R.id.textPassword)
+
+        val createButton = findViewById<Button>(R.id.createButton)
+        createButton.setOnClickListener(::creatUser,)
+
 
         loginButton.setOnClickListener {
             loginUser()
@@ -96,6 +114,7 @@ class MainActivity : AppCompatActivity() {
         auth.signInWithEmailAndPassword(email, password)
             .addOnCompleteListener  { task ->
                 if ( task.isSuccessful) {
+
                     Log.d(TAG, "loginUser: Success")
                     val user = Firebase.auth.currentUser
                     val email = user?.email.toString()
@@ -118,7 +137,7 @@ class MainActivity : AppCompatActivity() {
                         .addOnFailureListener { exception ->
                             Log.d(TAG, "Error getting documents: ", exception)
                         }
-
+ 
                 } else {
                     Log.d(TAG, "loginUser: user not loged in ${task.exception}")
                     Toast.makeText(this, "Användarnamn eller lösernord stämmer inte!"
@@ -152,15 +171,16 @@ class MainActivity : AppCompatActivity() {
                         db.collection("users").document(auth.currentUser!!.uid)
                             .set(user)
                             .addOnSuccessListener { documentReference ->
-
                                 Log.d(
                                     TAG,
                                     "DocumentSnapshot added with ID: ${auth.currentUser!!.uid}"
                                 )  // här är tillagt userID
+                                uniqueUserList()
                             }
                             .addOnFailureListener { e ->
                                 Log.w(TAG, "Error adding document", e)
                             }
+
 
                         val intent = Intent(this , WeekdaysActivity::class.java)
                         intent.putExtra(Constants.PINKOD, pinkod)
@@ -169,17 +189,62 @@ class MainActivity : AppCompatActivity() {
                         Log.d(TAG, "creatUser: user not created ${task.exception}")
                         Toast.makeText(this, "Email addressen finns redan!", Toast.LENGTH_LONG).show()
 
+            
+
                     }
                 }
 
             }
 
+
     }}
 
+        }
+
+    }
+
+    fun uniqueUserList(){
+        actionsRef.get().addOnSuccessListener { snapshot ->
+            if (snapshot != null){
+                actionsList.clear()
+                for (document in snapshot.documents) {
+                    val newDocument = document.toObject(Actions::class.java)
+                    if (newDocument != null) {
+                        actionsList.add(newDocument)
+                    }
+
+                }
+            }
+            Log.d("!!!", "1 onCreate: ${actionsList.size}")
+
+            val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser // Henrik ny härifrån
+
+            var uid : String? = null
+            if (currentUser != null) {
+                 uid = currentUser.uid
+                Log.d("!!!", "onCreate: userId $uid")
+            }
+
+
+            for (action in actionsList){
+                for (day in week) {
+                    db.collection("users").document(uid!!).collection("weekday")
+                        .document(day).collection("action").add(action)
+                        .addOnSuccessListener { docRef ->
+
+                            Log.d(TAG, "uniqueUserList: uid: $uid, day: $day Success!!!! ${docRef.id}")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.d(TAG, "uniqueUserList: Error: $e")
+                        }
+
+                }
+            }
+        }
+    }
+
+
+}
 data class Usuari( var email: String="", var pinkod: String="", var password: String="")
-
-
-
-
 
 
