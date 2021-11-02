@@ -290,49 +290,61 @@ class ToDoActivity : AppCompatActivity() {
     fun saveTemplate(name: String) {
         uid = auth.currentUser!!.uid
 
-        Log.d("ffs", "Calling saveTemplate!")
         for (action in action) {
             if (action != null) {               // Ta bort detta?
+
                 actionId = action.documentName.toString()
 
                 db.collection("users").document(uid).collection("weekday")
-                    .document(name).collection("action")
-                    .add(action)                    // Laddar upp lokala actions i listan till users egen mall.
+                    .document(name).collection("action").document(actionId)
+                    .set(action)                    // Laddar upp lokala actions i listan till users egen mall.
                     .addOnSuccessListener {
-                        Log.d("ffs", "saveTemplate fun $action added ")
+                   //    Log.d("ffs", "saveTemplate MAINaction fun actionId: $actionId  ${action.documentName} added ")
 
+                        actionId = action.documentName.toString()
 
                         db.collection("users").document(uid).collection("weekday")
-                            .document(decision).collection("action").document(actionId).collection("steps")
-                            .orderBy("order", Query.Direction.ASCENDING).get()
+                            .document(decision).collection("action").document(actionId).collection("steps").get()
+                          //  .orderBy("order", Query.Direction.ASCENDING).get()
                             .addOnSuccessListener {documents ->
 
-                                Log.d("ffs", "step succes")
+                            //    Log.d("ffs", "step succes dag: ${decision} actionid: $actionId document size ${documents.documents.size}")
+
                                 val stepList = mutableListOf<Actions>()     // temporär lista för att ladda ner och upp steps
-                                for (document in documents) {
+                                for (document in documents.documents) {
 
-                                    stepList.add(document.toObject(Actions::class.java))
+                                    val newStep = document.toObject(Actions::class.java)
 
-                                    Log.d("ffs", "A step was added! Tjoho!")
+                                    if (newStep != null){
+                                        stepList.add(newStep)
+                                    }
+
+
+                                //   Log.d("ffs", "A step was added! Tjoho! ${newStep!!.documentName}")
+
 
                                 }
 
-                                //Hur får man in så den här väntar tills istan är klar?
-
-                                for (action in stepList) {
+                                for (step in stepList) {
 
                                     db.collection("users").document(uid).collection("weekday")
                                         .document(name).collection("action").document(actionId)
                                         .collection("steps")
-                                        .add(action)                    // Laddar upp lokala actions i listan till users egen mall.
+                                        .add(step)                    // Laddar upp lokala actions i listan till users egen mall.
                                         .addOnSuccessListener {
-                                            Log.d("ffs", "saveTemplate fun $action step added in $uid")
+                                      //     Log.d("ffs", "saveSTEP fun ${step.documentName} step added in $uid Mallnamn:$name, action ID: $actionId")
+                                        }
+                                        .addOnFailureListener {
+                                     //      Log.d("ffs", "$it add step funkar inte")
                                         }
 
 
                                 }
 
 
+                            }
+                            .addOnFailureListener {
+                                Log.d("ffs", "$actionId fail $it")
                             }
                     }
 
