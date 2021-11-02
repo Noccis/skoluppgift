@@ -197,10 +197,6 @@ class MainActivity : AppCompatActivity() {
             }
 
 
-    }}
-
-        }
-
     }
 
     fun uniqueUserList(){
