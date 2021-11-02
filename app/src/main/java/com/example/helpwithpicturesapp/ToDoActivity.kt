@@ -22,6 +22,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.ktx.Firebase
+import java.lang.reflect.Array.get
 import java.util.*
 
 class ToDoActivity : AppCompatActivity() {
@@ -284,22 +285,39 @@ class ToDoActivity : AppCompatActivity() {
 
         Log.d("ffs", "Calling saveTemplate!")
         for (action in action) {
-            if (action != null) {
-               actionId = action.documentName.toString()        // Laddar upp lokala actions i listan till users egen mall.
+            if (action != null) {               // Ta bort detta?
+               actionId = action.documentName.toString()
 
-                db.collection("users").document(uid).collection(name).add(action)
+                db.collection("users").document(uid).collection("weekday")
+                    .document(name).collection("action").add(action)                    // Laddar upp lokala actions i listan till users egen mall.
                     .addOnSuccessListener {
                         Log.d("ffs", "saveTemplate fun $action added in $uid")
                     }
 
+              //  db = FirebaseFirestore.get()
+                db.collection("users").document(uid).collection("weekday")
+                    .document(decision).collection("action").document(actionId).collection("steps")
+                    .orderBy("order", Query.Direction.ASCENDING).get()
+                    .addOnSuccessListener {
+
+                        Log.d("ffs", "step succes")
+                        val stepList = mutableListOf<Actions>()     // temporär lista för att ladda ner och upp steps
+                        for (document in it) {
+
+                            stepList.add(document.toObject(Actions::class.java))
+
+                            Log.d("ffs", "A step was added! Tjoho!")
+
+                        }
+
+                    }
 
 
-                db.collection("users").document(uid).collection("weekday").document(decision).collection("todo").document(actionId).collection("steps")
 
             }
 
         }
-        
+
     }
 
 
