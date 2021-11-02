@@ -49,6 +49,12 @@ class ToDoActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
 
+        val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser // Henrik ny härifrån
+        if (currentUser != null) {
+            uid = currentUser.uid
+            Log.d("!!!!", "onCreate: ToDoActivity userId $uid")
+        }
+
         templateSave = findViewById(R.id.saveTemplateText)
         templateSave.visibility = View.GONE
 // Lägg till templateSave.GONE sen när koden är klar.
@@ -179,8 +185,9 @@ class ToDoActivity : AppCompatActivity() {
             }
         }
         db = FirebaseFirestore.getInstance()
-        db.collection("Weekday").document(decision).collection(decision)
-            .orderBy("order", Query.Direction.ASCENDING)
+        db.collection("users").document(uid).collection("weekday")
+            .document(decision).collection("action")
+            //.orderBy("order", Query.Direction.ASCENDING)
             .addSnapshotListener(object : EventListener<QuerySnapshot> {
 
                 override fun onEvent(
