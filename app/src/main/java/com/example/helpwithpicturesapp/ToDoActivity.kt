@@ -37,7 +37,7 @@ class ToDoActivity : AppCompatActivity() {
     private var longAnimationDuration: Int = 2000
     lateinit var lock: Button
     lateinit var unlock: Button
-    var password = ""
+    var pinkod = ""
     lateinit var close: ImageView
     lateinit var rewardImageView: ImageView
     private var shortAnimationDuration: Int = 400
@@ -61,7 +61,7 @@ class ToDoActivity : AppCompatActivity() {
         }
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
-        password = intent.getStringExtra(Constants.PASSWORD).toString()
+        pinkod = intent.getStringExtra(Constants.PINKOD).toString()
         editPassword = findViewById(R.id.editPassword)
         passCard = findViewById(R.id.passCard)
         passCard.visibility = View.GONE
@@ -91,7 +91,7 @@ class ToDoActivity : AppCompatActivity() {
 
         recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        myAdapter = ActionsRecycleViewAdapter(this, action, decision, password)
+        myAdapter = ActionsRecycleViewAdapter(this, action, decision, pinkod)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = myAdapter
         EventChangeListener()
@@ -242,7 +242,7 @@ class ToDoActivity : AppCompatActivity() {
 
         unlock.setOnClickListener {
             val pass = editPassword.text.toString()
-            if (password == pass) {
+            if (pinkod == pass) {
                 passCard.visibility = View.GONE
                 addButton.visibility = View.VISIBLE
                 editPassword.setText("")
@@ -255,7 +255,7 @@ class ToDoActivity : AppCompatActivity() {
 
         lock.setOnClickListener {
             val pass = editPassword.text.toString()
-            if (password == pass) {
+            if (pinkod == pass) {
                 passCard.visibility = View.GONE
                 addButton.visibility = View.GONE
                 editPassword.setText("")

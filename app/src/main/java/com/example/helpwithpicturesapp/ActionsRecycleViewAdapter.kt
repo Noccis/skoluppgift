@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 import com.google.firebase.firestore.DocumentId
 
 
-class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> , val decision : String , val password :String):
+class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> , val decision : String , val pinkod :String):
     RecyclerView.Adapter<ActionsRecycleViewAdapter.ViewHolder>(){
 
     val layoutInflater = LayoutInflater.from(context)
@@ -33,7 +33,7 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
                 intent.putExtra(ACTIONS_POSITION_KEY, actionsPosition)
                 intent.putExtra(Constants.DAY_CHOSEN, decision)
                 intent.putExtra(ACTION_LOCATION, action[actionsPosition].documentName)
-                intent.putExtra(Constants.PASSWORD, password)
+                intent.putExtra(Constants.PINKOD, pinkod)
                 context.startActivity(intent)
             }
             checkBoxView.setOnClickListener {

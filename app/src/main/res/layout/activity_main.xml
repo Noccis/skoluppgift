@@ -7,6 +7,7 @@
     android:background="@drawable/bgimage3"
     tools:context=".MainActivity">
 
+
     <TextView
         android:id="@+id/instructions_Tv"
         android:layout_width="181dp"
@@ -19,23 +20,54 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <androidx.cardview.widget.CardView
-        android:layout_width="358dp"
-        android:layout_height="225dp"
-        app:cardBackgroundColor="@color/monday"
+        android:layout_width="349dp"
+        android:layout_height="312dp"
         android:layout_marginStart="100dp"
         android:layout_marginTop="60dp"
         android:layout_marginEnd="100dp"
+        app:cardBackgroundColor="@color/monday"
         app:cardCornerRadius="15dp"
         app:cardElevation="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/instructions_Tv">
 
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+            <Button
+                android:id="@+id/signInButton"
+                android:layout_width="168dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/tuesday"
+                android:text="Inloggning"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:cornerRadius="10dp" />
+
+            <Button
+                android:id="@+id/signUpButton"
+                android:layout_width="176dp"
+                android:layout_height="match_parent"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/tuesday"
+                android:text="Regisrering"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:cornerRadius="10dp" />
+        </LinearLayout>
+
+
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="350dp"
             android:gravity="center_vertical"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:layout_gravity="center">
 
 
             <EditText
@@ -43,33 +75,50 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:backgroundTint="@color/black"
                 android:elevation="2dp"
                 android:ems="12"
-                android:backgroundTint="@color/black"
                 android:hint="E-mail "
                 android:inputType="textPersonName"
                 android:minHeight="48dp"
                 android:textColor="@color/black"
                 android:textColorHighlight="#F3ECEC"
-                android:textColorLink="#F1EDED"
-                android:textColorHint="@color/white"/>
+                android:textColorHint="@color/white"
+                android:textColorLink="#F1EDED" />
 
             <EditText
                 android:id="@+id/textPassword"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:backgroundTint="@color/black"
                 android:elevation="2dp"
                 android:ems="12"
-                android:backgroundTint="@color/black"
                 android:hint="Lösenord"
                 android:inputType="textPersonName"
                 android:minHeight="48dp"
                 android:password="true"
                 android:textColor="@color/black"
                 android:textColorHighlight="#F3ECEC"
-                android:textColorLink="#F1EDED"
-                android:textColorHint="@color/white"/>
+                android:textColorHint="@color/white"
+                android:textColorLink="#F1EDED" />
+
+            <EditText
+                android:id="@+id/textPinkod"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:backgroundTint="@color/black"
+                android:elevation="2dp"
+                android:ems="12"
+                android:hint="Pin-Kod"
+                android:inputType="textPersonName"
+                android:minHeight="48dp"
+                android:password="true"
+                android:textColor="@color/black"
+                android:textColorHighlight="#F3ECEC"
+                android:textColorHint="@color/white"
+                android:textColorLink="#F1EDED" />
 
             <Button
                 android:id="@+id/loginButton"
@@ -87,11 +136,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textColor="@color/white"
                 android:backgroundTint="@color/tuesday"
-                android:text="Skapa användare"
+                android:text="Registrera"
+                android:textColor="@color/white"
                 android:textStyle="bold"
-                app:cornerRadius="10dp"/>
+                app:cornerRadius="10dp" />
 
         </LinearLayout>
 
@@ -107,6 +156,10 @@
         app:layout_constraintHorizontal_bias="0.612"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+
+
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
