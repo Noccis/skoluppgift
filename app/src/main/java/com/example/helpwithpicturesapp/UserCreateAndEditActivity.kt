@@ -22,6 +22,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -49,13 +51,11 @@ class UserCreateAndEditActivity : AppCompatActivity() {
 
     var curFile: Uri? = null
     val imageRef = Firebase.storage.reference
-    val uniqeString = UUID.randomUUID().toString()
     val db = FirebaseFirestore.getInstance()
     var decision = ""
     val userImageUrl = mutableListOf<String>()
     var choosenImageUrl: String? = null
     var actionId = ""
-
 
 
     lateinit var recyclerView: RecyclerView
@@ -68,11 +68,19 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     lateinit var imgeViewButton: ImageButton
     lateinit var imageAdapter: ImageAdapter
     lateinit var backImage: ImageView
+    var uid = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_create_and_edit)
+        
+        val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+        if(currentUser != null) {
+            uid = currentUser.uid
+            Log.d(TAG, "onCreate: $uid")
+            
+        }
 
         recyclerView = findViewById(R.id.recyclerView)
 
@@ -87,6 +95,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
 
         decision = intent.getStringExtra(Constants.DAY_CHOSEN).toString()
         actionId = intent.getStringExtra(INSTRUCTIONS_POSITION_KEY).toString()
+        
 
         recyclerView.layoutManager = gridLayoutManager
         recyclerView.setHasFixedSize(true)
@@ -197,7 +206,9 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         try {
 
             curFile?.let {
-                val uploadTask = imageRef.child("UploadedPictures/$uniqeString").putFile(it)
+                val uniqeString = UUID.randomUUID().toString()
+                val uploadTask = imageRef.child("UploadedPictures/$uid/$uniqeString").putFile(it) // lägg in authID här
+                Log.d(TAG, "uploadImageToStorage: $uid")
 
                 val urlTask = uploadTask.continueWithTask { task ->
                     if (!task.isSuccessful) {
@@ -205,7 +216,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                             throw it
                         }
                     }
-                    imageRef.child("UploadedPictures/$uniqeString").downloadUrl
+                    imageRef.child(uniqeString).downloadUrl
                 }.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val downloadUri = task.result

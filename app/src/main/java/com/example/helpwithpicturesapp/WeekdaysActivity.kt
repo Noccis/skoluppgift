@@ -60,6 +60,7 @@ class WeekdaysActivity : AppCompatActivity() {
 
         password = intent.getStringExtra(Constants.PASSWORD).toString()
 
+
         mondayButton = findViewById(R.id.måndag_Button)
         mondayButton.setOnClickListener {
 
