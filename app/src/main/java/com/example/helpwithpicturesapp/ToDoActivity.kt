@@ -280,28 +280,30 @@ class ToDoActivity : AppCompatActivity() {
 
     }
 
-    public fun saveTemplate(name: String) {
-        uid =  auth.currentUser!!.uid
+    fun saveTemplate(name: String) {
+        uid = auth.currentUser!!.uid
 
         Log.d("ffs", "Calling saveTemplate!")
         for (action in action) {
             if (action != null) {               // Ta bort detta?
-               actionId = action.documentName.toString()
+                actionId = action.documentName.toString()
 
                 db.collection("users").document(uid).collection("weekday")
-                    .document(name).collection("action").add(action)                    // Laddar upp lokala actions i listan till users egen mall.
+                    .document(name).collection("action")
+                    .add(action)                    // Laddar upp lokala actions i listan till users egen mall.
                     .addOnSuccessListener {
                         Log.d("ffs", "saveTemplate fun $action added in $uid")
                     }
 
-              //  db = FirebaseFirestore.get()
+                //  db = FirebaseFirestore.get()
                 db.collection("users").document(uid).collection("weekday")
                     .document(decision).collection("action").document(actionId).collection("steps")
                     .orderBy("order", Query.Direction.ASCENDING).get()
                     .addOnSuccessListener {
 
                         Log.d("ffs", "step succes")
-                        val stepList = mutableListOf<Actions>()     // temporär lista för att ladda ner och upp steps
+                        val stepList =
+                            mutableListOf<Actions>()     // temporär lista för att ladda ner och upp steps
                         for (document in it) {
 
                             stepList.add(document.toObject(Actions::class.java))
@@ -310,8 +312,23 @@ class ToDoActivity : AppCompatActivity() {
 
                         }
 
-                    }
+                        //Hur får man in så den här väntar tills istan är klar?
 
+                        for (action in stepList) {
+
+                            db.collection("users").document(uid).collection("weekday")
+                                .document(name).collection("action").document(actionId)
+                                .collection("steps")
+                                .add(action)                    // Laddar upp lokala actions i listan till users egen mall.
+                                .addOnSuccessListener {
+                                    Log.d("ffs", "saveTemplate fun $action step added in $uid")
+                                }
+
+
+                        }
+
+
+                    }
 
 
             }
@@ -319,11 +336,6 @@ class ToDoActivity : AppCompatActivity() {
         }
 
     }
-
-
-
-
-
 
 
 }
