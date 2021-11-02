@@ -292,19 +292,18 @@ class ToDoActivity : AppCompatActivity() {
                     .document(name).collection("action")
                     .add(action)                    // Laddar upp lokala actions i listan till users egen mall.
                     .addOnSuccessListener {
-                        Log.d("ffs", "saveTemplate fun $action added in $uid")
+                        Log.d("ffs", "saveTemplate fun $action added ")
                     }
 
                 //  db = FirebaseFirestore.get()
                 db.collection("users").document(uid).collection("weekday")
                     .document(decision).collection("action").document(actionId).collection("steps")
                     .orderBy("order", Query.Direction.ASCENDING).get()
-                    .addOnSuccessListener {
+                    .addOnSuccessListener {documents ->
 
                         Log.d("ffs", "step succes")
-                        val stepList =
-                            mutableListOf<Actions>()     // temporär lista för att ladda ner och upp steps
-                        for (document in it) {
+                        val stepList = mutableListOf<Actions>()     // temporär lista för att ladda ner och upp steps
+                        for (document in documents) {
 
                             stepList.add(document.toObject(Actions::class.java))
 
@@ -329,6 +328,8 @@ class ToDoActivity : AppCompatActivity() {
 
 
                     }
+
+
 
 
             }
