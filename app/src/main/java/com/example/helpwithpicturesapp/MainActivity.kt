@@ -21,12 +21,14 @@ class MainActivity : AppCompatActivity() {
     lateinit var textEmail : EditText
     lateinit var textPassword : EditText
     lateinit var userSeeInsrtuctionsView: TextView
+    val authid = ""
     val TAG = "!!!"
     val db = Firebase.firestore
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
 
         val button2 = findViewById<Button>(R.id.button2)
         button2.setOnClickListener {
@@ -43,7 +45,7 @@ class MainActivity : AppCompatActivity() {
         textPassword = findViewById(R.id.textPassword)
 
         val createButton = findViewById<Button>(R.id.createButton)
-        createButton.setOnClickListener(::creatUser)
+        createButton.setOnClickListener(::creatUser,)
 
         val loginButton = findViewById<Button>(R.id.loginButton)
         loginButton.setOnClickListener {
