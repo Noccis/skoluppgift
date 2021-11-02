@@ -293,41 +293,43 @@ class ToDoActivity : AppCompatActivity() {
                     .add(action)                    // Laddar upp lokala actions i listan till users egen mall.
                     .addOnSuccessListener {
                         Log.d("ffs", "saveTemplate fun $action added ")
-                    }
 
-                //  db = FirebaseFirestore.get()
-                db.collection("users").document(uid).collection("weekday")
-                    .document(decision).collection("action").document(actionId).collection("steps")
-                    .orderBy("order", Query.Direction.ASCENDING).get()
-                    .addOnSuccessListener {documents ->
 
-                        Log.d("ffs", "step succes")
-                        val stepList = mutableListOf<Actions>()     // temporär lista för att ladda ner och upp steps
-                        for (document in documents) {
+                        db.collection("users").document(uid).collection("weekday")
+                            .document(decision).collection("action").document(actionId).collection("steps")
+                            .orderBy("order", Query.Direction.ASCENDING).get()
+                            .addOnSuccessListener {documents ->
 
-                            stepList.add(document.toObject(Actions::class.java))
+                                Log.d("ffs", "step succes")
+                                val stepList = mutableListOf<Actions>()     // temporär lista för att ladda ner och upp steps
+                                for (document in documents) {
 
-                            Log.d("ffs", "A step was added! Tjoho!")
+                                    stepList.add(document.toObject(Actions::class.java))
 
-                        }
+                                    Log.d("ffs", "A step was added! Tjoho!")
 
-                        //Hur får man in så den här väntar tills istan är klar?
+                                }
 
-                        for (action in stepList) {
+                                //Hur får man in så den här väntar tills istan är klar?
 
-                            db.collection("users").document(uid).collection("weekday")
-                                .document(name).collection("action").document(actionId)
-                                .collection("steps")
-                                .add(action)                    // Laddar upp lokala actions i listan till users egen mall.
-                                .addOnSuccessListener {
-                                    Log.d("ffs", "saveTemplate fun $action step added in $uid")
+                                for (action in stepList) {
+
+                                    db.collection("users").document(uid).collection("weekday")
+                                        .document(name).collection("action").document(actionId)
+                                        .collection("steps")
+                                        .add(action)                    // Laddar upp lokala actions i listan till users egen mall.
+                                        .addOnSuccessListener {
+                                            Log.d("ffs", "saveTemplate fun $action step added in $uid")
+                                        }
+
+
                                 }
 
 
-                        }
-
-
+                            }
                     }
+
+
 
 
 
