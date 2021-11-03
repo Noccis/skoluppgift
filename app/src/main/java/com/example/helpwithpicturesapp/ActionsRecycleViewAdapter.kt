@@ -35,6 +35,7 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
                 intent.putExtra(ACTION_LOCATION, action[actionsPosition].documentName)
                 intent.putExtra(Constants.PINKOD, pinkod)
                 context.startActivity(intent)
+
             }
             checkBoxView.setOnClickListener {
 

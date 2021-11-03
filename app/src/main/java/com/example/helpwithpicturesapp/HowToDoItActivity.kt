@@ -12,6 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import java.util.*
@@ -40,12 +42,19 @@ class HowToDoItActivity : AppCompatActivity() {
     lateinit var close : ImageView
     lateinit var addButton2 : FloatingActionButton
     lateinit var deletedCard : ActionSteps
+    var uid = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_how_to_do_it)
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+
+        val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser // Henrik ny härifrån
+        if (currentUser != null) {
+            uid = currentUser.uid
+            Log.d("!!!!", "onCreate: ToDoActivity userId $uid")
+        }
 
         pinkod = intent.getStringExtra(Constants.PINKOD).toString()
 
@@ -69,9 +78,9 @@ class HowToDoItActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = myAdapter
 
-        actionId = intent.getStringExtra(ACTION_LOCATION).toString()
+        pinkod = intent.getStringExtra(Constants.PINKOD).toString()
         decision = intent.getStringExtra(Constants.DAY_CHOSEN).toString()
-
+        actionId = intent.getStringExtra(ACTION_LOCATION).toString()
 
         addButton2 = findViewById(R.id.floatingActionButton2)
         addButton2.visibility = View.GONE
@@ -116,34 +125,42 @@ class HowToDoItActivity : AppCompatActivity() {
                 val position = viewHolder.adapterPosition
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
-                        deletedCard = actionStep.get(position)
+                        deletedCard = actionStep[position]
                         actionStep.removeAt(position)
                         myAdapter.notifyItemRemoved(position)
-                        Snackbar.make(
-                            recyclerView,
-                            "Uppgiften är borttagen",
-                            Snackbar.LENGTH_LONG
-                        )
+                        val docId = actionStep[position].documentName
+                        if (docId != null) {
+                            db.collection("users").document(uid).collection("weekday")
+                                .document(decision).collection("action").document(actionId)
+                                .collection(actionId).document(docId)
+                                .delete()
+                            myAdapter.notifyDataSetChanged()
+                        }
+
+
+                        Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG)
                             .setAction("Ångra", View.OnClickListener {
-                                actionStep.add(position, deletedCard)
-                                myAdapter.notifyItemInserted(position)
-                            }).show()
-                    }
-
-                }
-
+                                // action.add(position, deletedCard)
+                                val docId = actionStep[position].documentName
+                                if (docId != null) {
+                                    db.collection("users").document(uid).collection("weekday")
+                                        .document(decision).collection("action").document(actionId)
+                                        .collection(actionId)
+                                        .add(docId)
+                                    myAdapter.notifyDataSetChanged()
+                                }
+                            }).show() } }
             } else {
                 val position = null
                 myAdapter.notifyDataSetChanged()
             }
-
         }
-
     }
-
     fun eventChangeListener (){
         db = FirebaseFirestore.getInstance()
-        db.collection("Weekday").document(decision).collection(decision).document(actionId).collection(actionId)
+        db.collection("users").document(uid).collection("weekday")
+            .document(decision).collection("action").document(actionId)
+            .collection(actionId)
             .orderBy("order", Query.Direction.ASCENDING)
             .addSnapshotListener(object : EventListener<QuerySnapshot> {
 
