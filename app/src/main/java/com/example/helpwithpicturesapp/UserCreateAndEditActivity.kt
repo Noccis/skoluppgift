@@ -256,7 +256,8 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     fun storeAction() {
         val storageImage = Actions(null, choosenImageUrl, false, editText.text.toString())
         if (choosenImageUrl != null && editText.text.toString() != "") {
-            db.collection("Weekday").document(decision).collection(decision).add(storageImage)
+            db.collection("users").document(uid).collection("weekday")
+                .document(decision).collection("action").add(storageImage)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Log.d(TAG, "storeAction: $storageImage")
