@@ -239,7 +239,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
 }
 data class Usuari( var email: String="", var pinkod: String="", var password: String="")
 
