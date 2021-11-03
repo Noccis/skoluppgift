@@ -12,8 +12,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.ktx.Firebase
 import java.util.*
 
 const val ACTIONS_POSITION_KEY = "ACTION_KEY"
@@ -40,6 +42,7 @@ class HowToDoItActivity : AppCompatActivity() {
     lateinit var close : ImageView
     lateinit var addButton2 : FloatingActionButton
     lateinit var deletedCard : ActionSteps
+    val auth = Firebase.auth
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -142,9 +145,13 @@ class HowToDoItActivity : AppCompatActivity() {
     }
 
     fun eventChangeListener (){
+
+        var uid = auth.currentUser!!.uid
+
         db = FirebaseFirestore.getInstance()
-        db.collection("Weekday").document(decision).collection(decision).document(actionId).collection(actionId)
-            .orderBy("order", Query.Direction.ASCENDING)
+        db.collection("users").document(uid).collection("weekday")
+            .document(decision).collection("action").document(actionId).collection("steps")
+            //.orderBy("order", Query.Direction.ASCENDING)
             .addSnapshotListener(object : EventListener<QuerySnapshot> {
 
                 override fun onEvent(
