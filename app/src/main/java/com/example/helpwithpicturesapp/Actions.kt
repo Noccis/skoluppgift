@@ -9,7 +9,4 @@ data class Actions(@DocumentId var documentName: String? = null, // här kan man
                    var imageText: String? = null,
                    var order : Long? = null,
                    var steps: Boolean = false
-) {
-
-    val listOfActionSteps = mutableListOf<Actions>()
-}
+)
