@@ -138,30 +138,37 @@ class ToDoActivity : AppCompatActivity() {
                 val position = viewHolder.adapterPosition
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
-                        deletedCard = action.get(position)
+                        deletedCard = action[position]
                         action.removeAt(position)
                         myAdapter.notifyItemRemoved(position)
-                        Snackbar.make(
-                            recyclerView,
-                            "Uppgiften är borttagen",
-                            Snackbar.LENGTH_LONG
-                        )
+                        val docId = action[position].documentName
+                        if (docId != null) {
+                            db.collection("users").document(uid).collection("weekday")
+                                .document(decision).collection("action")
+                                .document(docId)
+                                .delete()
+                            myAdapter.notifyDataSetChanged()
+                        }
+
+                        Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG)
                             .setAction("Ångra", View.OnClickListener {
-                                action.add(position, deletedCard)
-                                myAdapter.notifyItemInserted(position)
+                                // action.add(position, deletedCard)
+                                val docId = action[position].documentName
+                                if (docId != null) {
+                                    db.collection("users").document(uid).collection("weekday")
+                                        .document(decision).collection("action")
+                                        .add(deletedCard)
+                                    myAdapter.notifyDataSetChanged()
+                                }
                             }).show()
                     }
-
                 }
-
             } else {
                 val position = null
                 myAdapter.notifyDataSetChanged()
             }
-
         }
     }
-
     fun EventChangeListener() {
         when (decision) {
             "monday" -> {
