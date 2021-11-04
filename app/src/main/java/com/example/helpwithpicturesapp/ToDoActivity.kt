@@ -204,7 +204,7 @@ class ToDoActivity : AppCompatActivity() {
         db = FirebaseFirestore.getInstance()
         db.collection("users").document(uid).collection("weekday")
             .document(decision).collection("action")
-            //.orderBy("order", Query.Direction.ASCENDING)
+            .orderBy("order", Query.Direction.ASCENDING)
             .addSnapshotListener(object : EventListener<QuerySnapshot> {
 
                 override fun onEvent(
@@ -224,6 +224,21 @@ class ToDoActivity : AppCompatActivity() {
                     myAdapter.notifyDataSetChanged()
                 }
             })
+
+    }
+    fun setNewOrder () {
+        Log.d("ffs", "setNewOrder körs")
+        var newOrder:Long = 1
+
+        for (step in action){
+            Log.d("TAG", "setNewOrder:${step.documentName.toString()} order ${step.order}")
+        }
+        for (step in action) {
+            step.order = newOrder
+            newOrder ++
+            Log.d("TAG", "setNewOrder:${step.documentName.toString()} order ${step.order}")
+
+        }
 
     }
 

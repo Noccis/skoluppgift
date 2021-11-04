@@ -37,16 +37,16 @@ class HowToDoItActivity : AppCompatActivity() {
     lateinit var myAdapter: HowToDoItRecycleViewAdapter
     var actionId = ""
     var decision = ""
-    lateinit var lockButton : ImageView
-    lateinit var passCard : CardView
-    lateinit var editPassword : EditText
+    lateinit var lockButton: ImageView
+    lateinit var passCard: CardView
+    lateinit var editPassword: EditText
     private var longtAnimationDuration: Int = 2000
-    lateinit var lock : Button
-    lateinit var unlock : Button
+    lateinit var lock: Button
+    lateinit var unlock: Button
     var pinkod = ""
-    lateinit var close : ImageView
-    lateinit var addButton2 : FloatingActionButton
-    lateinit var deletedCard : ActionSteps
+    lateinit var close: ImageView
+    lateinit var addButton2: FloatingActionButton
+    lateinit var deletedCard: ActionSteps
 
     var uid = ""
 
@@ -59,7 +59,8 @@ class HowToDoItActivity : AppCompatActivity() {
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
-        val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser // Henrik ny härifrån
+        val currentUser: FirebaseUser? =
+            FirebaseAuth.getInstance().currentUser // Henrik ny härifrån
         if (currentUser != null) {
             uid = currentUser.uid
             Log.d("!!!!", "onCreate: ToDoActivity userId $uid")
@@ -113,10 +114,13 @@ class HowToDoItActivity : AppCompatActivity() {
     }
 
     private var simpleCallback = object : ItemTouchHelper.SimpleCallback(
-        ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), ItemTouchHelper.LEFT) {
+        ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), ItemTouchHelper.LEFT
+    ) {
 
-        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
-                            target: RecyclerView.ViewHolder): Boolean {
+        override fun onMove(
+            recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
+            target: RecyclerView.ViewHolder
+        ): Boolean {
 
             if (addButton2.visibility == View.VISIBLE) {
                 var startPosition = viewHolder.adapterPosition
@@ -158,14 +162,17 @@ class HowToDoItActivity : AppCompatActivity() {
                                         .add(docId)
                                     myAdapter.notifyDataSetChanged()
                                 }
-                            }).show() } }
+                            }).show()
+                    }
+                }
             } else {
                 val position = null
                 myAdapter.notifyDataSetChanged()
             }
         }
     }
-    fun eventChangeListener (){
+
+    fun eventChangeListener() {
 
         var uid = auth.currentUser!!.uid
 
@@ -174,10 +181,6 @@ class HowToDoItActivity : AppCompatActivity() {
             .document(decision).collection("action").document(actionId)
             .collection("steps")
             .orderBy("order", Query.Direction.ASCENDING)
-
-         //   .document(decision).collection("action").document(actionId).collection("steps")
-            //.orderBy("order", Query.Direction.ASCENDING)
-
             .addSnapshotListener(object : EventListener<QuerySnapshot> {
 
                 override fun onEvent(
@@ -199,7 +202,23 @@ class HowToDoItActivity : AppCompatActivity() {
                 }
             })
     }
-    fun lockEditing(){
+    fun setNewOrder () {
+        Log.d("ffs", "setNewOrder körs")
+        var newOrder:Long = 1
+
+        for (step in actionStep){
+            Log.d("TAG", "setNewOrder:${step.documentName.toString()} order ${step.order}")
+        }
+        for (step in actionStep) {
+            step.order = newOrder
+            newOrder ++
+            Log.d("TAG", "setNewOrder:${step.documentName.toString()} order ${step.order}")
+
+        }
+
+    }
+
+    fun lockEditing() {
         passCard.apply {
             alpha = 0f
             visibility = View.VISIBLE
@@ -208,7 +227,7 @@ class HowToDoItActivity : AppCompatActivity() {
 
         unlock.setOnClickListener {
             val pass = editPassword.text.toString()
-            if ( pinkod == pass) {
+            if (pinkod == pass) {
                 passCard.visibility = View.GONE
                 addButton2.visibility = View.VISIBLE
                 editPassword.setText("")
@@ -219,7 +238,7 @@ class HowToDoItActivity : AppCompatActivity() {
 
         lock.setOnClickListener {
             val pass = editPassword.text.toString()
-            if ( pinkod == pass) {
+            if (pinkod == pass) {
                 passCard.visibility = View.GONE
                 addButton2.visibility = View.GONE
                 editPassword.setText("")
