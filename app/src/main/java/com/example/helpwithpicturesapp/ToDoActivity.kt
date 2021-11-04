@@ -311,8 +311,8 @@ class ToDoActivity : AppCompatActivity() {
                         actionId = action.documentName.toString()
 
                         db.collection("users").document(uid).collection("weekday")
-                            .document(decision).collection("action").document(actionId).collection("steps").get()
-                          //  .orderBy("order", Query.Direction.ASCENDING).get()
+                            .document(decision).collection("action").document(actionId).collection("steps")
+                            .orderBy("order", Query.Direction.ASCENDING).get()
                             .addOnSuccessListener {documents ->
 
                             //    Log.d("ffs", "step succes dag: ${decision} actionid: $actionId document size ${documents.documents.size}")

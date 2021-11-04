@@ -171,9 +171,8 @@ class HowToDoItActivity : AppCompatActivity() {
 
         db = FirebaseFirestore.getInstance()
         db.collection("users").document(uid).collection("weekday")
-
             .document(decision).collection("action").document(actionId)
-            .collection(actionId)
+            .collection("steps")
             .orderBy("order", Query.Direction.ASCENDING)
 
          //   .document(decision).collection("action").document(actionId).collection("steps")
