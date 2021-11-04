@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.lang.reflect.Array.get
 import java.util.*
@@ -147,6 +148,7 @@ class ToDoActivity : AppCompatActivity() {
                                 .document(decision).collection("action")
                                 .document(docId)
                                 .delete()
+
                             myAdapter.notifyDataSetChanged()
                         }
 
@@ -158,14 +160,19 @@ class ToDoActivity : AppCompatActivity() {
                                     db.collection("users").document(uid).collection("weekday")
                                         .document(decision).collection("action")
                                         .add(deletedCard)
+
                                     myAdapter.notifyDataSetChanged()
+
                                 }
                             }).show()
+                        setNewOrderDelete()
                     }
                 }
             } else {
                 val position = null
+
                 myAdapter.notifyDataSetChanged()
+
             }
         }
     }
@@ -222,10 +229,44 @@ class ToDoActivity : AppCompatActivity() {
                         }
                     }
                     myAdapter.notifyDataSetChanged()
+
                 }
             })
 
     }
+    fun setNewOrderDelete () {
+        Log.d("ffs", "setNewOrder körs")
+        var newOrder:Long = 1
+/*
+        for (step in action){
+            Log.d("TAG", "setNewOrder:${step.documentName.toString()} order ${step.order}")
+        }
+
+ */
+        for (step in action) {
+            step.order = newOrder
+            actionId = step.documentName.toString()
+            val db = Firebase.firestore
+            db.collection("users").document(uid).collection("weekday")
+                .document(decision).collection("action").document(actionId).set(step)
+                .addOnSuccessListener {
+                    Log.d("TAG", "setNewOrder:${step.documentName.toString()} added to db order ${step.order}")
+
+                }
+                .addOnFailureListener {
+                    Log.d("TAG", "setNewOrderDelete: action add failure")
+                }
+
+
+            newOrder ++
+
+
+        }
+
+        // ladda upp till FB
+
+    }
+
     fun setNewOrder () {
         Log.d("ffs", "setNewOrder körs")
         var newOrder:Long = 1
@@ -239,6 +280,8 @@ class ToDoActivity : AppCompatActivity() {
             Log.d("TAG", "setNewOrder:${step.documentName.toString()} order ${step.order}")
 
         }
+
+        // ladda upp till FB
 
     }
 
