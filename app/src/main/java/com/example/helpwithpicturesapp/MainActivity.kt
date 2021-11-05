@@ -17,7 +17,6 @@ import com.google.firebase.ktx.Firebase
 
 class MainActivity : AppCompatActivity() {
 
-
     lateinit var auth : FirebaseAuth
     lateinit var textEmail : EditText
     lateinit var textPassword : EditText
@@ -33,11 +32,11 @@ class MainActivity : AppCompatActivity() {
     val week = listOf<String>("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")
     val actionsList = mutableListOf<Actions>()
     val actionsRef = db.collection("Actions")
+    var actionId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
 
         signInButton = findViewById(R.id.signInButton)
         signUpButton = findViewById(R.id.signUpButton)
@@ -68,7 +67,7 @@ class MainActivity : AppCompatActivity() {
         auth = Firebase.auth
 
         if ( auth.currentUser?.uid != null ) {
-        val intent = Intent ( this, WeekdaysActivity::class.java)
+            val intent = Intent ( this, WeekdaysActivity::class.java)
             startActivity(intent)
             finish()
         }
@@ -136,7 +135,7 @@ class MainActivity : AppCompatActivity() {
                         .addOnFailureListener { exception ->
                             Log.d(TAG, "Error getting documents: ", exception)
                         }
- 
+
                 } else {
                     Log.d(TAG, "loginUser: user not loged in ${task.exception}")
                     Toast.makeText(this, "Användarnamn eller lösernord stämmer inte!"
@@ -189,7 +188,7 @@ class MainActivity : AppCompatActivity() {
                         Log.d(TAG, "creatUser: user not created ${task.exception}")
                         Toast.makeText(this, "Email addressen finns redan!", Toast.LENGTH_LONG).show()
 
-            
+
 
                     }
                 }
@@ -200,7 +199,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun uniqueUserList(){
-        actionsRef.get().addOnSuccessListener { snapshot ->
+        actionsRef.get().orderby("order").addOnSuccessListener { snapshot ->
             if (snapshot != null){
                 actionsList.clear()
                 for (document in snapshot.documents) {
@@ -208,7 +207,6 @@ class MainActivity : AppCompatActivity() {
                     if (newDocument != null) {
                         actionsList.add(newDocument)
                     }
-
                 }
             }
             Log.d("!!!", "1 onCreate: ${actionsList.size}")
@@ -217,23 +215,70 @@ class MainActivity : AppCompatActivity() {
 
             var uid : String? = null
             if (currentUser != null) {
-                 uid = currentUser.uid
+                uid = currentUser.uid
                 Log.d("!!!", "onCreate: userId $uid")
             }
-
+            val actionIdsWithSteps = mutableListOf<Actions>()
 
             for (action in actionsList){
-                for (day in week) {
-                    db.collection("users").document(uid!!).collection("weekday")
-                        .document(day).collection("action").add(action)
-                        .addOnSuccessListener { docRef ->
+                if (action.steps) {
+                    actionId = action.documentName!!
+                    Log.d("1111", "0 actionId: $actionId")  /// Här är det tre olika actionId
 
-                            Log.d(TAG, "uniqueUserList: uid: $uid, day: $day Success!!!! ${docRef.id}")
-                        }
-                        .addOnFailureListener { e ->
-                            Log.d(TAG, "uniqueUserList: Error: $e")
-                        }
 
+                    actionIdsWithSteps.add(action)
+
+                    actionsRef.document(actionId!!).collection("steps").get() //
+                        .addOnSuccessListener { stepSnapshot ->
+                            val stepList = mutableListOf<Actions>()
+                            stepList.clear()
+                            for (step in stepSnapshot.documents) {
+                                val newStep = step.toObject(Actions::class.java)
+                                if (newStep != null) {
+                                    stepList.add(newStep)
+
+                                }
+                            }
+
+                            for (day in week) {
+                                val x = 'y'
+                                // for (action in actionIdsWithSteps) {
+                                Log.d("peter","actionidwithsteps size ${actionIdsWithSteps.size}")
+
+                                db.collection("users").document(uid!!).collection("weekday")
+                                    .document(day).collection("action").document(action.documentName!!)
+                                    .set(action)
+                                    .addOnSuccessListener { docRef ->
+                                        Log.d("peter", "actionid: ${action.documentName!!} day: $day")
+                                        // for (actionId in actionIdsWithSteps)
+                                        //  {
+                                        Log.d("peter", "steplist: ${stepList.size}")
+                                        for (step in stepList) {
+                                            Log.d("peter", "step: ${step}")
+                                            db.collection("users").document(uid)
+                                                .collection("weekday")
+                                                .document(day).collection("action")
+                                                .document(action.documentName!!)
+                                                .collection("steps").add(step)
+                                        }
+                                    }
+                                    .addOnFailureListener { e ->
+                                        Log.d(TAG, "uniqueUserList: Error: $e")
+                                    }
+                            }
+                        }
+                } else {
+                    for (day in week) {
+                        db.collection("users").document(uid!!).collection("weekday")
+                            .document(day).collection("action").add(action)
+                            .addOnSuccessListener { docRef ->
+
+                                Log.d(TAG, "uniqueUserList: uid: $uid, day: $day Success!!!! ${docRef.id}")
+                            }
+                            .addOnFailureListener { e ->
+                                Log.d(TAG, "uniqueUserList: Error: $e")
+                            }
+                    }
                 }
             }
         }
@@ -241,5 +286,4 @@ class MainActivity : AppCompatActivity() {
 
 }
 data class Usuari( var email: String="", var pinkod: String="", var password: String="")
-
 

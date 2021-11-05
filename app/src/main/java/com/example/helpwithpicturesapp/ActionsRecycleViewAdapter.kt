@@ -22,6 +22,7 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
         val imageButtonView = itemView.findViewById<ImageView>(R.id.imageButton)
         val imageText = itemView.findViewById<TextView>(R.id.imageText)
         val checkBoxView = itemView.findViewById<CheckBox>(R.id.checkBox_Button)
+        val stepsImage = itemView.findViewById<ImageView>(R.id.stepsImage)
         var actionsPosition = 0
 
         init {
@@ -41,6 +42,7 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
                     toDoActivity.reward()
                 }
             }
+            stepsImage.visibility = View.GONE
         }
     }
 
@@ -53,6 +55,9 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
     override fun onBindViewHolder(holder: ActionsRecycleViewAdapter.ViewHolder, position: Int) {
         val action = action[position]
 
+        if (action.steps) {
+            holder.stepsImage.visibility = View.VISIBLE
+        }
         Glide.with(context).load(action.imageId).into(holder.imageButtonView)
         holder.checkBoxView.isChecked = action.checkBox
         holder.actionsPosition = position
