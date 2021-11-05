@@ -34,7 +34,6 @@ class ImageAdapter(val activity: UserCreateAndEditActivity,
     }
 
 
-
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         return ImageViewHolder(
             LayoutInflater.from(parent.context).inflate(R.layout.item_image,parent,false)

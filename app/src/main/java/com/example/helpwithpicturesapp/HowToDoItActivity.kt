@@ -20,6 +20,7 @@ import com.google.firebase.auth.ktx.auth
 
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
 
@@ -128,6 +129,7 @@ class HowToDoItActivity : AppCompatActivity() {
                 var endPosition = target.adapterPosition
                 Collections.swap(actionStep, startPosition, endPosition)
                 recyclerView.adapter?.notifyItemMoved(startPosition, endPosition)
+                setNewOrder ()
                 return true
             } else return false
         }
@@ -193,15 +195,28 @@ class HowToDoItActivity : AppCompatActivity() {
     fun setNewOrder () {
         Log.d("ffs", "setNewOrder körs")
         var newOrder:Long = 1
-
-        for (step in actionStep){
+/*
+        for (step in action){
             Log.d("TAG", "setNewOrder:${step.documentName.toString()} order ${step.order}")
         }
+
+ */
         for (step in actionStep) {
             step.order = newOrder
-            newOrder ++
-            Log.d("TAG", "setNewOrder:${step.documentName.toString()} order ${step.order}")
+            val stepId = step.documentName.toString()
+            val db = Firebase.firestore
+            db.collection("users").document(uid).collection("weekday")
+                .document(decision).collection("action").document(actionId).collection("steps").document(stepId).set(step)
+                .addOnSuccessListener {
+                    Log.d("TAG", "setNewOrder:${step.documentName.toString()} added to db order ${step.order}")
 
+
+                }
+                .addOnFailureListener {
+                    Log.d("TAG", "setNewOrderDelete: action add failure")
+                }
+
+            newOrder ++
         }
 
     }
@@ -238,4 +253,5 @@ class HowToDoItActivity : AppCompatActivity() {
             passCard.visibility = View.GONE
         }
     }
+
 }

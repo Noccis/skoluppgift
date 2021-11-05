@@ -21,6 +21,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
+import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.lang.reflect.Array.get
 import java.util.*
@@ -55,9 +56,13 @@ class ToDoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
+
             logoutButton = findViewById(R.id.logoutButton)
         
         val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser // Henrik ny härifrån
+
+
+       
         if (currentUser != null) {
             uid = currentUser.uid
             Log.d("!!!!", "onCreate: ToDoActivity userId $uid")
@@ -70,7 +75,11 @@ class ToDoActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-        templateSave = findViewById(R.id.saveTemplateText)
+        templdButton.visibility == View.VISIBLE) {
+                val position = viewHolder.adapterPosition
+                when (direction) {
+                    ItemTouchHelper.LEFT -> {
+                  ateSave = findViewById(R.id.saveTemplateText)
         templateSave.visibility = View.GONE
 // Lägg till templateSave.GONE sen när koden är klar.
 // Här är spara mall koden
@@ -136,38 +145,44 @@ class ToDoActivity : AppCompatActivity() {
             if (addButton.visibility == View.VISIBLE) {
                 var startPosition = viewHolder.adapterPosition
                 var endPosition = target.adapterPosition
-                Collections.swap(action, startPosition, endPosition)
-                recyclerView.adapter?.notifyItemMoved(startPosition, endPosition)
+                Collections.swap(action, startPosition, endPosition)  // Byter plats i listan
+                recyclerView.adapter?.notifyItemMoved( // säger till adapter att vi gjort förändring i position.
+                    startPosition,
+                    endPosition
+                )
+                setNewOrder()
+
                 return true
             } else return false
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
-            if (addButton.visibility == View.VISIBLE) {
-                val position = viewHolder.adapterPosition
-                when (direction) {
-                    ItemTouchHelper.LEFT -> {
-                        deletedCard = action[position]
+            if (ad      deletedCard = action[position]
                         val docId = action[position].documentName
                         if (docId != null) {
                             db.collection("users").document(uid).collection("weekday")
                                 .document(decision).collection("action")
                                 .document(docId)
                                 .delete()
+
                                 action.removeAt(position)
                                 myAdapter.notifyDataSetChanged()
                         }
 
                         Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG).show()
+
                     }
                 }
             } else {
                 val position = null
+
                 myAdapter.notifyDataSetChanged()
+
             }
         }
     }
+
     fun EventChangeListener() {
         when (decision) {
             "monday" -> {
@@ -221,22 +236,38 @@ class ToDoActivity : AppCompatActivity() {
                         }
                     }
                     myAdapter.notifyDataSetChanged()
+
                 }
             })
 
     }
-    fun setNewOrder () {
-        Log.d("ffs", "setNewOrder körs")
-        var newOrder:Long = 1
 
-        for (step in action){
+    fun setNewOrder() {
+        Log.d("ffs", "setNewOrder körs")
+        var newOrder: Long = 1
+
+        for (step in action) {
             Log.d("TAG", "setNewOrder:${step.documentName.toString()} order ${step.order}")
         }
+
         for (step in action) {
             step.order = newOrder
-            newOrder ++
-            Log.d("TAG", "setNewOrder:${step.documentName.toString()} order ${step.order}")
+            actionId = step.documentName.toString()
+            val db = Firebase.firestore
+            db.collection("users").document(uid).collection("weekday")
+                .document(decision).collection("action").document(actionId).set(step)
+                .addOnSuccessListener {
+                    Log.d(
+                        "TAG",
+                        "setNewOrder:${step.documentName.toString()} added to db order ${step.order}"
+                    )
 
+
+                }
+                .addOnFailureListener {
+                    Log.d("TAG", "setNewOrderDelete: action add failure")
+                }
+            newOrder++
         }
 
     }
@@ -320,28 +351,30 @@ class ToDoActivity : AppCompatActivity() {
                     .document(name).collection("action").document(actionId)
                     .set(action)                    // Laddar upp lokala actions i listan till users egen mall.
                     .addOnSuccessListener {
-                   //    Log.d("ffs", "saveTemplate MAINaction fun actionId: $actionId  ${action.documentName} added ")
+                        //    Log.d("ffs", "saveTemplate MAINaction fun actionId: $actionId  ${action.documentName} added ")
 
                         actionId = action.documentName.toString()
 
                         db.collection("users").document(uid).collection("weekday")
-                            .document(decision).collection("action").document(actionId).collection("steps")
+                            .document(decision).collection("action").document(actionId)
+                            .collection("steps")
                             .orderBy("order", Query.Direction.ASCENDING).get()
-                            .addOnSuccessListener {documents ->
+                            .addOnSuccessListener { documents ->
 
-                            //    Log.d("ffs", "step succes dag: ${decision} actionid: $actionId document size ${documents.documents.size}")
+                                //    Log.d("ffs", "step succes dag: ${decision} actionid: $actionId document size ${documents.documents.size}")
 
-                                val stepList = mutableListOf<Actions>()     // temporär lista för att ladda ner och upp steps
+                                val stepList =
+                                    mutableListOf<Actions>()     // temporär lista för att ladda ner och upp steps
                                 for (document in documents.documents) {
 
                                     val newStep = document.toObject(Actions::class.java)
 
-                                    if (newStep != null){
+                                    if (newStep != null) {
                                         stepList.add(newStep)
                                     }
 
 
-                                //   Log.d("ffs", "A step was added! Tjoho! ${newStep!!.documentName}")
+                                    //   Log.d("ffs", "A step was added! Tjoho! ${newStep!!.documentName}")
 
 
                                 }
@@ -353,10 +386,10 @@ class ToDoActivity : AppCompatActivity() {
                                         .collection("steps")
                                         .add(step)                    // Laddar upp lokala actions i listan till users egen mall.
                                         .addOnSuccessListener {
-                                      //     Log.d("ffs", "saveSTEP fun ${step.documentName} step added in $uid Mallnamn:$name, action ID: $actionId")
+                                            //     Log.d("ffs", "saveSTEP fun ${step.documentName} step added in $uid Mallnamn:$name, action ID: $actionId")
                                         }
                                         .addOnFailureListener {
-                                     //      Log.d("ffs", "$it add step funkar inte")
+                                            //      Log.d("ffs", "$it add step funkar inte")
                                         }
 
 
@@ -370,16 +403,11 @@ class ToDoActivity : AppCompatActivity() {
                     }
 
 
-
-
-
-
             }
 
         }
 
     }
-
 
 }
 
