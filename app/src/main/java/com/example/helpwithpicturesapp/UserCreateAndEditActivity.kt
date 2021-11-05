@@ -263,7 +263,9 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                         Toast.makeText(this@UserCreateAndEditActivity, "Bild och instruktion är tillagd i ditt schema", Toast.LENGTH_SHORT).show()
                     }
                 }
+
         } else Toast.makeText(this@UserCreateAndEditActivity, "Välj bild och skriv en instruktion", Toast.LENGTH_SHORT).show()
+
     }
 
     // Lagrade bilder funktion

@@ -33,7 +33,7 @@ const val ACTION_LOCATION = "ACTION_LOCATION"
 class HowToDoItActivity : AppCompatActivity() {
 
     lateinit var recyclerView: RecyclerView
-    val actionStep = mutableListOf<ActionSteps>()
+    val actionStep = mutableListOf<Actions>()
     lateinit var db: FirebaseFirestore
     lateinit var myAdapter: HowToDoItRecycleViewAdapter
     var actionId = ""
@@ -47,7 +47,7 @@ class HowToDoItActivity : AppCompatActivity() {
     var pinkod = ""
     lateinit var close: ImageView
     lateinit var addButton2: FloatingActionButton
-    lateinit var deletedCard: ActionSteps
+    lateinit var deletedCard: Actions
 
     var uid = ""
 
@@ -99,6 +99,7 @@ class HowToDoItActivity : AppCompatActivity() {
             val intent = Intent(this, CreateAndEditActionSteps::class.java)
             intent.putExtra(INSTRUCTIONS_POSITION_KEY, actionId)
             intent.putExtra(Constants.DAY_CHOSEN, decision)
+            intent.putExtra(Constants.PINKOD, pinkod)
             startActivity(intent)
         }
 
@@ -141,30 +142,17 @@ class HowToDoItActivity : AppCompatActivity() {
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
                         deletedCard = actionStep[position]
-                        actionStep.removeAt(position)
-                        myAdapter.notifyItemRemoved(position)
                         val docId = actionStep[position].documentName
                         if (docId != null) {
                             db.collection("users").document(uid).collection("weekday")
                                 .document(decision).collection("action").document(actionId)
-                                .collection(actionId).document(docId)
+                                .collection("steps").document(docId)
                                 .delete()
+                            actionStep.removeAt(position)
                             myAdapter.notifyDataSetChanged()
                         }
 
-
-                        Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG)
-                            .setAction("Ångra", View.OnClickListener {
-                                // action.add(position, deletedCard)
-                                val docId = actionStep[position].documentName
-                                if (docId != null) {
-                                    db.collection("users").document(uid).collection("weekday")
-                                        .document(decision).collection("action").document(actionId)
-                                        .collection(actionId)
-                                        .add(docId)
-                                    myAdapter.notifyDataSetChanged()
-                                }
-                            }).show()
+                        Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG).show()
                     }
                 }
             } else {
@@ -196,7 +184,7 @@ class HowToDoItActivity : AppCompatActivity() {
 
                     for (dc: DocumentChange in value?.documentChanges!!) {
                         if (dc.type == DocumentChange.Type.ADDED) {
-                            actionStep.add(dc.document.toObject(ActionSteps::class.java))
+                            actionStep.add(dc.document.toObject(Actions::class.java))
                         }
                     }
 

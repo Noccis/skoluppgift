@@ -50,20 +50,36 @@ class ToDoActivity : AppCompatActivity() {
     var uid = ""
     var actionId = " "
     val auth = Firebase.auth
+    lateinit var logoutButton : Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
 
-        val currentUser: FirebaseUser? =
-            FirebaseAuth.getInstance().currentUser // Henrik ny härifrån
+            logoutButton = findViewById(R.id.logoutButton)
+        
+        val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser // Henrik ny härifrån
+
+
+       
         if (currentUser != null) {
             uid = currentUser.uid
             Log.d("!!!!", "onCreate: ToDoActivity userId $uid")
         }
 
-        templateSave = findViewById(R.id.saveTemplateText)
+        logoutButton.setOnClickListener {
+                auth.signOut()
+            val intent = Intent(this, MainActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+            startActivity(intent)
+            finish()
+        }
+        templdButton.visibility == View.VISIBLE) {
+                val position = viewHolder.adapterPosition
+                when (direction) {
+                    ItemTouchHelper.LEFT -> {
+                  ateSave = findViewById(R.id.saveTemplateText)
         templateSave.visibility = View.GONE
 // Lägg till templateSave.GONE sen när koden är klar.
 // Här är spara mall koden
@@ -74,6 +90,7 @@ class ToDoActivity : AppCompatActivity() {
 
         }
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+
 
         pinkod = intent.getStringExtra(Constants.PINKOD).toString()
         editPassword = findViewById(R.id.editPassword)
@@ -141,45 +158,20 @@ class ToDoActivity : AppCompatActivity() {
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
-            if (addButton.visibility == View.VISIBLE) {
-                val position = viewHolder.adapterPosition
-                when (direction) {
-                    ItemTouchHelper.LEFT -> {
-                        deletedCard = action[position]
-                        action.removeAt(position)
-                        myAdapter.notifyItemRemoved(position)
+            if (ad      deletedCard = action[position]
                         val docId = action[position].documentName
                         if (docId != null) {
                             db.collection("users").document(uid).collection("weekday")
                                 .document(decision).collection("action")
                                 .document(docId)
                                 .delete()
-                                .addOnSuccessListener {
-                                    //  setNewOrderDelete()
-                                }
 
-                            myAdapter.notifyDataSetChanged()
-
+                                action.removeAt(position)
+                                myAdapter.notifyDataSetChanged()
                         }
 
-                        Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG)
-                            .setAction("Ångra", View.OnClickListener {
-                                // action.add(position, deletedCard)
-                                val docId = action[position].documentName
-                                if (docId != null) {
-                                    db.collection("users").document(uid).collection("weekday")
-                                        .document(decision).collection("action")
-                                        .add(deletedCard).addOnSuccessListener {
+                        Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG).show()
 
-                                        }
-
-                                    myAdapter.notifyDataSetChanged()
-
-
-                                }
-                            }).show()
-
-                        //setNewOrderDelete()
                     }
                 }
             } else {
