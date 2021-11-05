@@ -28,7 +28,9 @@ import java.util.*
 
 class ToDoActivity : AppCompatActivity() {
 
-    lateinit var addButton: FloatingActionButton
+    lateinit var addButton: ImageView
+    lateinit var homeButton : ImageView
+    lateinit var menuCard : CardView
     lateinit var recyclerView: RecyclerView
     val action = mutableListOf<Actions>()
     lateinit var db: FirebaseFirestore
@@ -46,30 +48,57 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var rewardImageView: ImageView
     private var shortAnimationDuration: Int = 400
     lateinit var deletedCard: Actions
-    lateinit var templateSave: TextView
+    lateinit var saveTemplate: ImageView
     var uid = ""
     var actionId = " "
     val auth = Firebase.auth
-    lateinit var logoutButton : Button
-    lateinit var refreshButton: Button
+    lateinit var logoutButton : ImageView
+    lateinit var refreshButton: ImageView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
 
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+
         logoutButton = findViewById(R.id.logoutButton)
         refreshButton = findViewById(R.id.refreshButton)
+        homeButton = findViewById(R.id.homeButton)
+        menuCard = findViewById(R.id.menuCard)
+        saveTemplate = findViewById(R.id.saveTemplate)
+        editPassword = findViewById(R.id.editPassword)
+        passCard = findViewById(R.id.passCard)
+        close = findViewById(R.id.close)
+        lock = findViewById(R.id.lock)
+        unlock = findViewById(R.id.unlock)
+        lockButton = findViewById(R.id.lockButton)
+        addButton = findViewById(R.id.addButton)
+        rewardImageView = findViewById(R.id.rewardImageView)
+        recyclerView = findViewById(R.id.recyclerView)
+        dayTextView = findViewById(R.id.dayTextView)
 
-        val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser // Henrik ny härifrån
+        menuCard.visibility = View.GONE
+        passCard.visibility = View.GONE
+        rewardImageView.visibility = View.GONE
+
+        pinkod = intent.getStringExtra(Constants.PINKOD).toString()
+        decision = intent.getStringExtra(Constants.DAY_CHOSEN).toString()
+
+        val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
             uid = currentUser.uid
             Log.d("!!!!", "onCreate: ToDoActivity userId $uid")
         }
 
+        lockButton.setOnClickListener {
+            lockEditing()
+        }
+
         refreshButton.setOnClickListener {
             refresh()
         }
+
         logoutButton.setOnClickListener {
             auth.signOut()
             val intent = Intent(this, MainActivity::class.java)
@@ -78,54 +107,29 @@ class ToDoActivity : AppCompatActivity() {
             finish()
         }
 
-        templateSave = findViewById(R.id.saveTemplateText)
-        templateSave.visibility = View.GONE
-// Lägg till templateSave.GONE sen när koden är klar.
-// Här är spara mall koden
-        templateSave.setOnClickListener {
-
+        saveTemplate.setOnClickListener {
             var dialog = TemplateDialogFragment(this)
             dialog.show(supportFragmentManager, "templateDialog")
-
-        }
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-
-
-        pinkod = intent.getStringExtra(Constants.PINKOD).toString()
-        editPassword = findViewById(R.id.editPassword)
-        passCard = findViewById(R.id.passCard)
-        passCard.visibility = View.GONE
-        close = findViewById(R.id.close)
-        lock = findViewById(R.id.lock)
-        unlock = findViewById(R.id.unlock)
-        lockButton = findViewById(R.id.lockButton)
-        lockButton.setOnClickListener {
-            lockEditing()
         }
 
-        addButton = findViewById(R.id.floatingActionButton)
-        addButton.visibility = View.GONE
         addButton.setOnClickListener {
             val intent = Intent(this, UserCreateAndEditActivity::class.java)
             intent.putExtra(Constants.DAY_CHOSEN, decision)
             startActivity(intent)
         }
 
+        homeButton.setOnClickListener {
+            val intent = Intent(this, WeekdaysActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
-        rewardImageView = findViewById(R.id.rewardImageView)
-        rewardImageView.visibility = View.GONE
-
-        dayTextView = findViewById(R.id.dayTextView)
-        decision = intent.getStringExtra(Constants.DAY_CHOSEN).toString()
-
-
-        recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         myAdapter = ActionsRecycleViewAdapter(this, action, decision, pinkod)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = myAdapter
-        EventChangeListener()
 
+        EventChangeListener()
 
         val itemTouchHelper = ItemTouchHelper(simpleCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
@@ -307,19 +311,14 @@ class ToDoActivity : AppCompatActivity() {
 
 
     fun lockEditing() {
-        passCard.apply {
-            alpha = 0f
-            visibility = View.VISIBLE
-            animate().alpha(1f).setDuration(longAnimationDuration.toLong()).setListener(null)
-        }
 
+        passCard.visibility = View.VISIBLE
         unlock.setOnClickListener {
             val pass = editPassword.text.toString()
             if (pinkod == pass) {
                 passCard.visibility = View.GONE
-                addButton.visibility = View.VISIBLE
+                menuCard.visibility = View.VISIBLE
                 editPassword.setText("")
-                templateSave.visibility = View.VISIBLE
 
             } else {
                 Toast.makeText(this, "Skriv rätt lösenord! ", Toast.LENGTH_SHORT).show()
@@ -330,9 +329,8 @@ class ToDoActivity : AppCompatActivity() {
             val pass = editPassword.text.toString()
             if (pinkod == pass) {
                 passCard.visibility = View.GONE
-                addButton.visibility = View.GONE
+                menuCard.visibility = View.GONE
                 editPassword.setText("")
-                templateSave.visibility = View.GONE
             } else {
                 Toast.makeText(this, "Skriv rätt lösenord! ", Toast.LENGTH_SHORT).show()
             }
