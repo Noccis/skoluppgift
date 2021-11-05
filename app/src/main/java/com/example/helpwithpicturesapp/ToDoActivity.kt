@@ -82,6 +82,7 @@ class ToDoActivity : AppCompatActivity() {
         }
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
+
         pinkod = intent.getStringExtra(Constants.PINKOD).toString()
         editPassword = findViewById(R.id.editPassword)
         passCard = findViewById(R.id.passCard)

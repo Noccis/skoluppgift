@@ -73,6 +73,7 @@ class CreateAndEditActionSteps : AppCompatActivity() {
         decision = intent.getStringExtra(Constants.DAY_CHOSEN).toString()
         actionId = intent.getStringExtra(INSTRUCTIONS_POSITION_KEY).toString()
 
+
         recyclerView.layoutManager = gridLayoutManager
         recyclerView.setHasFixedSize(true)
 

@@ -98,6 +98,7 @@ class HowToDoItActivity : AppCompatActivity() {
             val intent = Intent(this, CreateAndEditActionSteps::class.java)
             intent.putExtra(INSTRUCTIONS_POSITION_KEY, actionId)
             intent.putExtra(Constants.DAY_CHOSEN, decision)
+            intent.putExtra(Constants.PINKOD, pinkod)
             startActivity(intent)
         }
 

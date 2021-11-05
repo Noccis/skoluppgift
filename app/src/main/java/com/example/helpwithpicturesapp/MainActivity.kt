@@ -129,7 +129,6 @@ class MainActivity : AppCompatActivity() {
                                 Log.i("user_pin",pinkod)
 
                                 val intent =  Intent(this , WeekdaysActivity::class.java)
-                                intent.putExtra(Constants.PINKOD, pinkod)
                                 startActivity(intent)
 
                             }
