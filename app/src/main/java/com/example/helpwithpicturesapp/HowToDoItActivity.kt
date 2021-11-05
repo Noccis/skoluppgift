@@ -101,8 +101,6 @@ class HowToDoItActivity : AppCompatActivity() {
         recyclerView.adapter = myAdapter
 
         backButton.setOnClickListener {
-            val intent = Intent(this, ToDoActivity::class.java)
-            startActivity(intent)
             finish()
         }
 
