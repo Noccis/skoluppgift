@@ -32,7 +32,7 @@ const val ACTION_LOCATION = "ACTION_LOCATION"
 class HowToDoItActivity : AppCompatActivity() {
 
     lateinit var recyclerView: RecyclerView
-    val actionStep = mutableListOf<ActionSteps>()
+    val actionStep = mutableListOf<Actions>()
     lateinit var db: FirebaseFirestore
     lateinit var myAdapter: HowToDoItRecycleViewAdapter
     var actionId = ""
@@ -46,7 +46,7 @@ class HowToDoItActivity : AppCompatActivity() {
     var pinkod = ""
     lateinit var close: ImageView
     lateinit var addButton2: FloatingActionButton
-    lateinit var deletedCard: ActionSteps
+    lateinit var deletedCard: Actions
 
     var uid = ""
 
@@ -181,7 +181,7 @@ class HowToDoItActivity : AppCompatActivity() {
 
                     for (dc: DocumentChange in value?.documentChanges!!) {
                         if (dc.type == DocumentChange.Type.ADDED) {
-                            actionStep.add(dc.document.toObject(ActionSteps::class.java))
+                            actionStep.add(dc.document.toObject(Actions::class.java))
                         }
                     }
 

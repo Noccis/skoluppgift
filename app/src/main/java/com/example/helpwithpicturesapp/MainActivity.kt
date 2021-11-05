@@ -22,20 +22,15 @@ class MainActivity : AppCompatActivity() {
     lateinit var textEmail : EditText
     lateinit var textPassword : EditText
     lateinit var userSeeInsrtuctionsView: TextView
-
     lateinit var signInButton: Button
     lateinit var signUpButton: Button
     lateinit var textPinkod : TextView
     lateinit var loginButton : Button
     lateinit var createButton : Button
-
     val authid = ""
     val TAG = "!!!"
     val db = Firebase.firestore
-
     val week = listOf<String>("monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday")
-
-
     val actionsList = mutableListOf<Actions>()
     val actionsRef = db.collection("Actions")
 
@@ -72,6 +67,11 @@ class MainActivity : AppCompatActivity() {
 
         auth = Firebase.auth
 
+        if ( auth.currentUser?.uid != null ) {
+        val intent = Intent ( this, WeekdaysActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
         createButton.setOnClickListener(::creatUser)
 
