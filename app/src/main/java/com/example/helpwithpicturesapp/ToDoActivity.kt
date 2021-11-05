@@ -139,28 +139,17 @@ class ToDoActivity : AppCompatActivity() {
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
                         deletedCard = action[position]
-                        action.removeAt(position)
-                        myAdapter.notifyItemRemoved(position)
                         val docId = action[position].documentName
                         if (docId != null) {
                             db.collection("users").document(uid).collection("weekday")
                                 .document(decision).collection("action")
                                 .document(docId)
                                 .delete()
-                            myAdapter.notifyDataSetChanged()
+                                action.removeAt(position)
+                                myAdapter.notifyDataSetChanged()
                         }
 
-                        Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG)
-                            .setAction("Ångra", View.OnClickListener {
-                                // action.add(position, deletedCard)
-                                val docId = action[position].documentName
-                                if (docId != null) {
-                                    db.collection("users").document(uid).collection("weekday")
-                                        .document(decision).collection("action")
-                                        .add(deletedCard)
-                                    myAdapter.notifyDataSetChanged()
-                                }
-                            }).show()
+                        Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG).show()
                     }
                 }
             } else {

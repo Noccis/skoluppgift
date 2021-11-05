@@ -264,7 +264,8 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                         Toast.makeText(this@UserCreateAndEditActivity, "Bilden och instruktionen är tillagda i listan", Toast.LENGTH_SHORT).show()
                     }
                 }
-        } else Toast.makeText(this@UserCreateAndEditActivity, "Välj en bild och skriv instruktionen", Toast.LENGTH_SHORT).show()
+        } else Toast.makeText(this@UserCreateAndEditActivity,
+            "Välj en bild och skriv instruktionen", Toast.LENGTH_SHORT).show()
     }
 
     private fun listFiles() = CoroutineScope(Dispatchers.IO).launch {
