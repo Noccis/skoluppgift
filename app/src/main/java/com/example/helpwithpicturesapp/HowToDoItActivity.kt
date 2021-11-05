@@ -127,6 +127,7 @@ class HowToDoItActivity : AppCompatActivity() {
                 var startPosition = viewHolder.adapterPosition
                 var endPosition = target.adapterPosition
                 Collections.swap(actionStep, startPosition, endPosition)
+                setNewOrder ()
                 recyclerView.adapter?.notifyItemMoved(startPosition, endPosition)
                 return true
             } else return false
@@ -164,7 +165,6 @@ class HowToDoItActivity : AppCompatActivity() {
                                     myAdapter.notifyDataSetChanged()
                                 }
                             }).show()
-                        setNewOrderDelete()
                     }
                 }
             } else {
@@ -204,7 +204,7 @@ class HowToDoItActivity : AppCompatActivity() {
                 }
             })
     }
-    fun setNewOrderDelete () {
+    fun setNewOrder () {
         Log.d("ffs", "setNewOrder körs")
         var newOrder:Long = 1
 /*
@@ -222,18 +222,13 @@ class HowToDoItActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     Log.d("TAG", "setNewOrder:${step.documentName.toString()} added to db order ${step.order}")
 
+                    newOrder ++
                 }
                 .addOnFailureListener {
                     Log.d("TAG", "setNewOrderDelete: action add failure")
                 }
 
-
-            newOrder ++
-
-
         }
-
-        // ladda upp till FB
 
     }
 
