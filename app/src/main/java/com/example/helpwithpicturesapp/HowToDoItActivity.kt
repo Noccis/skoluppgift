@@ -111,7 +111,8 @@ class HowToDoItActivity : AppCompatActivity() {
     }
 
     private var simpleCallback = object : ItemTouchHelper.SimpleCallback(
-        ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), ItemTouchHelper.LEFT) {
+        ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), ItemTouchHelper.LEFT
+    ) {
 
         override fun onMove(
             recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
@@ -123,7 +124,7 @@ class HowToDoItActivity : AppCompatActivity() {
                 var endPosition = target.adapterPosition
                 Collections.swap(actionStep, startPosition, endPosition)
                 recyclerView.adapter?.notifyItemMoved(startPosition, endPosition)
-                setNewOrder ()
+                setNewOrder()
                 return true
             } else return false
         }
@@ -144,7 +145,8 @@ class HowToDoItActivity : AppCompatActivity() {
                             myAdapter.notifyDataSetChanged()
                         }
 
-                        Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG).show()
+                        Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG)
+                            .show()
                     }
                 }
             } else {
@@ -181,65 +183,78 @@ class HowToDoItActivity : AppCompatActivity() {
                     }
 
                     myAdapter.notifyDataSetChanged()
+
+                    if (actionStep.size == 0) {
+                        val stepRef = db.collection("users").document(uid).collection("weekday")
+                            .document(decision).collection("action").document(actionId)
+
+                        stepRef.update("steps", false)
+                    }
                 }
             })
+
     }
-    fun setNewOrder () {
-        Log.d("ffs", "setNewOrder körs")
-        var newOrder:Long = 1
+        fun setNewOrder() {
+            Log.d("ffs", "setNewOrder körs")
+            var newOrder: Long = 1
 /*
         for (step in action){
             Log.d("TAG", "setNewOrder:${step.documentName.toString()} order ${step.order}")
         }
 
  */
-        for (step in actionStep) {
-            step.order = newOrder
-            val stepId = step.documentName.toString()
-            val db = Firebase.firestore
-            db.collection("users").document(uid).collection("weekday")
-                .document(decision).collection("action").document(actionId).collection("steps").document(stepId).set(step)
-                .addOnSuccessListener {
-                    Log.d("TAG", "setNewOrder:${step.documentName.toString()} added to db order ${step.order}")
-                }
-                .addOnFailureListener {
-                    Log.d("TAG", "setNewOrderDelete: action add failure")
-                }
+            for (step in actionStep) {
+                step.order = newOrder
+                val stepId = step.documentName.toString()
+                val db = Firebase.firestore
+                db.collection("users").document(uid).collection("weekday")
+                    .document(decision).collection("action").document(actionId).collection("steps")
+                    .document(stepId).set(step)
+                    .addOnSuccessListener {
+                        Log.d(
+                            "TAG",
+                            "setNewOrder:${step.documentName.toString()} added to db order ${step.order}"
+                        )
+                    }
+                    .addOnFailureListener {
+                        Log.d("TAG", "setNewOrderDelete: action add failure")
+                    }
 
-            newOrder ++
-        }
-    }
-
-    fun lockEditing() {
-        passCard.apply {
-            alpha = 0f
-            visibility = View.VISIBLE
-            animate().alpha(1f).setDuration(longtAnimationDuration.toLong()).setListener(null)
-        }
-
-        unlock.setOnClickListener {
-            val pass = editPassword.text.toString()
-            if (pinkod == pass) {
-                passCard.visibility = View.GONE
-                addButton2.visibility = View.VISIBLE
-                editPassword.setText("")
-            } else {
-                Toast.makeText(this, "Fel Lösenord! ", Toast.LENGTH_SHORT).show()
+                newOrder++
             }
         }
 
-        lock.setOnClickListener {
-            val pass = editPassword.text.toString()
-            if (pinkod == pass) {
+        fun lockEditing() {
+            passCard.apply {
+                alpha = 0f
+                visibility = View.VISIBLE
+                animate().alpha(1f).setDuration(longtAnimationDuration.toLong()).setListener(null)
+            }
+
+            unlock.setOnClickListener {
+                val pass = editPassword.text.toString()
+                if (pinkod == pass) {
+                    passCard.visibility = View.GONE
+                    addButton2.visibility = View.VISIBLE
+                    editPassword.setText("")
+                } else {
+                    Toast.makeText(this, "Fel Lösenord! ", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+            lock.setOnClickListener {
+                val pass = editPassword.text.toString()
+                if (pinkod == pass) {
+                    passCard.visibility = View.GONE
+                    addButton2.visibility = View.GONE
+                    editPassword.setText("")
+                } else {
+                    Toast.makeText(this, "Fel Lösenord! ", Toast.LENGTH_SHORT).show()
+                }
+            }
+            close.setOnClickListener {
                 passCard.visibility = View.GONE
-                addButton2.visibility = View.GONE
-                editPassword.setText("")
-            } else {
-                Toast.makeText(this, "Fel Lösenord! ", Toast.LENGTH_SHORT).show()
             }
         }
-        close.setOnClickListener {
-            passCard.visibility = View.GONE
-        }
     }
-}
+

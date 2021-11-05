@@ -209,14 +209,17 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     fun storeAction() {
         val storageImage = Actions(null, choosenImageUrl, false, editText.text.toString())
         if (choosenImageUrl != null && editText.text.toString() != "") {
-            db.collection("users").document(uid).collection("weekday").document(decision).collection("action").add(storageImage)
+            db.collection("users").document(uid).collection("weekday")
+                .document(decision).collection("action").add(storageImage)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         Log.d(TAG, "storeAction: $storageImage")
-                        Toast.makeText(this@UserCreateAndEditActivity, "Bild och instruktion är tillagd i ditt schema", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@UserCreateAndEditActivity,
+                            "Bild och instruktion är tillagd i ditt schema", Toast.LENGTH_SHORT).show()
                     }
                 }
-        } else Toast.makeText(this@UserCreateAndEditActivity, "Välj bild och skriv en instruktion", Toast.LENGTH_SHORT).show()
+        } else Toast.makeText(this@UserCreateAndEditActivity,
+            "Välj bild och skriv en instruktion", Toast.LENGTH_SHORT).show()
     }
     // Lagrade bilder funktion
     private fun listFiles() = CoroutineScope(Dispatchers.IO).launch {

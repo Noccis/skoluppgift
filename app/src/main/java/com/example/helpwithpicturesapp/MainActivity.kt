@@ -199,7 +199,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun uniqueUserList(){
-        actionsRef.get().orderby("order").addOnSuccessListener { snapshot ->
+        actionsRef.get().addOnSuccessListener { snapshot ->
             if (snapshot != null){
                 actionsList.clear()
                 for (document in snapshot.documents) {

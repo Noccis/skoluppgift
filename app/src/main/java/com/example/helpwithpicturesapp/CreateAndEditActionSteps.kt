@@ -27,6 +27,19 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.util.*
+import com.bumptech.glide.load.engine.executor.GlideExecutor.UncaughtThrowableStrategy.LOG
+
+import androidx.annotation.NonNull
+import com.bumptech.glide.load.engine.executor.GlideExecutor.UncaughtThrowableStrategy
+
+import com.google.android.gms.tasks.OnFailureListener
+
+import com.google.android.gms.tasks.OnSuccessListener
+
+import com.google.firebase.firestore.SetOptions
+
+
+
 
 class CreateAndEditActionSteps : AppCompatActivity() {
 
@@ -203,11 +216,20 @@ class CreateAndEditActionSteps : AppCompatActivity() {
                         this@CreateAndEditActionSteps,
                         "Bilden och instruktionen är tillagda i listan", Toast.LENGTH_SHORT
                     ).show()
+
+                    val stepRef = db.collection("users").document(uid).collection("weekday")
+                        .document(decision).collection("action").document(actionId)
+
+                    stepRef.update("steps", true)
+
                 } else {
                     Toast.makeText(this@CreateAndEditActionSteps,
                         "Välj en bild och skriv instruktionen", Toast.LENGTH_SHORT).show()
                 }
             }
+
+
+
     }
 
     private fun listFiles() = CoroutineScope(Dispatchers.IO).launch {

@@ -51,22 +51,25 @@ class ToDoActivity : AppCompatActivity() {
     var actionId = " "
     val auth = Firebase.auth
     lateinit var logoutButton : Button
+    lateinit var refreshButton: Button
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
+
         logoutButton = findViewById(R.id.logoutButton)
+        refreshButton = findViewById(R.id.refreshButton)
 
         val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser // Henrik ny härifrån
-
-
-
         if (currentUser != null) {
             uid = currentUser.uid
             Log.d("!!!!", "onCreate: ToDoActivity userId $uid")
         }
 
+        refreshButton.setOnClickListener {
+            refresh()
+        }
         logoutButton.setOnClickListener {
             auth.signOut()
             val intent = Intent(this, MainActivity::class.java)
@@ -409,6 +412,12 @@ class ToDoActivity : AppCompatActivity() {
         }
 
     }
+    fun refresh() {
+        action.clear();
+        myAdapter.notifyDataSetChanged();
+        EventChangeListener()
+
+        }
 
 }
 
