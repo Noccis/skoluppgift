@@ -29,7 +29,6 @@ const val INSTRUCTIONS_POSITION_KEY = "INSTRUCTION_KEY"
 const val POSITION_NOT_SET = -1
 const val ACTION_LOCATION = "ACTION_LOCATION"
 
-
 class HowToDoItActivity : AppCompatActivity() {
 
     lateinit var recyclerView: RecyclerView
@@ -48,11 +47,8 @@ class HowToDoItActivity : AppCompatActivity() {
     lateinit var close: ImageView
     lateinit var addButton2: FloatingActionButton
     lateinit var deletedCard: Actions
-
     var uid = ""
-
     val auth = Firebase.auth
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -107,17 +103,15 @@ class HowToDoItActivity : AppCompatActivity() {
         previousButton.setOnClickListener {
             finish()
         }
-        eventChangeListener()
 
+        eventChangeListener()
 
         val itemTouchHelper = ItemTouchHelper(simpleCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
-
     }
 
     private var simpleCallback = object : ItemTouchHelper.SimpleCallback(
-        ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), ItemTouchHelper.LEFT
-    ) {
+        ItemTouchHelper.UP.or(ItemTouchHelper.DOWN), ItemTouchHelper.LEFT) {
 
         override fun onMove(
             recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder,
@@ -135,8 +129,6 @@ class HowToDoItActivity : AppCompatActivity() {
         }
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
-
-
             if (addButton2.visibility == View.VISIBLE) {
                 val position = viewHolder.adapterPosition
                 when (direction) {
@@ -209,8 +201,6 @@ class HowToDoItActivity : AppCompatActivity() {
                 .document(decision).collection("action").document(actionId).collection("steps").document(stepId).set(step)
                 .addOnSuccessListener {
                     Log.d("TAG", "setNewOrder:${step.documentName.toString()} added to db order ${step.order}")
-
-
                 }
                 .addOnFailureListener {
                     Log.d("TAG", "setNewOrderDelete: action add failure")
@@ -218,7 +208,6 @@ class HowToDoItActivity : AppCompatActivity() {
 
             newOrder ++
         }
-
     }
 
     fun lockEditing() {

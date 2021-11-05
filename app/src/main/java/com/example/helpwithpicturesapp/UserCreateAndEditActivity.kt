@@ -41,14 +41,9 @@ const val REQUEST_CODE_IMAGE_PICK = 0
 const val CAMERA_REQUEST_CODE = 1
 const val START_REQUEST_CAMERA = 2
 
-
-
 class UserCreateAndEditActivity : AppCompatActivity() {
 
-
-
     val TAG = "!!!"
-
     var curFile: Uri? = null
     val imageRef = Firebase.storage.reference
     val db = FirebaseFirestore.getInstance()
@@ -57,7 +52,6 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     var choosenImageUrl: String? = null
     var actionId = ""
     var uid = ""
-
     lateinit var recyclerView: RecyclerView
     private var gridLayoutManager: GridLayoutManager? = null
     lateinit var uploadButton: Button
@@ -69,8 +63,6 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     lateinit var imageAdapter: ImageAdapter
     lateinit var backImage: ImageView
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_create_and_edit)
@@ -79,11 +71,9 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         if(currentUser != null) {
             uid = currentUser.uid
             Log.d(TAG, "onCreate: $uid")
-
         }
 
         recyclerView = findViewById(R.id.recyclerView)
-
         gridLayoutManager = GridLayoutManager(applicationContext, 3,LinearLayoutManager.VERTICAL, false)
         uploadButton = findViewById(R.id.uploadButton)
         storeButton = findViewById(R.id.storeButton)
@@ -99,17 +89,12 @@ class UserCreateAndEditActivity : AppCompatActivity() {
 
         recyclerView.layoutManager = gridLayoutManager
         recyclerView.setHasFixedSize(true)
-
         imageAdapter = ImageAdapter(this, userImageUrl)
-
         recyclerView.adapter = imageAdapter
-
-
 
         backImage.setOnClickListener {
             finish()
         }
-
 
         imgeViewButton.setOnClickListener {
             Intent(Intent.ACTION_GET_CONTENT).also {
@@ -124,7 +109,6 @@ class UserCreateAndEditActivity : AppCompatActivity() {
 
         storeButton.setOnClickListener {
             listFiles()
-
         }
 
         startCameraButton.setOnClickListener {
@@ -134,8 +118,6 @@ class UserCreateAndEditActivity : AppCompatActivity() {
             }else {
                 startCamera()
             }
-
-
         }
 
         saveButton.setOnClickListener {
@@ -151,8 +133,6 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     fun startCamera() {
         val takePicturesIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(takePicturesIntent, START_REQUEST_CAMERA)
-
-
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -168,12 +148,6 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         when(requestCode) {
             CAMERA_REQUEST_CODE -> innerCheck("kamera")
         }
-
-
-
-
-
-
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -183,8 +157,6 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                 curFile = it
                 imgeViewButton.setImageURI(it)
             }
-
-
         }
         else if(requestCode == START_REQUEST_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
             val takenImage = data.extras?.get("data") as Bitmap
@@ -193,18 +165,10 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         }else {
             super.onActivityResult(requestCode, resultCode, data)
         }
-
-
-
-
-
-
     }
-
 
     private fun uploadImageToStorage(filename: String) = CoroutineScope(Dispatchers.IO).launch {
         try {
-
             curFile?.let {
                 val uniqeString = UUID.randomUUID().toString()
                 val uploadTask = imageRef.child("$uid/$uniqeString").putFile(it) // skapar en unik folder för inloggad användare
@@ -223,34 +187,23 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                         Toast.makeText(this@UserCreateAndEditActivity, "Bilden är sparad", Toast.LENGTH_SHORT).show()
 
                         val action = Actions(null, downloadUri.toString(), false, editText.text.toString())
-                        val actionsteps = ActionSteps(null, downloadUri.toString(), false, editText.text.toString())
-
+                        //val actionsteps = ActionSteps(null, downloadUri.toString(), false, editText.text.toString())
 
                         db.collection("users").document(uid).collection("weekday").document(decision).collection("action").add(action) // Kolla med David här
 
-
-                        db.collection("Weekday").document(decision).collection(decision).document(actionId).collection(actionId).add(actionsteps)
-
+                      //  db.collection("Weekday").document(decision).collection(decision)
+                        //  .document(actionId).collection(actionId).add(actionsteps)
 
                         storeAction()
-
                         Log.d(TAG, "uploadImageToStorage: ${downloadUri}")
-
                     }
                 }
-
-
             }
-
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
                 Toast.makeText(this@UserCreateAndEditActivity, "Error", Toast.LENGTH_SHORT).show()
             }
         }
-
-
-
-
     }
     //Lägg till i listanfunktion
     fun storeAction() {
@@ -263,11 +216,8 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                         Toast.makeText(this@UserCreateAndEditActivity, "Bild och instruktion är tillagd i ditt schema", Toast.LENGTH_SHORT).show()
                     }
                 }
-
         } else Toast.makeText(this@UserCreateAndEditActivity, "Välj bild och skriv en instruktion", Toast.LENGTH_SHORT).show()
-
     }
-
     // Lagrade bilder funktion
     private fun listFiles() = CoroutineScope(Dispatchers.IO).launch {
         try {
@@ -284,94 +234,65 @@ class UserCreateAndEditActivity : AppCompatActivity() {
             for(publicImage in publicImages.items ) {
                 val publicUrl = publicImage.downloadUrl.await()
                 userImageUrl.add(publicUrl.toString())
-
             }
-
             withContext(Dispatchers.Main) {
                 recyclerView.adapter?.notifyDataSetChanged()
-
-
             }
-
-
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
                 Toast.makeText(this@UserCreateAndEditActivity, "Error", Toast.LENGTH_SHORT).show()
             }
         }
-
-
     }
-
     //Sätter vald bild från rcViewn till imageView
     fun setImage(url: String) {
         choosenImageUrl = url // <- adressen kommer in
         Glide.with(this).load(url).into(imgeViewButton)
     }
+}
+/*
+
+private fun downLoadImage(filename: String) = CoroutineScope(Dispatchers.IO).launch {
+    try {
+
+        val maxDownloadSize = 5L * 1024 * 1024
+        val bytes =
+            imageRef.child("UploadedPictures/$uniqeString").getBytes(maxDownloadSize).await()
+        val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+        withContext(Dispatchers.Main) {
+            imgeViewButton.setImageBitmap(bmp)
+        }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*
-
-  private fun downLoadImage(filename: String) = CoroutineScope(Dispatchers.IO).launch {
-      try {
-
-          val maxDownloadSize = 5L * 1024 * 1024
-          val bytes =
-              imageRef.child("UploadedPictures/$uniqeString").getBytes(maxDownloadSize).await()
-          val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-          withContext(Dispatchers.Main) {
-              imgeViewButton.setImageBitmap(bmp)
-          }
-
-
-      } catch (e: Exception) {
-          withContext(Dispatchers.Main) {
-              Toast.makeText(this@UserCreateAndEditActivity, e.message, Toast.LENGTH_SHORT).show()
-          }
-
-      }
-
-  }
-
-       */
-    /*
-    private fun deleteImage(filename: String) = CoroutineScope(Dispatchers.IO).launch {
-        try {
-
-            imageRef.child("UploadedPictures/$filename").delete().await()
-            withContext(Dispatchers.Main) {
-                Toast.makeText(
-                    this@UserCreateAndEditActivity, "Bilden är raderad", Toast.LENGTH_SHORT).show()
-            }
-
-        } catch (e: Exception) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(this@UserCreateAndEditActivity, e.message, Toast.LENGTH_SHORT).show()
-            }
+    } catch (e: Exception) {
+        withContext(Dispatchers.Main) {
+            Toast.makeText(this@UserCreateAndEditActivity, e.message, Toast.LENGTH_SHORT).show()
         }
 
     }
 
- */
+}
 
+     */
+/*
+private fun deleteImage(filename: String) = CoroutineScope(Dispatchers.IO).launch {
+    try {
+
+        imageRef.child("UploadedPictures/$filename").delete().await()
+        withContext(Dispatchers.Main) {
+            Toast.makeText(
+                this@UserCreateAndEditActivity, "Bilden är raderad", Toast.LENGTH_SHORT).show()
+        }
+
+    } catch (e: Exception) {
+        withContext(Dispatchers.Main) {
+            Toast.makeText(this@UserCreateAndEditActivity, e.message, Toast.LENGTH_SHORT).show()
+        }
+    }
 
 }
+
+*/
 
 
 
