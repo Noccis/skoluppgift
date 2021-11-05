@@ -192,6 +192,13 @@ class HowToDoItActivity : AppCompatActivity() {
                 }
             })
     }
+
+    override fun onResume() {
+        Log.d("TAG", "ON RESUME KÖRS")
+        setNewOrder()
+        super.onResume()
+    }
+    
     fun setNewOrder () {
         Log.d("ffs", "setNewOrder körs")
         var newOrder:Long = 1
