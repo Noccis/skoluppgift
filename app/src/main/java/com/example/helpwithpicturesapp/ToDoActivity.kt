@@ -56,30 +56,26 @@ class ToDoActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
+        logoutButton = findViewById(R.id.logoutButton)
 
-            logoutButton = findViewById(R.id.logoutButton)
-        
         val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser // Henrik ny härifrån
 
 
-       
+
         if (currentUser != null) {
             uid = currentUser.uid
             Log.d("!!!!", "onCreate: ToDoActivity userId $uid")
         }
 
         logoutButton.setOnClickListener {
-                auth.signOut()
+            auth.signOut()
             val intent = Intent(this, MainActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
             startActivity(intent)
             finish()
         }
-        templdButton.visibility == View.VISIBLE) {
-                val position = viewHolder.adapterPosition
-                when (direction) {
-                    ItemTouchHelper.LEFT -> {
-                  ateSave = findViewById(R.id.saveTemplateText)
+
+        templateSave = findViewById(R.id.saveTemplateText)
         templateSave.visibility = View.GONE
 // Lägg till templateSave.GONE sen när koden är klar.
 // Här är spara mall koden
@@ -158,7 +154,12 @@ class ToDoActivity : AppCompatActivity() {
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
-            if (ad      deletedCard = action[position]
+            if (addButton.visibility == View.VISIBLE) {
+                val position = viewHolder.adapterPosition
+                when (direction) {
+                    ItemTouchHelper.LEFT -> {
+
+                        deletedCard = action[position]
                         val docId = action[position].documentName
                         if (docId != null) {
                             db.collection("users").document(uid).collection("weekday")
@@ -166,8 +167,8 @@ class ToDoActivity : AppCompatActivity() {
                                 .document(docId)
                                 .delete()
 
-                                action.removeAt(position)
-                                myAdapter.notifyDataSetChanged()
+                            action.removeAt(position)
+                            myAdapter.notifyDataSetChanged()
                         }
 
                         Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG).show()
