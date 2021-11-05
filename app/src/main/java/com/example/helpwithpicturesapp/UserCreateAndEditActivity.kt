@@ -3,6 +3,7 @@ package com.example.helpwithpicturesapp
 import android.app.Activity
 import android.app.AlertDialog
 import android.app.Instrumentation
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -13,6 +14,8 @@ import android.net.Uri
 import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
@@ -108,6 +111,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         }
 
         storeButton.setOnClickListener {
+
             listFiles()
         }
 
@@ -121,6 +125,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         }
 
         saveButton.setOnClickListener {
+            it.hideKeyboard()
             storeAction()
         }
     }
@@ -208,6 +213,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     //Lägg till i listanfunktion
     fun storeAction() {
         val storageImage = Actions(null, choosenImageUrl, false, editText.text.toString())
+
         if (choosenImageUrl != null && editText.text.toString() != "") {
             db.collection("users").document(uid).collection("weekday")
                 .document(decision).collection("action").add(storageImage)
@@ -216,6 +222,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                         Log.d(TAG, "storeAction: $storageImage")
                         Toast.makeText(this@UserCreateAndEditActivity,
                             "Bild och instruktion är tillagd i ditt schema", Toast.LENGTH_SHORT).show()
+                        editText.setText("")
                     }
                 }
         } else Toast.makeText(this@UserCreateAndEditActivity,
@@ -251,6 +258,11 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     fun setImage(url: String) {
         choosenImageUrl = url // <- adressen kommer in
         Glide.with(this).load(url).into(imgeViewButton)
+    }
+
+    fun View.hideKeyboard() {
+        val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(windowToken, 0)
     }
 }
 /*

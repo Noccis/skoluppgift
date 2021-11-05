@@ -1,6 +1,7 @@
 package com.example.helpwithpicturesapp
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -9,6 +10,8 @@ import android.os.Bundle
 import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.GridLayoutManager
@@ -122,6 +125,7 @@ class CreateAndEditActionSteps : AppCompatActivity() {
         }
 
         saveButton.setOnClickListener {
+            it.hideKeyboard()
             storeAction()
         }
     }
@@ -216,7 +220,7 @@ class CreateAndEditActionSteps : AppCompatActivity() {
                         this@CreateAndEditActionSteps,
                         "Bilden och instruktionen är tillagda i listan", Toast.LENGTH_SHORT
                     ).show()
-
+                    editText.setText("")
                     val stepRef = db.collection("users").document(uid).collection("weekday")
                         .document(decision).collection("action").document(actionId)
 
@@ -259,6 +263,11 @@ class CreateAndEditActionSteps : AppCompatActivity() {
     fun setImage(url: String) {
         choosenImageUrl = url // <- adressen kommer in
         Glide.with(this).load(url).into(imgeViewButton)
+    }
+
+    fun View.hideKeyboard() {
+        val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(windowToken, 0)
     }
 }
 
