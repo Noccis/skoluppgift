@@ -243,12 +243,18 @@ class ToDoActivity : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        Log.d("TAG", "ON RESUME KÖRS")
+        setNewOrder()
+        super.onResume()
+    }
+
     fun setNewOrder() {
-        Log.d("ffs", "setNewOrder körs")
+        Log.d("ffs", "SETNEWORDER KÖRS")
         var newOrder: Long = 1
 
         for (step in action) {
-            Log.d("TAG", "setNewOrder:${step.documentName.toString()} order ${step.order}")
+            Log.d("TAG", "setNewOrder, ny action i listan:${step.documentName.toString()} order ${step.order}")
         }
 
         for (step in action) {
