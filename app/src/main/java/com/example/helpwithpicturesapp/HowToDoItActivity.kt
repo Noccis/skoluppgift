@@ -242,5 +242,4 @@ class HowToDoItActivity : AppCompatActivity() {
             passCard.visibility = View.GONE
         }
     }
-
 }
