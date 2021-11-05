@@ -16,7 +16,6 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -25,7 +24,6 @@ import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.lang.reflect.Array.get
 import java.util.*
 
 class ToDoActivity : AppCompatActivity() {
@@ -57,8 +55,6 @@ class ToDoActivity : AppCompatActivity() {
     var uid = ""
     var actionId = " "
     val auth = Firebase.auth
-
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -257,10 +253,8 @@ class ToDoActivity : AppCompatActivity() {
                         }
                     }
                     myAdapter.notifyDataSetChanged()
-
                 }
             })
-
     }
 
     fun setNewOrder() {
@@ -278,19 +272,13 @@ class ToDoActivity : AppCompatActivity() {
             db.collection("users").document(uid).collection("weekday")
                 .document(decision).collection("action").document(actionId).set(step)
                 .addOnSuccessListener {
-                    Log.d(
-                        "TAG",
-                        "setNewOrder:${step.documentName.toString()} added to db order ${step.order}"
-                    )
-
-
+                    Log.d("TAG","setNewOrder:${step.documentName.toString()} added to db order ${step.order}")
                 }
                 .addOnFailureListener {
                     Log.d("TAG", "setNewOrderDelete: action add failure")
                 }
             newOrder++
         }
-
     }
 
     fun reward() {
@@ -322,7 +310,6 @@ class ToDoActivity : AppCompatActivity() {
         rewardImageView.visibility = View.GONE
     }
 
-
     fun lockEditing() {
 
         passCard.visibility = View.VISIBLE
@@ -353,12 +340,10 @@ class ToDoActivity : AppCompatActivity() {
         close.setOnClickListener {
             passCard.visibility = View.GONE
         }
-
     }
 
     fun saveTemplate(name: String) {
         uid = auth.currentUser!!.uid
-
         for (action in action) {
             if (action != null) {               // Ta bort detta?
 
@@ -377,9 +362,7 @@ class ToDoActivity : AppCompatActivity() {
                             .collection("steps")
                             .orderBy("order", Query.Direction.ASCENDING).get()
                             .addOnSuccessListener { documents ->
-
                                 //    Log.d("ffs", "step succes dag: ${decision} actionid: $actionId document size ${documents.documents.size}")
-
                                 val stepList =
                                     mutableListOf<Actions>()     // temporär lista för att ladda ner och upp steps
                                 for (document in documents.documents) {
@@ -389,13 +372,7 @@ class ToDoActivity : AppCompatActivity() {
                                     if (newStep != null) {
                                         stepList.add(newStep)
                                     }
-
-
-                                    //   Log.d("ffs", "A step was added! Tjoho! ${newStep!!.documentName}")
-
-
                                 }
-
                                 for (step in stepList) {
 
                                     db.collection("users").document(uid).collection("weekday")
@@ -408,23 +385,16 @@ class ToDoActivity : AppCompatActivity() {
                                         .addOnFailureListener {
                                             //      Log.d("ffs", "$it add step funkar inte")
                                         }
-
-
                                 }
-
-
                             }
                             .addOnFailureListener {
                                 Log.d("ffs", "$actionId fail $it")
                             }
                     }
-
-
             }
-
         }
-
     }
+
     fun refresh() {
         action.clear();
         myAdapter.notifyDataSetChanged();
@@ -435,12 +405,4 @@ class ToDoActivity : AppCompatActivity() {
         val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(windowToken, 0)
     }
-
 }
-
-
-
-
-
-
-

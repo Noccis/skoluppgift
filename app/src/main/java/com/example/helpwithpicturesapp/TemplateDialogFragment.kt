@@ -38,12 +38,6 @@ class TemplateDialogFragment(val activity: ToDoActivity) : DialogFragment() {
             // spara mall
             dismiss()
         }
-
-
-
-
-
         return rootView
     }
-
 }

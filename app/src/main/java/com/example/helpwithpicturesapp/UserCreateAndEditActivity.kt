@@ -1,26 +1,19 @@
 package com.example.helpwithpicturesapp
 
 import android.app.Activity
-import android.app.AlertDialog
-import android.app.Instrumentation
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.Camera
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.net.Uri
-import android.os.Build
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
-import androidx.activity.result.ActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -36,9 +29,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.lang.Exception
-import java.nio.file.attribute.AclEntry
 import java.util.*
-import java.util.jar.Manifest
 
 const val REQUEST_CODE_IMAGE_PICK = 0
 const val CAMERA_REQUEST_CODE = 1
@@ -46,38 +37,33 @@ const val START_REQUEST_CAMERA = 2
 
 class UserCreateAndEditActivity : AppCompatActivity() {
 
-    val TAG = "!!!"
-    var curFile: Uri? = null
-    val imageRef = Firebase.storage.reference
-    val db = FirebaseFirestore.getInstance()
-    var decision = ""
-    val userImageUrl = mutableListOf<String>()
-    var choosenImageUrl: String? = null
-    var actionId = ""
-    var uid = ""
     lateinit var recyclerView: RecyclerView
     private var gridLayoutManager: GridLayoutManager? = null
     lateinit var uploadButton: Button
     lateinit var startCameraButton: Button
     lateinit var storeButton: Button
     lateinit var saveButton: Button
-    lateinit var editText: EditText
     lateinit var imgeViewButton: ImageButton
     lateinit var imageAdapter: ImageAdapter
     lateinit var backImage: ImageView
+    lateinit var editText: EditText
+    val TAG = "!!!"
+    val imageRef = Firebase.storage.reference
+    val db = FirebaseFirestore.getInstance()
+    var decision = ""
+    val userImageUrl = mutableListOf<String>()
+    var choosenImageUrl: String? = null
+    var curFile: Uri? = null
+    var actionId = ""
+    var uid = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_create_and_edit)
 
-        val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
-        if(currentUser != null) {
-            uid = currentUser.uid
-            Log.d(TAG, "onCreate: $uid")
-        }
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
         recyclerView = findViewById(R.id.recyclerView)
-        gridLayoutManager = GridLayoutManager(applicationContext, 3,LinearLayoutManager.VERTICAL, false)
         uploadButton = findViewById(R.id.uploadButton)
         storeButton = findViewById(R.id.storeButton)
         startCameraButton = findViewById(R.id.startCameraButton)
@@ -91,9 +77,17 @@ class UserCreateAndEditActivity : AppCompatActivity() {
 
 
         recyclerView.layoutManager = gridLayoutManager
+        gridLayoutManager = GridLayoutManager(applicationContext, 3,LinearLayoutManager.VERTICAL, false)
         recyclerView.setHasFixedSize(true)
         imageAdapter = ImageAdapter(this, userImageUrl)
         recyclerView.adapter = imageAdapter
+
+
+        val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+        if(currentUser != null) {
+            uid = currentUser.uid
+            Log.d(TAG, "onCreate: $uid")
+        }
 
         backImage.setOnClickListener {
             finish()
@@ -111,7 +105,6 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         }
 
         storeButton.setOnClickListener {
-
             listFiles()
         }
 
@@ -191,14 +184,10 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                         val downloadUri = task.result
                         Toast.makeText(this@UserCreateAndEditActivity, "Bilden är sparad", Toast.LENGTH_SHORT).show()
 
-                        val action = Actions(null, downloadUri.toString(), false, editText.text.toString())
-                        //val actionsteps = ActionSteps(null, downloadUri.toString(), false, editText.text.toString())
-
-                        db.collection("users").document(uid).collection("weekday").document(decision).collection("action").add(action) // Kolla med David här
-
-                      //  db.collection("Weekday").document(decision).collection(decision)
-                        //  .document(actionId).collection(actionId).add(actionsteps)
-
+                        val action = Actions(null, downloadUri.toString(),
+                            false, editText.text.toString())
+                        db.collection("users").document(uid).collection("weekday")
+                            .document(decision).collection("action").add(action)
                         storeAction()
                         Log.d(TAG, "uploadImageToStorage: ${downloadUri}")
                     }
@@ -210,7 +199,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
             }
         }
     }
-    //Lägg till i listanfunktion
+
     fun storeAction() {
         val storageImage = Actions(null, choosenImageUrl, false, editText.text.toString())
 
@@ -228,7 +217,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         } else Toast.makeText(this@UserCreateAndEditActivity,
             "Välj bild och skriv en instruktion", Toast.LENGTH_SHORT).show()
     }
-    // Lagrade bilder funktion
+
     private fun listFiles() = CoroutineScope(Dispatchers.IO).launch {
         try {
 

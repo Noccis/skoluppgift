@@ -51,8 +51,6 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
                 }
             }
             stepsImage.visibility = View.GONE
-
-
         }
     }
 

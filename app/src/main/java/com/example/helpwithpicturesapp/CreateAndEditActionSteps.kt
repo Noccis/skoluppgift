@@ -30,53 +30,35 @@ import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.util.*
-import com.bumptech.glide.load.engine.executor.GlideExecutor.UncaughtThrowableStrategy.LOG
-
-import androidx.annotation.NonNull
-import com.bumptech.glide.load.engine.executor.GlideExecutor.UncaughtThrowableStrategy
-
-import com.google.android.gms.tasks.OnFailureListener
-
-import com.google.android.gms.tasks.OnSuccessListener
-
-import com.google.firebase.firestore.SetOptions
-
-
-
 
 class CreateAndEditActionSteps : AppCompatActivity() {
 
-    val TAG = "!!!"
-    var curFile: Uri? = null
-    val imageRef = Firebase.storage.reference
-    val uniqeString = UUID.randomUUID().toString()
-    val db = FirebaseFirestore.getInstance()
-    var decision = ""
-    val userImageUrl = mutableListOf<String>()
-    var choosenImageUrl: String? = null
-    var actionId = ""
-    lateinit var recyclerView: RecyclerView
-    private var gridLayoutManager: GridLayoutManager? = null
     lateinit var uploadButton: Button
     lateinit var startCameraButton: Button
-    lateinit var deleteButton: Button
     lateinit var storeButton: Button
     lateinit var saveButton: Button
-    lateinit var editText: EditText
     lateinit var imgeViewButton: ImageButton
-    lateinit var imageAdapter2: ImageAdapter2
     lateinit var backImage: ImageView
+    lateinit var editText: EditText
+    lateinit var recyclerView: RecyclerView
+    lateinit var imageAdapter2: ImageAdapter2
+    var choosenImageUrl: String? = null
+    var gridLayoutManager: GridLayoutManager? = null
+    var curFile: Uri? = null
+    val TAG = "!!!"
     var uid = ""
+    var actionId = ""
+    var decision = ""
+    val db = FirebaseFirestore.getInstance()
+    val userImageUrl = mutableListOf<String>()
+    val uniqeString = UUID.randomUUID().toString()
+    val imageRef = Firebase.storage.reference
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_create_and_edit_action_steps)
-
-        val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
-        if(currentUser != null) {
-            uid = currentUser.uid
-            Log.d(TAG, "onCreate: $uid")
-        }
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
         recyclerView = findViewById(R.id.recyclerView)
         gridLayoutManager = GridLayoutManager(applicationContext, 3,LinearLayoutManager.VERTICAL, false)
@@ -90,6 +72,12 @@ class CreateAndEditActionSteps : AppCompatActivity() {
 
         decision = intent.getStringExtra(Constants.DAY_CHOSEN).toString()
         actionId = intent.getStringExtra(INSTRUCTIONS_POSITION_KEY).toString()
+
+        val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+        if(currentUser != null) {
+            uid = currentUser.uid
+            Log.d(TAG, "onCreate: $uid")
+        }
 
         recyclerView.layoutManager = gridLayoutManager
         recyclerView.setHasFixedSize(true)

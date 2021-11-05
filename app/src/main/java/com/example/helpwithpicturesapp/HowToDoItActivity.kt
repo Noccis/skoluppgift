@@ -12,14 +12,10 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
-
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-
 import com.google.firebase.auth.ktx.auth
-
 import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ktx.firestore
@@ -125,7 +121,6 @@ class HowToDoItActivity : AppCompatActivity() {
         }
 
         saveTemplate.setOnClickListener {
-
         }
 
         addButton.setOnClickListener {
