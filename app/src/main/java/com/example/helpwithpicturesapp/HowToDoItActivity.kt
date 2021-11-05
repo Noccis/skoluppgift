@@ -264,4 +264,10 @@ class HowToDoItActivity : AppCompatActivity() {
             passCard.visibility = View.GONE
         }
     }
+
+    override fun onResume() {
+        setNewOrder()
+        super.onResume()
+    }
+
 }

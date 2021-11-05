@@ -417,6 +417,11 @@ class ToDoActivity : AppCompatActivity() {
 
     }
 
+    override fun onResume() {
+        setNewOrder()
+        super.onResume()
+    }
+
 
 }
 
