@@ -129,12 +129,12 @@ class ToDoActivity : AppCompatActivity() {
                 var startPosition = viewHolder.adapterPosition
                 var endPosition = target.adapterPosition
                 Collections.swap(action, startPosition, endPosition)  // Byter plats i listan
-
-                setNewOrder()
-                recyclerView.adapter?.notifyItemMoved(
+                recyclerView.adapter?.notifyItemMoved( // säger till adapter att vi gjort förändring i position.
                     startPosition,
                     endPosition
-                )   // säger till adapter att vi gjort förändring i position.
+                )
+                setNewOrder()
+
                 return true
             } else return false
         }
@@ -270,12 +270,12 @@ class ToDoActivity : AppCompatActivity() {
                         "setNewOrder:${step.documentName.toString()} added to db order ${step.order}"
                     )
 
-                    newOrder++
+
                 }
                 .addOnFailureListener {
                     Log.d("TAG", "setNewOrderDelete: action add failure")
                 }
-
+            newOrder++
         }
 
     }
@@ -416,12 +416,6 @@ class ToDoActivity : AppCompatActivity() {
         }
 
     }
-
-    override fun onResume() {
-        setNewOrder()
-        super.onResume()
-    }
-
 
 }
 
