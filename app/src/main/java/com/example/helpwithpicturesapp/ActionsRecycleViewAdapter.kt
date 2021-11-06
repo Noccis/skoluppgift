@@ -20,7 +20,7 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
     inner class ViewHolder(itemView: View):RecyclerView.ViewHolder(itemView) {
 
         val imageButtonView = itemView.findViewById<ImageView>(R.id.imageButton)
-        val imageText = itemView.findViewById<TextView>(R.id.imageText)
+        val imageText = itemView.findViewById<TextView>(R.id.templateName)
         val checkBoxView = itemView.findViewById<CheckBox>(R.id.checkBox_Button)
         val stepsImage = itemView.findViewById<ImageView>(R.id.stepsImage)
         var actionsPosition = 0

@@ -21,14 +21,19 @@
         <entry key="..\:/Users/toniw/AndroidStudioProjects/Help-with-pictures-app/app/src/main/res/layout/fragment_layout.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/toniw/AndroidStudioProjects/Help-with-pictures-app/app/src/main/res/layout/list_actions.xml" value="0.5541666666666667" />
         <entry key="..\:/Users/toniw/AndroidStudioProjects/Help-with-pictures-app/app/src/main/res/layout/template_fragment.xml" value="0.33958333333333335" />
+        <entry key="app/src/main/res/layout/Rec_browse_template_fragment.xml" value="0.18125" />
         <entry key="app/src/main/res/layout/activity_create_and_edit_action_steps.xml" value="0.178515625" />
         <entry key="app/src/main/res/layout/activity_how_to_do_it.xml" value="0.22" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2" />
         <entry key="app/src/main/res/layout/activity_to_do.xml" value="0.21535893155258765" />
         <entry key="app/src/main/res/layout/activity_user_create_and_edit.xml" value="0.16" />
         <entry key="app/src/main/res/layout/activity_weekdays.xml" value="0.11979166666666667" />
+        <entry key="app/src/main/res/layout/browse_template_fragment.xml" value="0.25" />
         <entry key="app/src/main/res/layout/how_to_do_it_list_item.xml" value="0.14628623188405798" />
+        <entry key="app/src/main/res/layout/item_image.xml" value="0.18125" />
         <entry key="app/src/main/res/layout/list_actions.xml" value="0.2" />
+        <entry key="app/src/main/res/layout/list_browse.xml" value="0.18125" />
+        <entry key="app/src/main/res/layout/rec_browse_template_fragment.xml" value="0.19270833333333334" />
         <entry key="app/src/main/res/layout/template_fragment.xml" value="0.33" />
       </map>
     </option>
