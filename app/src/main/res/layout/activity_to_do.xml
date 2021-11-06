@@ -186,6 +186,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/backButton"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/question" />
+        app:srcCompat="@drawable/questionmark" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
