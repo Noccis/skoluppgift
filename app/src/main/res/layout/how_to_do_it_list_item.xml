@@ -70,5 +70,6 @@
         app:layout_constraintStart_toStartOf="@+id/guideline2"
         app:layout_constraintTop_toTopOf="parent"
         tools:textAlignment="center"/>
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>

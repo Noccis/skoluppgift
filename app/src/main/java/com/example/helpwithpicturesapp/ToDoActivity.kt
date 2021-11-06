@@ -128,8 +128,10 @@ class ToDoActivity : AppCompatActivity() {
         }
 
         browseTemplate.setOnClickListener {
-            var dialog = BrowseTemplateDialogFragment(this)
-            dialog.show(supportFragmentManager, "templateDialog")
+          val intent = Intent(this , BrowseTemplateActivity::class.java)
+            intent.putExtra(Constants.DAY_CHOSEN, decision)
+            intent.putExtra(Constants.PINKOD, pinkod)
+            startActivity(intent)
         }
         addButton.setOnClickListener {
             val intent = Intent(this, UserCreateAndEditActivity::class.java)

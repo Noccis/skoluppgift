@@ -43,6 +43,7 @@ class HowToDoItActivity : AppCompatActivity() {
     lateinit var menuCard : CardView
     lateinit var passCard: CardView
     lateinit var editPassword: EditText
+    lateinit var emptyPage : TextView
     lateinit var deletedCard: Actions
     lateinit var recyclerView: RecyclerView
     lateinit var db: FirebaseFirestore
@@ -75,9 +76,12 @@ class HowToDoItActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.howToDoRecycleView)
         backButton= findViewById(R.id.backButton)
         instructionButton = findViewById(R.id.instructionButton)
+        emptyPage = findViewById(R.id.emptyPage)
+
 
         menuCard.visibility = View.GONE
         passCard.visibility = View.GONE
+        emptyPage.visibility = View.GONE
 
         pinkod = intent.getStringExtra(Constants.PINKOD).toString()
         decision = intent.getStringExtra(Constants.DAY_CHOSEN).toString()
@@ -189,6 +193,7 @@ class HowToDoItActivity : AppCompatActivity() {
 
     fun eventChangeListener() {
 
+
         var uid = auth.currentUser!!.uid
 
         db = FirebaseFirestore.getInstance()
@@ -212,7 +217,9 @@ class HowToDoItActivity : AppCompatActivity() {
                             actionStep.add(dc.document.toObject(Actions::class.java))
                         }
                     }
-
+                    if ( actionStep.size == 0){
+                        emptyPage.visibility = View.VISIBLE
+                    }
                     myAdapter.notifyDataSetChanged()
 
                     if (actionStep.size == 0) {

@@ -102,12 +102,12 @@
 
     <ImageView
         android:id="@+id/backImage"
-        android:layout_width="78dp"
-        android:layout_height="27dp"
+        android:layout_width="76dp"
+        android:layout_height="37dp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toStartOf="@+id/uploadButton"
         app:layout_constraintHorizontal_bias="0.098"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_back" />
+        app:srcCompat="@drawable/back_button" />
 </androidx.constraintlayout.widget.ConstraintLayout>

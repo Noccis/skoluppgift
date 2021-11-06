@@ -159,5 +159,18 @@
         app:layout_constraintTop_toBottomOf="@+id/lockButton"
         tools:listitem="@layout/how_to_do_it_list_item" />
 
+    <TextView
+        android:id="@+id/emptyPage"
+        android:layout_width="321dp"
+        android:layout_height="205dp"
+        android:text="Tryck på låset föt att lägga till bilder"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="36dp"
+        app:layout_constraintBottom_toBottomOf="@+id/menuCard"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

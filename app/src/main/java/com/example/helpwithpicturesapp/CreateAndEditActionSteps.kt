@@ -199,7 +199,8 @@ class CreateAndEditActionSteps : AppCompatActivity() {
         //val storageImage = Actions(null, choosenImageUrl, false, editText.text.toString())
         val actionstepsImage = ActionSteps(null, choosenImageUrl, false, editText.text.toString())
         db.collection("users").document(uid).collection("weekday")
-            .document(decision).collection("action").document(actionId).collection("steps")
+            .document(decision).collection("action").document(actionId)
+            .collection("steps")
             .add(actionstepsImage)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
