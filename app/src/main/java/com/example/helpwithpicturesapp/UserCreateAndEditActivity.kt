@@ -76,10 +76,11 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         actionId = intent.getStringExtra(INSTRUCTIONS_POSITION_KEY).toString()
 
 
-        recyclerView.layoutManager = gridLayoutManager
+
         gridLayoutManager = GridLayoutManager(applicationContext, 3,LinearLayoutManager.VERTICAL, false)
         recyclerView.setHasFixedSize(true)
         imageAdapter = ImageAdapter(this, userImageUrl)
+        recyclerView.layoutManager = gridLayoutManager
         recyclerView.adapter = imageAdapter
 
 
@@ -167,6 +168,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
 
     private fun uploadImageToStorage(filename: String) = CoroutineScope(Dispatchers.IO).launch {
         try {
+
             curFile?.let {
                 val uniqeString = UUID.randomUUID().toString()
                 val uploadTask = imageRef.child("$uid/$uniqeString").putFile(it) // skapar en unik folder för inloggad användare
@@ -184,22 +186,36 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                         val downloadUri = task.result
                         Toast.makeText(this@UserCreateAndEditActivity, "Bilden är sparad", Toast.LENGTH_SHORT).show()
 
-                        val action = Actions(null, downloadUri.toString(),
-                            false, editText.text.toString())
-                        db.collection("users").document(uid).collection("weekday")
-                            .document(decision).collection("action").add(action)
+                        val action = Actions(null, downloadUri.toString(), false, editText.text.toString())
+                        val actionsteps = ActionSteps(null, downloadUri.toString(), false, editText.text.toString())
+
+
+                        db.collection("users").document(uid).collection("weekday").document(decision).collection("action").add(action) // Kolla med David här
+
+
+                        db.collection("Weekday").document(decision).collection(decision).document(actionId).collection(actionId).add(actionsteps)
+
+
                         storeAction()
+
                         Log.d(TAG, "uploadImageToStorage: ${downloadUri}")
+
                     }
                 }
+
+
             }
+
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
                 Toast.makeText(this@UserCreateAndEditActivity, "Error", Toast.LENGTH_SHORT).show()
             }
         }
-    }
 
+
+
+
+    }
     fun storeAction() {
         val storageImage = Actions(null, choosenImageUrl, false, editText.text.toString())
 
