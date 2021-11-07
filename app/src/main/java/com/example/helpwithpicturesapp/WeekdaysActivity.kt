@@ -115,5 +115,6 @@ class WeekdaysActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
+
 }
 
