@@ -12,13 +12,14 @@
         android:layout_width="349dp"
         android:layout_height="312dp"
         android:layout_marginStart="100dp"
+        android:layout_marginTop="160dp"
         android:layout_marginEnd="100dp"
         app:cardBackgroundColor="@color/monday"
         app:cardCornerRadius="15dp"
         app:cardElevation="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="158dp">
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <LinearLayout
