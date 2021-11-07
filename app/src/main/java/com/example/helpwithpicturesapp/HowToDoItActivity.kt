@@ -128,8 +128,9 @@ class HowToDoItActivity : AppCompatActivity() {
         }
 
         addButton.setOnClickListener {
-            val intent = Intent(this, UserCreateAndEditActivity::class.java)
+            val intent = Intent(this, CreateAndEditActionSteps::class.java)
             intent.putExtra(Constants.DAY_CHOSEN, decision)
+            intent.putExtra(INSTRUCTIONS_POSITION_KEY, actionId)
             startActivity(intent)
         }
 
@@ -217,9 +218,7 @@ class HowToDoItActivity : AppCompatActivity() {
                             actionStep.add(dc.document.toObject(Actions::class.java))
                         }
                     }
-                    if ( actionStep.size == 0){
-                        emptyPage.visibility = View.VISIBLE
-                    }
+
                     myAdapter.notifyDataSetChanged()
 
                     if (actionStep.size == 0) {
@@ -227,7 +226,8 @@ class HowToDoItActivity : AppCompatActivity() {
                             .document(decision).collection("action").document(actionId)
 
                         stepRef.update("steps", false)
-                    }
+                        emptyPage.visibility = View.VISIBLE
+                    } else  emptyPage.visibility = View.GONE
                 }
             })
 

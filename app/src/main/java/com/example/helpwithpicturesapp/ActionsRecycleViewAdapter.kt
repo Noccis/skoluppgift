@@ -77,7 +77,7 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
 
         if ( action.steps){
             holder.stepsImage.visibility = View.VISIBLE
-        }
+        } else holder.stepsImage.visibility = View.GONE
         Glide.with(context).load(action.imageId).into(holder.imageButtonView)
         holder.checkBoxView.isChecked = action.checkBox
         holder.actionsPosition = position

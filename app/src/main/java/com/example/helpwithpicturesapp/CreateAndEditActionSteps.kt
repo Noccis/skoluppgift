@@ -113,8 +113,8 @@ class CreateAndEditActionSteps : AppCompatActivity() {
         }
 
         saveButton.setOnClickListener {
-            it.hideKeyboard()
             storeAction()
+            it.hideKeyboard()
         }
     }
 
@@ -197,7 +197,7 @@ class CreateAndEditActionSteps : AppCompatActivity() {
 
     fun storeAction() {
         //val storageImage = Actions(null, choosenImageUrl, false, editText.text.toString())
-        val actionstepsImage = ActionSteps(null, choosenImageUrl, false, editText.text.toString())
+        val actionstepsImage = Actions(null, choosenImageUrl, false, editText.text.toString())
         db.collection("users").document(uid).collection("weekday")
             .document(decision).collection("action").document(actionId)
             .collection("steps")
