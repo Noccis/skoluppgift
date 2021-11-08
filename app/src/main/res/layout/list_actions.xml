@@ -39,9 +39,20 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/borstatander" />
 
+            <ImageView
+                android:id="@+id/stepsImage"
+                android:layout_width="wrap_content"
+                android:layout_height="60dp"
+                android:layout_weight="1"
+                android:layout_marginStart="10dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="10dp"
+                android:gravity="center_vertical"
+                app:srcCompat="@drawable/forward" />
+
             <CheckBox
                 android:id="@+id/checkBox_Button"
-                android:layout_width="100dp"
+                android:layout_width="87dp"
                 android:layout_height="79dp"
                 android:layout_marginStart="10dp"
                 android:layout_marginTop="50dp"

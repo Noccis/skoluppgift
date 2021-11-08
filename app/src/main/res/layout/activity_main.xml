@@ -8,29 +8,18 @@
     tools:context=".MainActivity">
 
 
-    <TextView
-        android:id="@+id/instructions_Tv"
-        android:layout_width="181dp"
-        android:layout_height="82dp"
-        android:layout_marginTop="16dp"
-        android:text="Instructions"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.565"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <androidx.cardview.widget.CardView
         android:layout_width="349dp"
         android:layout_height="312dp"
         android:layout_marginStart="100dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="160dp"
         android:layout_marginEnd="100dp"
         app:cardBackgroundColor="@color/monday"
         app:cardCornerRadius="15dp"
         app:cardElevation="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/instructions_Tv">
+        app:layout_constraintTop_toTopOf="parent">
 
 
         <LinearLayout
@@ -65,9 +54,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="350dp"
+            android:layout_gravity="center"
             android:gravity="center_vertical"
-            android:orientation="vertical"
-            android:layout_gravity="center">
+            android:orientation="vertical">
 
 
             <EditText
@@ -145,21 +134,6 @@
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>
-
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="96dp"
-        android:text="Button"
-        app:layout_constraintEnd_toStartOf="@+id/instructions_Tv"
-        app:layout_constraintHorizontal_bias="0.612"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-
-
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
