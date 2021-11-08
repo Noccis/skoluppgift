@@ -232,9 +232,18 @@ class HowToDoItActivity : AppCompatActivity() {
             })
 
     }
-        fun setNewOrder() {
-            Log.d("ffs", "setNewOrder körs")
-            var newOrder: Long = 1
+
+
+    override fun onResume() {
+        Log.d("TAG", "ON RESUME KÖRS")
+        setNewOrder()
+        super.onResume()
+    }
+    
+    fun setNewOrder () {
+        Log.d("ffs", "setNewOrder körs")
+        var newOrder:Long = 1
+
 /*
         for (step in action){
             Log.d("TAG", "setNewOrder:${step.documentName.toString()} order ${step.order}")
