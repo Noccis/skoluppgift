@@ -36,7 +36,6 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var refreshButton: ImageView
     lateinit var rewardImageView: ImageView
     lateinit var lockButton: ImageView
-    lateinit var instructionButton : ImageView
     lateinit var backButton : ImageView
     lateinit var dayTextView: TextView
     lateinit var editPassword: EditText
@@ -48,7 +47,6 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var db: FirebaseFirestore
     lateinit var myAdapter: ActionsRecycleViewAdapter
     lateinit var deletedCard: Actions
-    lateinit var logoutButton : Button
     lateinit var helpButton: ImageView
     var pinkod = ""
     var decision = ""
@@ -82,7 +80,6 @@ class ToDoActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         dayTextView = findViewById(R.id.dayTextView)
         backButton= findViewById(R.id.backButton)
-        instructionButton = findViewById(R.id.instructionButton)
 
         menuCard.visibility = View.GONE
         passCard.visibility = View.GONE
@@ -111,10 +108,6 @@ class ToDoActivity : AppCompatActivity() {
             finish()
         }
 
-        instructionButton.setOnClickListener {
-           // val intent = Intent(this, InstructionsActivity::class.java)
-          //  startActivity(intent)
-        }
 
         lockButton.setOnClickListener {
             lockEditing()

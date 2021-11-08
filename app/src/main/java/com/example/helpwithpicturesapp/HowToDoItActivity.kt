@@ -36,7 +36,6 @@ class HowToDoItActivity : AppCompatActivity() {
     lateinit var lockButton: ImageView
     lateinit var addButton: ImageView
     lateinit var close: ImageView
-    lateinit var instructionButton : ImageView
     lateinit var backButton : ImageView
     lateinit var lock: Button
     lateinit var unlock: Button
@@ -75,7 +74,6 @@ class HowToDoItActivity : AppCompatActivity() {
         addButton = findViewById(R.id.addButton)
         recyclerView = findViewById(R.id.howToDoRecycleView)
         backButton= findViewById(R.id.backButton)
-        instructionButton = findViewById(R.id.instructionButton)
         emptyPage = findViewById(R.id.emptyPage)
 
 
@@ -104,10 +102,6 @@ class HowToDoItActivity : AppCompatActivity() {
             finish()
         }
 
-        instructionButton.setOnClickListener {
-            // val intent = Intent(this, InstructionsActivity::class.java)
-            //  startActivity(intent)
-        }
         lockButton.setOnClickListener {
             lockEditing()
         }
