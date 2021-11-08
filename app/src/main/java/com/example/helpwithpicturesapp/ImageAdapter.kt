@@ -1,17 +1,11 @@
 package com.example.helpwithpicturesapp
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.ImageView
-import androidx.core.app.ActivityCompat.startActivityForResult
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-
 
 class ImageAdapter(val activity: UserCreateAndEditActivity,
     val urls: List<String>
@@ -21,18 +15,12 @@ class ImageAdapter(val activity: UserCreateAndEditActivity,
         val recyclerViewImageViewButton = itemView.findViewById<ImageButton>(R.id.recyclerViewImageButton)
         var url = ""
 
-
         init {
             recyclerViewImageViewButton.setOnClickListener {
              activity.setImage(url)
-
-
             }
-
         }
-
     }
-
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ImageViewHolder {
         return ImageViewHolder(
@@ -42,14 +30,10 @@ class ImageAdapter(val activity: UserCreateAndEditActivity,
 
     override fun onBindViewHolder(holder: ImageViewHolder, position: Int) {
        holder.url = urls[position]
-
         Glide.with(holder.itemView).load(holder.url).into(holder.recyclerViewImageViewButton)
     }
 
     override fun getItemCount(): Int {
         return urls.size
     }
-
-
-
 }

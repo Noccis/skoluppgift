@@ -30,30 +30,21 @@ class HowToDoItRecycleViewAdapter (val context: Context, val actionStep: List<Ac
                 actionStep[actionsPosition].checkBox = checkBoxView.isChecked
                 if (actionStep[actionsPosition].checkBox) {
 
-                    // Variabler för att göra ActionSteps gråa när man klickar på dom.
                     val grey = ColorMatrix()
                     grey.setSaturation(0F)
                     val greyfilter = ColorMatrixColorFilter(grey)
-
                     imageView.colorFilter = greyfilter
-
 
                 } else {
                     imageView.colorFilter = null
                 }
             }
         }
-
     }
-
-
 
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int): HowToDoItRecycleViewAdapter.ViewHolder {
         val itemView = layoutInflater.inflate(R.layout.how_to_do_it_list_item,parent,false)
-
-
-
         return ViewHolder(itemView)
     }
 
@@ -64,8 +55,6 @@ class HowToDoItRecycleViewAdapter (val context: Context, val actionStep: List<Ac
         holder.checkBoxView.isChecked = action.checkBox
         holder.actionsPosition = position
         holder.imageText.text = action.imageText
-
-
     }
 
     override fun getItemCount(): Int {

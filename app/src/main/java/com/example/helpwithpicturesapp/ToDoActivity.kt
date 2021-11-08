@@ -1,5 +1,6 @@
 package com.example.helpwithpicturesapp
 
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.media.MediaPlayer
@@ -9,12 +10,12 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -23,43 +24,69 @@ import com.google.firebase.firestore.*
 import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import java.lang.reflect.Array.get
 import java.util.*
 
 class ToDoActivity : AppCompatActivity() {
 
-    lateinit var addButton: FloatingActionButton
-    lateinit var recyclerView: RecyclerView
-    val action = mutableListOf<Actions>()
-    lateinit var db: FirebaseFirestore
-    lateinit var myAdapter: ActionsRecycleViewAdapter
-    var decision = ""
-    lateinit var dayTextView: TextView
+    lateinit var addButton: ImageView
+    lateinit var homeButton : ImageView
+    lateinit var saveTemplate: ImageView
+    lateinit var close: ImageView
+    lateinit var logoutButton : ImageView
+    lateinit var refreshButton: ImageView
+    lateinit var rewardImageView: ImageView
     lateinit var lockButton: ImageView
-    lateinit var passCard: CardView
+    lateinit var instructionButton : ImageView
+    lateinit var backButton : ImageView
+    lateinit var dayTextView: TextView
     lateinit var editPassword: EditText
-    private var longAnimationDuration: Int = 2000
     lateinit var lock: Button
     lateinit var unlock: Button
-    var pinkod = ""
-    lateinit var close: ImageView
-    lateinit var rewardImageView: ImageView
-    private var shortAnimationDuration: Int = 400
+    lateinit var passCard: CardView
+    lateinit var menuCard : CardView
+    lateinit var recyclerView: RecyclerView
+    lateinit var db: FirebaseFirestore
+    lateinit var myAdapter: ActionsRecycleViewAdapter
     lateinit var deletedCard: Actions
-    lateinit var templateSave: TextView
+    lateinit var logoutButton : Button
+    lateinit var helpButton: ImageView
+    var pinkod = ""
+    var decision = ""
+    var shortAnimationDuration: Int = 400
+    val action = mutableListOf<Actions>()
     var uid = ""
     var actionId = " "
     val auth = Firebase.auth
-    lateinit var logoutButton : Button
-    lateinit var helpButton: ImageView
+  
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_to_do)
-        logoutButton = findViewById(R.id.logoutButton)
 
-        val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser // Henrik ny härifrån
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+
+        logoutButton = findViewById(R.id.logoutButton)
+        refreshButton = findViewById(R.id.refreshButton)
+        homeButton = findViewById(R.id.homeButton)
+        menuCard = findViewById(R.id.menuCard)
+        saveTemplate = findViewById(R.id.saveTemplate)
+        editPassword = findViewById(R.id.editPassword)
+        passCard = findViewById(R.id.passCard)
+        close = findViewById(R.id.close)
+        lock = findViewById(R.id.lock)
+        unlock = findViewById(R.id.unlock)
+        lockButton = findViewById(R.id.lockButton)
+        addButton = findViewById(R.id.addButton)
+        rewardImageView = findViewById(R.id.rewardImageView)
+        recyclerView = findViewById(R.id.recyclerView)
+        dayTextView = findViewById(R.id.dayTextView)
+        backButton= findViewById(R.id.backButton)
+        instructionButton = findViewById(R.id.instructionButton)
+
+        menuCard.visibility = View.GONE
+        passCard.visibility = View.GONE
+        rewardImageView.visibility = View.GONE
 
 
         helpButton = findViewById(R.id.helpButton)
@@ -68,9 +95,33 @@ class ToDoActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
+        pinkod = intent.getStringExtra(Constants.PINKOD).toString()
+        decision = intent.getStringExtra(Constants.DAY_CHOSEN).toString()
+
+
+        val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
             uid = currentUser.uid
             Log.d("!!!!", "onCreate: ToDoActivity userId $uid")
+        }
+
+        backButton.setOnClickListener {
+            val intent = Intent(this, WeekdaysActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
+
+        instructionButton.setOnClickListener {
+           // val intent = Intent(this, InstructionsActivity::class.java)
+          //  startActivity(intent)
+        }
+
+        lockButton.setOnClickListener {
+            lockEditing()
+        }
+
+        refreshButton.setOnClickListener {
+            refresh()
         }
 
         logoutButton.setOnClickListener {
@@ -81,54 +132,31 @@ class ToDoActivity : AppCompatActivity() {
             finish()
         }
 
-        templateSave = findViewById(R.id.saveTemplateText)
-        templateSave.visibility = View.GONE
-// Lägg till templateSave.GONE sen när koden är klar.
-// Här är spara mall koden
-        templateSave.setOnClickListener {
-
+        saveTemplate.setOnClickListener {
             var dialog = TemplateDialogFragment(this)
             dialog.show(supportFragmentManager, "templateDialog")
-
         }
+
            window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
-
-        pinkod = intent.getStringExtra(Constants.PINKOD).toString()
-        editPassword = findViewById(R.id.editPassword)
-        passCard = findViewById(R.id.passCard)
-        passCard.visibility = View.GONE
-        close = findViewById(R.id.close)
-        lock = findViewById(R.id.lock)
-        unlock = findViewById(R.id.unlock)
-        lockButton = findViewById(R.id.lockButton)
-        lockButton.setOnClickListener {
-            lockEditing()
-        }
-
-        addButton = findViewById(R.id.floatingActionButton)
-        addButton.visibility = View.GONE
         addButton.setOnClickListener {
             val intent = Intent(this, UserCreateAndEditActivity::class.java)
             intent.putExtra(Constants.DAY_CHOSEN, decision)
             startActivity(intent)
         }
 
+        homeButton.setOnClickListener {
+            val intent = Intent(this, WeekdaysActivity::class.java)
+            startActivity(intent)
+            finish()
+        }
 
-        rewardImageView = findViewById(R.id.rewardImageView)
-        rewardImageView.visibility = View.GONE
-
-        dayTextView = findViewById(R.id.dayTextView)
-        decision = intent.getStringExtra(Constants.DAY_CHOSEN).toString()
-
-
-        recyclerView = findViewById(R.id.recyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
         myAdapter = ActionsRecycleViewAdapter(this, action, decision, pinkod)
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = myAdapter
-        EventChangeListener()
 
+        EventChangeListener()
 
         val itemTouchHelper = ItemTouchHelper(simpleCallback)
         itemTouchHelper.attachToRecyclerView(recyclerView)
@@ -144,7 +172,7 @@ class ToDoActivity : AppCompatActivity() {
             target: RecyclerView.ViewHolder
         ): Boolean {
 
-            if (addButton.visibility == View.VISIBLE) {
+            if (menuCard.visibility == View.VISIBLE) {
                 var startPosition = viewHolder.adapterPosition
                 var endPosition = target.adapterPosition
                 Collections.swap(action, startPosition, endPosition)  // Byter plats i listan
@@ -160,7 +188,7 @@ class ToDoActivity : AppCompatActivity() {
 
         override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
 
-            if (addButton.visibility == View.VISIBLE) {
+            if (menuCard.visibility == View.VISIBLE) {
                 val position = viewHolder.adapterPosition
                 when (direction) {
                     ItemTouchHelper.LEFT -> {
@@ -172,20 +200,16 @@ class ToDoActivity : AppCompatActivity() {
                                 .document(decision).collection("action")
                                 .document(docId)
                                 .delete()
-
                             action.removeAt(position)
                             myAdapter.notifyDataSetChanged()
                         }
-
                         Snackbar.make(recyclerView, "Uppgiften är borttagen", Snackbar.LENGTH_LONG).show()
-
                     }
                 }
             } else {
                 val position = null
 
                 myAdapter.notifyDataSetChanged()
-
             }
         }
     }
@@ -243,10 +267,8 @@ class ToDoActivity : AppCompatActivity() {
                         }
                     }
                     myAdapter.notifyDataSetChanged()
-
                 }
             })
-
     }
 
     override fun onResume() {
@@ -270,19 +292,13 @@ class ToDoActivity : AppCompatActivity() {
             db.collection("users").document(uid).collection("weekday")
                 .document(decision).collection("action").document(actionId).set(step)
                 .addOnSuccessListener {
-                    Log.d(
-                        "TAG",
-                        "setNewOrder:${step.documentName.toString()} added to db order ${step.order}"
-                    )
-
-
+                    Log.d("TAG","setNewOrder:${step.documentName.toString()} added to db order ${step.order}")
                 }
                 .addOnFailureListener {
                     Log.d("TAG", "setNewOrderDelete: action add failure")
                 }
             newOrder++
         }
-
     }
 
     fun reward() {
@@ -314,21 +330,16 @@ class ToDoActivity : AppCompatActivity() {
         rewardImageView.visibility = View.GONE
     }
 
-
     fun lockEditing() {
-        passCard.apply {
-            alpha = 0f
-            visibility = View.VISIBLE
-            animate().alpha(1f).setDuration(longAnimationDuration.toLong()).setListener(null)
-        }
 
+        passCard.visibility = View.VISIBLE
         unlock.setOnClickListener {
+            it.hideKeyboard()
             val pass = editPassword.text.toString()
             if (pinkod == pass) {
                 passCard.visibility = View.GONE
-                addButton.visibility = View.VISIBLE
+                menuCard.visibility = View.VISIBLE
                 editPassword.setText("")
-                templateSave.visibility = View.VISIBLE
 
             } else {
                 Toast.makeText(this, "Skriv rätt lösenord! ", Toast.LENGTH_SHORT).show()
@@ -336,12 +347,12 @@ class ToDoActivity : AppCompatActivity() {
         }
 
         lock.setOnClickListener {
+            it.hideKeyboard()
             val pass = editPassword.text.toString()
             if (pinkod == pass) {
                 passCard.visibility = View.GONE
-                addButton.visibility = View.GONE
+                menuCard.visibility = View.GONE
                 editPassword.setText("")
-                templateSave.visibility = View.GONE
             } else {
                 Toast.makeText(this, "Skriv rätt lösenord! ", Toast.LENGTH_SHORT).show()
             }
@@ -349,12 +360,10 @@ class ToDoActivity : AppCompatActivity() {
         close.setOnClickListener {
             passCard.visibility = View.GONE
         }
-
     }
 
     fun saveTemplate(name: String) {
         uid = auth.currentUser!!.uid
-
         for (action in action) {
             if (action != null) {               // Ta bort detta?
 
@@ -373,9 +382,7 @@ class ToDoActivity : AppCompatActivity() {
                             .collection("steps")
                             .orderBy("order", Query.Direction.ASCENDING).get()
                             .addOnSuccessListener { documents ->
-
                                 //    Log.d("ffs", "step succes dag: ${decision} actionid: $actionId document size ${documents.documents.size}")
-
                                 val stepList =
                                     mutableListOf<Actions>()     // temporär lista för att ladda ner och upp steps
                                 for (document in documents.documents) {
@@ -385,13 +392,7 @@ class ToDoActivity : AppCompatActivity() {
                                     if (newStep != null) {
                                         stepList.add(newStep)
                                     }
-
-
-                                    //   Log.d("ffs", "A step was added! Tjoho! ${newStep!!.documentName}")
-
-
                                 }
-
                                 for (step in stepList) {
 
                                     db.collection("users").document(uid).collection("weekday")
@@ -404,29 +405,25 @@ class ToDoActivity : AppCompatActivity() {
                                         .addOnFailureListener {
                                             //      Log.d("ffs", "$it add step funkar inte")
                                         }
-
-
                                 }
-
-
                             }
                             .addOnFailureListener {
                                 Log.d("ffs", "$actionId fail $it")
                             }
                     }
-
-
             }
+        }
+    }
 
+    fun refresh() {
+        action.clear();
+        myAdapter.notifyDataSetChanged();
+        EventChangeListener()
         }
 
+    fun View.hideKeyboard() {
+        val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputManager.hideSoftInputFromWindow(windowToken, 0)
     }
 
 }
-
-
-
-
-
-
-
