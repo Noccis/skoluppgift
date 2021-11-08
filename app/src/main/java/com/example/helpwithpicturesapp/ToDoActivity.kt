@@ -51,6 +51,7 @@ class ToDoActivity : AppCompatActivity() {
     var actionId = " "
     val auth = Firebase.auth
     lateinit var logoutButton : Button
+    lateinit var helpButton: ImageView
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +62,11 @@ class ToDoActivity : AppCompatActivity() {
         val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser // Henrik ny härifrån
 
 
+        helpButton = findViewById(R.id.helpButton)
+        helpButton.setOnClickListener {
+            val intent = Intent(this, InstructionsActivity::class.java)
+            startActivity(intent)
+        }
 
         if (currentUser != null) {
             uid = currentUser.uid
@@ -85,7 +91,7 @@ class ToDoActivity : AppCompatActivity() {
             dialog.show(supportFragmentManager, "templateDialog")
 
         }
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+           window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
 
         pinkod = intent.getStringExtra(Constants.PINKOD).toString()

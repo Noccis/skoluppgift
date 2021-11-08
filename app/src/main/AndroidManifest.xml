@@ -3,11 +3,11 @@
     package="com.example.helpwithpicturesapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.CAMERA" />
+
     <uses-feature android:name="android.hardware.camera.any" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
 
     <application
         android:allowBackup="true"
@@ -17,25 +17,28 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HelpWithPicturesApp">
         <activity
+            android:name=".InstructionsActivity"
+            android:exported="false" />
+        <activity
             android:name=".CreateAndEditActionSteps"
             android:exported="false"
-            android:theme="@style/NoActionBarTheme"/>
+            android:theme="@style/NoActionBarTheme" />
         <activity
             android:name=".UserCreateAndEditActivity"
             android:exported="false"
-            android:theme="@style/NoActionBarTheme"/>
+            android:theme="@style/NoActionBarTheme" />
         <activity
             android:name=".HowToDoItActivity"
             android:exported="true"
-            android:theme="@style/NoActionBarTheme"/>
+            android:theme="@style/NoActionBarTheme" />
         <activity
             android:name=".ToDoActivity"
             android:exported="true"
-            android:theme="@style/NoActionBarTheme"/>
+            android:theme="@style/NoActionBarTheme" />
         <activity
             android:name=".WeekdaysActivity"
             android:exported="true"
-            android:theme="@style/NoActionBarTheme"/>
+            android:theme="@style/NoActionBarTheme" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
