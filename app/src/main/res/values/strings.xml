@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">HelpWithPicturesApp</string>
+    <string name="instructions"><b>För att ändra i schemat:</b>\nNär du är inne på en dag eller delmoment, tryck på hänglåset uppe i högra hörnet och slå in din pinkod.\nDu kan nu ändra i schemat.
+        \n\n<u>Logga ut:</u> Klicka på ikonen uppe i vänstra hörnet som ser ut som en dörr.
+    \n\n<u>Radera bild från dag:</u> Dra bilden åt vänster.
+        \n\n<u>Ändra ordning på bilder:</u> Håll in och dra bilden åt det håll du vill flytta den.
+    \n\n<u>Lägga till bild:</u> Klicka på den runda plussknappen nere i högra hörnet. Du kommer nu till en ny sida. \n\nKlicka på "Lagrade bilder" för att välja från sparade bilder.
+    \n\nKlicka på "Ladda up bild" för att välja en bild från ditt galleri.
+   \n\nKlicka på "Starta kamera" för att ta en bild.
+    \n\nLägg sedan till en text under bilden och klicka på "Lägg till i listan".
+   \n\nNu kan du gå tillbaka eller välja att lägga till en till bild.</string>
 </resources>

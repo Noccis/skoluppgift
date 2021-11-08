@@ -20,6 +20,9 @@
             android:name=".BrowseTemplateActivity"
             android:exported="false" />
         <activity
+            android:name=".InstructionsActivity"
+            android:exported="false" />
+        <activity
             android:name=".CreateAndEditActionSteps"
             android:exported="false"
             android:theme="@style/NoActionBarTheme" />

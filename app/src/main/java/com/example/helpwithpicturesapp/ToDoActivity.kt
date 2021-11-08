@@ -48,6 +48,8 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var db: FirebaseFirestore
     lateinit var myAdapter: ActionsRecycleViewAdapter
     lateinit var deletedCard: Actions
+    lateinit var logoutButton : Button
+    lateinit var helpButton: ImageView
     var pinkod = ""
     var decision = ""
     var shortAnimationDuration: Int = 400
@@ -55,6 +57,8 @@ class ToDoActivity : AppCompatActivity() {
     var uid = ""
     var actionId = " "
     val auth = Firebase.auth
+  
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,8 +88,16 @@ class ToDoActivity : AppCompatActivity() {
         passCard.visibility = View.GONE
         rewardImageView.visibility = View.GONE
 
+
+        helpButton = findViewById(R.id.helpButton)
+        helpButton.setOnClickListener {
+            val intent = Intent(this, InstructionsActivity::class.java)
+            startActivity(intent)
+        }
+
         pinkod = intent.getStringExtra(Constants.PINKOD).toString()
         decision = intent.getStringExtra(Constants.DAY_CHOSEN).toString()
+
 
         val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
@@ -124,6 +136,8 @@ class ToDoActivity : AppCompatActivity() {
             var dialog = TemplateDialogFragment(this)
             dialog.show(supportFragmentManager, "templateDialog")
         }
+
+           window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
         addButton.setOnClickListener {
             val intent = Intent(this, UserCreateAndEditActivity::class.java)
