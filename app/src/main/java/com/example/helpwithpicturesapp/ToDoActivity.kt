@@ -38,7 +38,6 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var lockButton: ImageView
     lateinit var instructionButton : ImageView
     lateinit var backButton : ImageView
-    lateinit var browseTemplate: ImageView
     lateinit var dayTextView: TextView
     lateinit var editPassword: EditText
     lateinit var lock: Button
@@ -80,7 +79,6 @@ class ToDoActivity : AppCompatActivity() {
         dayTextView = findViewById(R.id.dayTextView)
         backButton= findViewById(R.id.backButton)
         instructionButton = findViewById(R.id.instructionButton)
-        browseTemplate = findViewById(R.id.browseTemplate)
 
         menuCard.visibility = View.GONE
         passCard.visibility = View.GONE
@@ -127,12 +125,6 @@ class ToDoActivity : AppCompatActivity() {
             dialog.show(supportFragmentManager, "templateDialog")
         }
 
-        browseTemplate.setOnClickListener {
-          val intent = Intent(this , BrowseTemplateActivity::class.java)
-            intent.putExtra(Constants.DAY_CHOSEN, decision)
-            intent.putExtra(Constants.PINKOD, pinkod)
-            startActivity(intent)
-        }
         addButton.setOnClickListener {
             val intent = Intent(this, UserCreateAndEditActivity::class.java)
             intent.putExtra(Constants.DAY_CHOSEN, decision)
@@ -413,30 +405,5 @@ class ToDoActivity : AppCompatActivity() {
         val inputManager = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         inputManager.hideSoftInputFromWindow(windowToken, 0)
     }
-    fun loadTemplate(templatename : String){
-
-        db = FirebaseFirestore.getInstance()
-        db.collection("users").document(auth.currentUser!!.uid).collection("Zeemall")
-            .orderBy("order", Query.Direction.ASCENDING)
-            .addSnapshotListener(object : EventListener<QuerySnapshot> {
-
-                override fun onEvent(
-                    value: QuerySnapshot?,
-                    error: FirebaseFirestoreException?
-                ) {
-                    if (error != null) {
-                        Log.d("Firestore error", error.message.toString())
-                        return
-                    }
-                    for (dc: DocumentChange in value?.documentChanges!!) {
-                        if (dc.type == DocumentChange.Type.ADDED) {
-                            action.add(dc.document.toObject(Actions::class.java))
-                        }
-                    }
-                    myAdapter.notifyDataSetChanged()
-                }
-            })
-    }
-
 
 }

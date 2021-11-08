@@ -39,10 +39,6 @@ class HowToDoItRecycleViewAdapter (val context: Context, val actionStep: List<Ac
                     imageView.colorFilter = null
                 }
             }
-
-
-
-
         }
     }
 

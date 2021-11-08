@@ -2,7 +2,6 @@ package com.example.helpwithpicturesapp
 
 import android.content.Context
 import android.content.Intent
-import android.content.Intent.*
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -27,7 +26,6 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
         val stepsImage = itemView.findViewById<ImageView>(R.id.stepsImage)
         var actionsPosition = 0
 
-
         init {
             imageButtonView.setOnClickListener{
                 val intent = Intent(context,HowToDoItActivity::class.java)
@@ -44,7 +42,6 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
                 intent.putExtra(ACTION_LOCATION, action[actionsPosition].documentName)
                 intent.putExtra(Constants.PINKOD, pinkod)
                 context.startActivity(intent)
-
             }
             checkBoxView.setOnClickListener {
 
@@ -53,19 +50,11 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
 
                     val toDoActivity = context as ToDoActivity
                     toDoActivity.reward()
-
-
                 }
             }
-
             stepsImage.visibility = View.GONE
-
-
         }
-
     }
-
-
 
     override fun onCreateViewHolder(
         parent: ViewGroup, viewType: Int): ActionsRecycleViewAdapter.ViewHolder {
