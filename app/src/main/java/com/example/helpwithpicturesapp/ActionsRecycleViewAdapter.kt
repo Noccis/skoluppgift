@@ -24,6 +24,7 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
         val imageText = itemView.findViewById<TextView>(R.id.imageText)
         val checkBoxView = itemView.findViewById<CheckBox>(R.id.checkBox_Button)
         val stepsImage = itemView.findViewById<ImageView>(R.id.stepsImage)
+        val spareImage = itemView.findViewById<TextView>(R.id.spareImage)
         var actionsPosition = 0
 
         init {
@@ -58,6 +59,7 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
                 }
             }
             stepsImage.visibility = View.GONE
+            spareImage.visibility = View.VISIBLE
         }
     }
 
@@ -74,7 +76,10 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
 
         if ( action.steps){
             holder.stepsImage.visibility = View.VISIBLE
-        } else holder.stepsImage.visibility = View.GONE
+            holder.spareImage.visibility = View.GONE
+        } else {holder.stepsImage.visibility = View.GONE
+            holder.spareImage.visibility = View.VISIBLE}
+
         Glide.with(context).load(action.imageId).into(holder.imageButtonView)
         holder.checkBoxView.isChecked = action.checkBox
         holder.actionsPosition = position
@@ -86,3 +91,5 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
         return action.size
     }
 }
+
+
