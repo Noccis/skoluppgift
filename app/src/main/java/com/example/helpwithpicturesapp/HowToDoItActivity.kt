@@ -30,13 +30,13 @@ const val ACTION_LOCATION = "ACTION_LOCATION"
 class HowToDoItActivity : AppCompatActivity() {
 
     lateinit var homeButton : ImageView
-    lateinit var saveTemplate: ImageView
     lateinit var logoutButton : ImageView
     lateinit var refreshButton: ImageView
     lateinit var lockButton: ImageView
     lateinit var addButton: ImageView
     lateinit var close: ImageView
     lateinit var backButton : ImageView
+    lateinit var helpButton : ImageView
     lateinit var lock: Button
     lateinit var unlock: Button
     lateinit var menuCard : CardView
@@ -64,7 +64,6 @@ class HowToDoItActivity : AppCompatActivity() {
         refreshButton = findViewById(R.id.refreshButton)
         homeButton = findViewById(R.id.homeButton)
         menuCard = findViewById(R.id.menuCard)
-        saveTemplate = findViewById(R.id.saveTemplate)
         editPassword = findViewById(R.id.editPassword)
         passCard = findViewById(R.id.passCard)
         close = findViewById(R.id.close)
@@ -75,6 +74,7 @@ class HowToDoItActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.howToDoRecycleView)
         backButton= findViewById(R.id.backButton)
         emptyPage = findViewById(R.id.emptyPage)
+        helpButton = findViewById(R.id.helpButton)
 
 
         menuCard.visibility = View.GONE
@@ -98,6 +98,11 @@ class HowToDoItActivity : AppCompatActivity() {
         recyclerView.setHasFixedSize(true)
         recyclerView.adapter = myAdapter
 
+        helpButton.setOnClickListener {
+            val intent = Intent(this, InstructionsActivity::class.java)
+            startActivity(intent)
+        }
+
         backButton.setOnClickListener {
             finish()
         }
@@ -118,8 +123,6 @@ class HowToDoItActivity : AppCompatActivity() {
             finish()
         }
 
-        saveTemplate.setOnClickListener {
-        }
 
         addButton.setOnClickListener {
             val intent = Intent(this, CreateAndEditActionSteps::class.java)

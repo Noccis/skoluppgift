@@ -24,11 +24,6 @@
             android:gravity="center_horizontal"
             android:layout_gravity="center_horizontal">
 
-            <ImageView
-                android:id="@+id/saveTemplate"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                app:srcCompat="@drawable/addtemplate" />
 
             <ImageView
                 android:id="@+id/addButton"
@@ -191,14 +186,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/back_button" />
-
-    <Button
-        android:id="@+id/loadTemplate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Load"
-        app:layout_constraintStart_toEndOf="@+id/backButton"
-        app:layout_constraintTop_toTopOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
