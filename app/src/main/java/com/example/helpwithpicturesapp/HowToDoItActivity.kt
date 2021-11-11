@@ -87,7 +87,7 @@ class HowToDoItActivity : AppCompatActivity() {
 
 
         val currentUser: FirebaseUser? =
-            FirebaseAuth.getInstance().currentUser // Henrik ny härifrån
+            FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
             uid = currentUser.uid
             Log.d("!!!!", "onCreate: ToDoActivity userId $uid")
@@ -306,6 +306,8 @@ class HowToDoItActivity : AppCompatActivity() {
         myAdapter.notifyDataSetChanged();
         eventChangeListener()
     }
+
+    
 
 }
 

@@ -50,6 +50,7 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
 
                     val toDoActivity = context as ToDoActivity
                     toDoActivity.reward()
+                    toDoActivity.stepIsDone(action[actionsPosition])
                 }
             }
             stepsImage.visibility = View.GONE
