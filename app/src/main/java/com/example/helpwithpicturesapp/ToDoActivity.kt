@@ -501,7 +501,7 @@ class ToDoActivity : AppCompatActivity() {
 
                 db.collection("users").document(uid).collection("weekday")
                     .document(name).collection("action").document(action.documentName!!)
-                    .set(action)                    // Laddar upp lokala actions i listan till users egen mall.
+                    .set(action)                  
                     .addOnSuccessListener {
 
                     }
