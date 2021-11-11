@@ -302,7 +302,15 @@ class ToDoActivity : AppCompatActivity() {
 
     fun stepIsDone(step : Actions) {
         val actionName = step.documentName
-        step.checkBox = true
+            step.checkBox = true
+            val db = Firebase.firestore
+                db.collection("users").document(uid).collection("weekday")
+                .document(decision).collection("action").document(actionName!!).set(step)
+    }
+
+    fun uncheckCheckBox(step : Actions){
+        val actionName = step.documentName
+        step.checkBox = false
         val db = Firebase.firestore
         db.collection("users").document(uid).collection("weekday")
             .document(decision).collection("action").document(actionName!!).set(step)
