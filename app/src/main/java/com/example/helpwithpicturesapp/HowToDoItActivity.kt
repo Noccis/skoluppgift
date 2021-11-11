@@ -90,7 +90,6 @@ class HowToDoItActivity : AppCompatActivity() {
             FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
             uid = currentUser.uid
-            Log.d("!!!!", "onCreate: ToDoActivity userId $uid")
         }
 
         recyclerView.layoutManager = LinearLayoutManager(this)
@@ -206,7 +205,6 @@ class HowToDoItActivity : AppCompatActivity() {
                     error: FirebaseFirestoreException?
                 ) {
                     if (error != null) {
-                        Log.d("Firestore error", error.message.toString())
                         return
                     }
 
@@ -232,21 +230,13 @@ class HowToDoItActivity : AppCompatActivity() {
 
 
     override fun onResume() {
-        Log.d("TAG", "ON RESUME KÖRS")
         setNewOrder()
         super.onResume()
     }
     
     fun setNewOrder () {
-        Log.d("ffs", "setNewOrder körs")
         var newOrder:Long = 1
 
-/*
-        for (step in action){
-            Log.d("TAG", "setNewOrder:${step.documentName.toString()} order ${step.order}")
-        }
-
- */
             for (step in actionStep) {
                 step.order = newOrder
                 val stepId = step.documentName.toString()
@@ -255,15 +245,8 @@ class HowToDoItActivity : AppCompatActivity() {
                     .document(decision).collection("action").document(actionId).collection("steps")
                     .document(stepId).set(step)
                     .addOnSuccessListener {
-                        Log.d(
-                            "TAG",
-                            "setNewOrder:${step.documentName.toString()} added to db order ${step.order}"
-                        )
-                    }
-                    .addOnFailureListener {
-                        Log.d("TAG", "setNewOrderDelete: action add failure")
-                    }
 
+                    }
                 newOrder++
             }
         }

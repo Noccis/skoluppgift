@@ -76,7 +76,6 @@ class CreateAndEditActionSteps : AppCompatActivity() {
         val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
         if(currentUser != null) {
             uid = currentUser.uid
-            Log.d(TAG, "onCreate: $uid")
         }
 
         recyclerView.layoutManager = gridLayoutManager
@@ -144,7 +143,6 @@ class CreateAndEditActionSteps : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Log.d(TAG, "onActivityResult: 1 req$requestCode, res$resultCode, data$data, ${Activity.RESULT_OK}")
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_IMAGE_PICK) {
             data?.data?.let {
                 curFile = it
@@ -154,7 +152,6 @@ class CreateAndEditActionSteps : AppCompatActivity() {
         else if(requestCode == START_REQUEST_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
             val takenImage = data.extras?.get("data") as Bitmap
             imgeViewButton.setImageBitmap(takenImage)
-            Log.d(TAG, "onActivityResult: 2  $requestCode, $resultCode, $data")
         }else {
             super.onActivityResult(requestCode, resultCode, data)
         }
@@ -165,7 +162,6 @@ class CreateAndEditActionSteps : AppCompatActivity() {
             curFile?.let {
                 val uniqeString = UUID.randomUUID().toString()
                 val uploadTask = imageRef.child("$uid/$uniqeString").putFile(it) // skapar en unik folder för inloggad användare
-                Log.d(TAG, "uploadImageToStorage: $uid")
 
                 val urlTask = uploadTask.continueWithTask { task ->
                     if (!task.isSuccessful) {
@@ -184,7 +180,6 @@ class CreateAndEditActionSteps : AppCompatActivity() {
                         document(decision).collection("action").document(uid).
                         collection("steps").add(actionsteps)
                         storeAction()
-                        Log.d(TAG, "uploadImageToStorage: ${downloadUri}")
                     }
                 }
             }
@@ -221,8 +216,6 @@ class CreateAndEditActionSteps : AppCompatActivity() {
                 }
             }
 
-
-
     }
 
     private fun listFiles() = CoroutineScope(Dispatchers.IO).launch {
@@ -230,11 +223,10 @@ class CreateAndEditActionSteps : AppCompatActivity() {
             val userImages = imageRef.child(uid).listAll().await()
             val publicImages = imageRef.child("UploadedPictures").listAll().await()
 
-            // Laddar bilder från användarens folder på storage
             for (image in userImages.items) {
                 val url = image.downloadUrl.await()
                 userImageUrl.add(url.toString())
-            }   // Laddar publika bilder från storage
+            }
             for(publicImage in publicImages.items ) {
                 val publicUrl = publicImage.downloadUrl.await()
                 userImageUrl.add(publicUrl.toString())
@@ -248,9 +240,9 @@ class CreateAndEditActionSteps : AppCompatActivity() {
             }
         }
     }
-    //Sätter vald bild från rcViewn till imageView
+
     fun setImage(url: String) {
-        choosenImageUrl = url // <- adressen kommer in
+        choosenImageUrl = url
         Glide.with(this).load(url).into(imgeViewButton)
     }
 
