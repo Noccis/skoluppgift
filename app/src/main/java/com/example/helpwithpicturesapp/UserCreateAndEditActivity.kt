@@ -5,15 +5,19 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.net.Uri
+import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.app.ActivityCompat
+import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -28,8 +32,14 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
+import java.io.File
+import java.io.IOException
 import java.lang.Exception
+import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.jvm.Throws
+import kotlin.math.log
 
 const val REQUEST_CODE_IMAGE_PICK = 0
 const val CAMERA_REQUEST_CODE = 1
@@ -43,10 +53,11 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     lateinit var startCameraButton: Button
     lateinit var storeButton: Button
     lateinit var saveButton: Button
-    lateinit var imgeViewButton: ImageButton
+    lateinit var imageView_Button: ImageButton
     lateinit var imageAdapter: ImageAdapter
     lateinit var backImage: ImageView
     lateinit var editText: EditText
+    lateinit var frameLayout: FrameLayout
 
 
     val TAG = "!!!"
@@ -55,7 +66,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     var decision = ""
     val userImageUrl = mutableListOf<String>()
     var choosenImageUrl: String? = null
-    var imageToList: String? = null
+    var choosenImageBitmap: Bitmap? = null
     var curFile: Uri? = null
     var actionId = ""
     var uid = ""
@@ -64,15 +75,17 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_create_and_edit)
 
+
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
+        frameLayout = findViewById(R.id.framelayout)
         recyclerView = findViewById(R.id.recyclerView)
         uploadButton = findViewById(R.id.uploadButton)
         storeButton = findViewById(R.id.storeButton)
         startCameraButton = findViewById(R.id.startCameraButton)
         saveButton = findViewById(R.id.saveButton)
         editText = findViewById(R.id.userEditText)
-        imgeViewButton = findViewById(R.id.imageViewButton)
+        imageView_Button = findViewById(R.id.imageView_Button)
         backImage = findViewById(R.id.backImage)
 
 
@@ -99,7 +112,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
             finish()
         }
 
-        imgeViewButton.setOnClickListener {
+        imageView_Button.setOnClickListener {
             Intent(Intent.ACTION_GET_CONTENT).also {
                 it.type = "image/*"
                 startActivityForResult(it, REQUEST_CODE_IMAGE_PICK)
@@ -107,7 +120,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         }
 
         uploadButton.setOnClickListener {
-            uploadImageToStorage("uniqeString")
+            uploadImage()
 
 
         }
@@ -130,6 +143,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                 Toast.makeText(this, "Kameran går ej att öppna", Toast.LENGTH_SHORT).show()
             } else {
                 startCamera()
+
             }
         }
         //Lägg till i listanknapp
@@ -147,7 +161,66 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     fun startCamera() {
         val takePicturesIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(takePicturesIntent, START_REQUEST_CAMERA)
+
+
+
     }
+
+    fun uploadImage() {
+        Log.d(TAG, "uploadImage: ")
+        if(choosenImageUrl != null || choosenImageBitmap == null) {
+            uploadImageToStorage("uniqueString")
+            Log.d(TAG, "uploadImage: url")
+
+        }
+        else if(choosenImageBitmap != null || choosenImageUrl != null) {
+           uploadImageAsBitmapToStorage()
+            Log.d(TAG, "uploadImage: bitmap")
+
+
+        }
+    }
+
+
+
+
+
+
+
+    fun uploadImageAsBitmapToStorage() {
+        val bitmap = (imageView_Button.drawable as BitmapDrawable).bitmap
+        val baos = ByteArrayOutputStream()
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
+        val data = baos.toByteArray()
+
+        val uniqeString = UUID.randomUUID().toString()
+        var uploadTask = imageRef.child("$uid/$uniqeString").putBytes(data)
+
+
+        val urlTask = uploadTask.continueWithTask { task ->
+            if (!task.isSuccessful) {
+                task.exception?.let {
+                    throw it
+                }
+            }
+            imageRef.child("$uid/$uniqeString").downloadUrl
+        }.addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val downloadUri = task.result
+
+
+                choosenImageUrl = downloadUri.toString()
+
+                storeAction()
+
+
+            }
+
+        }
+
+
+    }
+
 
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -178,24 +251,34 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_IMAGE_PICK) {
             data?.data?.let {
                 curFile = it
-                imgeViewButton.setImageURI(it)
+                imageView_Button.setImageURI(it)
             }
         } else if (requestCode == START_REQUEST_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
             val takenImage = data.extras?.get("data") as Bitmap
-            imgeViewButton.setImageBitmap(takenImage)
-            Log.d(TAG, "onActivityResult: 2  $requestCode, $resultCode, $data")
+
+
+            imageView_Button.setImageBitmap(takenImage)
+
+
+            choosenImageBitmap = takenImage
+           
+
         } else {
             super.onActivityResult(requestCode, resultCode, data)
         }
     }
 
+    
+
     private fun uploadImageToStorage(filename: String) = CoroutineScope(Dispatchers.IO).launch {
+
         try {
+
+
 
             curFile?.let {
                 val uniqeString = UUID.randomUUID().toString()
-                val uploadTask = imageRef.child("$uid/$uniqeString")
-                    .putFile(it) // skapar en unik folder för inloggad användare
+                val uploadTask = imageRef.child("$uid/$uniqeString").putFile(it) // skapar en unik folder för inloggad användare
 
 
                 val urlTask = uploadTask.continueWithTask { task ->
@@ -212,6 +295,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
 
                         choosenImageUrl = downloadUri.toString()
                         Log.d(TAG, "uploadImageToStorage: $choosenImageUrl")
+
 
                         storeAction()
 
@@ -290,7 +374,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     //Sätter vald bild från rcViewn till imageView
     fun setImage(url: String) {
         choosenImageUrl = url // <- adressen kommer in
-        Glide.with(this).load(url).into(imgeViewButton)
+        Glide.with(this).load(url).into(imageView_Button)
     }
 
     fun View.hideKeyboard() {
