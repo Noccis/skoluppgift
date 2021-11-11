@@ -25,6 +25,7 @@ import com.google.firebase.firestore.EventListener
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
+import kotlin.math.log
 
 class ToDoActivity : AppCompatActivity() {
 
@@ -48,6 +49,7 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var myAdapter: ActionsRecycleViewAdapter
     lateinit var deletedCard: Actions
     lateinit var helpButton: ImageView
+    lateinit var loadButton: Button
     var pinkod = ""
     var decision = ""
     var shortAnimationDuration: Int = 400
@@ -55,6 +57,7 @@ class ToDoActivity : AppCompatActivity() {
     var uid = ""
     var actionId = " "
     val auth = Firebase.auth
+    val TAG = "!!!"
   
 
 
@@ -63,7 +66,7 @@ class ToDoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_to_do)
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-
+        loadButton = findViewById(R.id.loadTemplate)
         logoutButton = findViewById(R.id.logoutButton)
         refreshButton = findViewById(R.id.refreshButton)
         homeButton = findViewById(R.id.homeButton)
@@ -85,6 +88,9 @@ class ToDoActivity : AppCompatActivity() {
         passCard.visibility = View.GONE
         rewardImageView.visibility = View.GONE
 
+        loadButton.setOnClickListener {
+           loadTemplate("nosteps")
+        }
 
         helpButton = findViewById(R.id.helpButton)
         helpButton.setOnClickListener {
@@ -355,57 +361,212 @@ class ToDoActivity : AppCompatActivity() {
         }
     }
 
-    fun saveTemplate(name: String) {
+    fun loadTemplate(name: String) {    // Kommer köra asyncromt funkar inte.
         uid = auth.currentUser!!.uid
-        for (action in action) {
-            if (action != null) {               // Ta bort detta?
+        // Radera actions den dag användaren har valt.
+        deleteFbData()      // Väntar den tills den här är klar innan den kör nästa?
+        // Cleara action listan
+        Log.d(TAG, "loadTemplate:actions lista size: ${action.size}")
 
-                actionId = action.documentName.toString()
+        // Hämta ner actions från mallen
+        db.collection("users").document(uid).collection("weekday")
+            .document(name).collection("action").get()
+            .addOnSuccessListener { doc ->
 
-                db.collection("users").document(uid).collection("weekday")
-                    .document(name).collection("action").document(actionId)
-                    .set(action)                    // Laddar upp lokala actions i listan till users egen mall.
-                    .addOnSuccessListener {
-                        //    Log.d("ffs", "saveTemplate MAINaction fun actionId: $actionId  ${action.documentName} added ")
+                Log.d(TAG, "loadTemplate:om jag är noll behöver du inte cleara listan efter action get. ${action.size}")
+                action.clear() // ta bort mig om jag är noll
 
-                        actionId = action.documentName.toString()
+                for (step in doc.documents) {
+                    val newAction = step.toObject(Actions::class.java)
+                        action.add(newAction!!)
+
+                }
+
+                // Här ska vi ha alla actions lokalt i lista
+
+                for (newAction in action) {
+
+                    actionId = newAction.documentName!!
+
+                    if (newAction.steps) {
+
+                        val newStepList = mutableListOf<Actions>()
+                        newStepList.clear()
+
+                        // if steps -> Hämta hem steps-> cleara steplist-> spara på lista ->set action -> for(stp in steplist) adda step ->notify datasetchange
+                        db.collection("users").document(uid).collection("weekday")
+                            .document(name).collection("action").document(actionId)
+                            .collection("steps").get()
+                            .addOnSuccessListener { stepDoc ->
+
+                                for (step in stepDoc.documents) {
+
+                                    val newStep = step.toObject(Actions::class.java)
+                                    newStepList.add(newStep!!)
+
+                                }
+                                // Här har vi alla steps sparade på lista
+                                // Laddar upp action med step till vald dag.
+                                db.collection("users").document(uid).collection("weekday")
+                                    .document(decision).collection("action").document(newAction.documentName!!)
+                                    .set(action).addOnSuccessListener {
+                                        Log.d(TAG, "loadTemplate: ACTION with steps ADDED to FB!")
+
+                                        for (steps in newStepList) {
+
+                                            val stepName = steps.documentName
+                                            db.collection("users").document(uid).collection("weekday")
+                                                .document(decision).collection("action").document(newAction.documentName!!).collection("steps").document(stepName!!).set(steps) // Settar step
+                                                .addOnSuccessListener {
+                                                    Log.d(TAG, "loadTemplate:NEWSTEP added to FB!")
+                                                }
+                                        }
+
+
+                                    }
+
+
+                            }
+
+                    } else {
 
                         db.collection("users").document(uid).collection("weekday")
-                            .document(decision).collection("action").document(actionId)
-                            .collection("steps")
-                            .orderBy("order", Query.Direction.ASCENDING).get()
-                            .addOnSuccessListener { documents ->
-                                //    Log.d("ffs", "step succes dag: ${decision} actionid: $actionId document size ${documents.documents.size}")
-                                val stepList =
-                                    mutableListOf<Actions>()     // temporär lista för att ladda ner och upp steps
-                                for (document in documents.documents) {
+                            .document(decision).collection("action").document(newAction.documentName!!)
+                            .set(newAction).addOnSuccessListener {
 
-                                    val newStep = document.toObject(Actions::class.java)
+                                Log.d(TAG, "loadTemplate:ACTION WITHOUT steps added to FB!")
+                            }
 
-                                    if (newStep != null) {
-                                        stepList.add(newStep)
-                                    }
+
+                    }
+
+
+
+
+
+                }
+
+            }
+
+
+
+
+        myAdapter.notifyDataSetChanged()
+        // else -> set action -> notify datasetchange
+
+    }
+
+    fun deleteFbData() {
+        for (action in action) {                // För varje action i listan
+            actionId = action.documentName!!
+
+            if (action.steps) {
+                // Hämta alla steps name
+                db.collection("users").document(uid).collection("weekday").document(decision)
+                    .collection("action").document(actionId).collection("steps").get()
+                    .addOnSuccessListener { stepdoc ->
+
+                        for (step in stepdoc.documents) {       // spara step name och radera
+                            val newStep = step.toObject(Actions::class.java)
+                            val stepId = newStep!!.documentName
+
+                            db.collection("users").document(uid).collection("weekday").document(decision)
+                                .collection("action").document(actionId).collection("steps").document(stepId!!).delete()
+                                .addOnSuccessListener {
+                                    Log.d(TAG, "deleteFbData:step $stepId deletet from FB")
+
+
                                 }
-                                for (step in stepList) {
+
+
+                        }
+
+
+                    }
+
+                db.collection("users").document(uid).collection("weekday").document(decision)
+                    .collection("action").document(actionId).delete()
+                Log.d(TAG, "deleteFbData:ACTION with step DELETED")
+
+
+            }else {
+
+                db.collection("users").document(uid).collection("weekday").document(decision)
+                    .collection("action").document(actionId).delete()
+
+                Log.d(TAG, "deleteFbData:ACTION without step DELETED")
+
+            }
+
+
+
+
+        }
+        action.clear()
+        Log.d(TAG, "deleteFbData:actionslist cleared! ${action.size}")
+    }
+
+
+    fun saveTemplate(name: String) {
+        uid = auth.currentUser!!.uid
+
+        for (action in action) {
+            actionId = action.documentName!!
+
+            if (action.steps) {
+
+                db.collection("users").document(uid).collection("weekday")
+                    .document(decision).collection("action").document(actionId)
+                    .collection("steps")
+                    .orderBy("order", Query.Direction.ASCENDING).get()
+                    .addOnSuccessListener{ stepSnap ->
+
+                        val actionStepList = mutableListOf<Actions>()
+                        actionStepList.clear()
+
+                        for (step in stepSnap.documents) {
+                            val newStep = step.toObject(Actions::class.java)
+
+                            actionStepList.add(newStep!!)
+
+                        }
+
+                        db.collection("users").document(uid).collection("weekday")
+                            .document(name).collection("action").document(action.documentName!!)
+                            .set(action)                    // Laddar upp lokala actions i listan till users egen mall.
+                            .addOnSuccessListener {
+
+                                for (step in actionStepList) {
 
                                     db.collection("users").document(uid).collection("weekday")
-                                        .document(name).collection("action").document(actionId)
-                                        .collection("steps")
-                                        .add(step)                    // Laddar upp lokala actions i listan till users egen mall.
+                                        .document(name).collection("action").document(action.documentName!!)
+                                        .collection("steps").document(step.documentName!!).set(step)
                                         .addOnSuccessListener {
-                                            //     Log.d("ffs", "saveSTEP fun ${step.documentName} step added in $uid Mallnamn:$name, action ID: $actionId")
+
+                                            Log.d(TAG, "saveTemplate: Step was added to ${action.documentName}")
                                         }
-                                        .addOnFailureListener {
-                                            //      Log.d("ffs", "$it add step funkar inte")
-                                        }
+
                                 }
                             }
-                            .addOnFailureListener {
-                                Log.d("ffs", "$actionId fail $it")
-                            }
                     }
+            }else {
+
+                db.collection("users").document(uid).collection("weekday")
+                    .document(name).collection("action").document(action.documentName!!)
+                    .set(action)                    // Laddar upp lokala actions i listan till users egen mall.
+                    .addOnSuccessListener{
+
+                        Log.d(TAG, "saveTemplate:action upploaded WITHOUT step")
+                    }
+
+
+
             }
+
+
+
         }
+
     }
 
     fun refresh() {
