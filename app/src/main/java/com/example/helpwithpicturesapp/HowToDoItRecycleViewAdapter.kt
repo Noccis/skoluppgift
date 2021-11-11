@@ -60,6 +60,14 @@ class HowToDoItRecycleViewAdapter (val context: Context, val actionStep: List<Ac
         holder.checkBoxView.isChecked = action.checkBox
         holder.actionsPosition = position
         holder.imageText.text = action.imageText
+
+        if (action.checkBox) {
+
+            val grey = ColorMatrix()
+            grey.setSaturation(0F)
+            val greyfilter = ColorMatrixColorFilter(grey)
+            holder.imageView.colorFilter = greyfilter
+        }
     }
 
     override fun getItemCount(): Int {
