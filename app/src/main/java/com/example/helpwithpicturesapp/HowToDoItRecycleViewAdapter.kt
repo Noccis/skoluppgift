@@ -30,13 +30,18 @@ class HowToDoItRecycleViewAdapter (val context: Context, val actionStep: List<Ac
                 actionStep[actionsPosition].checkBox = checkBoxView.isChecked
                 if (actionStep[actionsPosition].checkBox) {
 
+                    val howtoDoActivity = context as HowToDoItActivity
                     val grey = ColorMatrix()
                     grey.setSaturation(0F)
                     val greyfilter = ColorMatrixColorFilter(grey)
                     imageView.colorFilter = greyfilter
+                    howtoDoActivity.stepIsDone(actionStep[actionsPosition])
+
 
                 } else {
                     imageView.colorFilter = null
+                    val howtoDoActivity = context as HowToDoItActivity
+                    howtoDoActivity.uncheckCheckBox(actionStep[actionsPosition])
                 }
             }
         }

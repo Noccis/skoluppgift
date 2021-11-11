@@ -269,6 +269,24 @@ class HowToDoItActivity : AppCompatActivity() {
         }
 
 
+    fun stepIsDone(step : Actions) {
+     //   val stepName = step.documentName
+        step.checkBox = true
+        val db = Firebase.firestore
+        db.collection("users").document(uid).collection("weekday")
+            .document(decision).collection("action").document(actionId)
+            .collection("steps").document(step.documentName!!).set(step)
+    }
+
+    fun uncheckCheckBox(step : Actions){
+      //  val actionName = step.documentName
+        step.checkBox = false
+        val db = Firebase.firestore
+        db.collection("users").document(uid).collection("weekday")
+            .document(decision).collection("action").document(actionId)
+            .collection("steps").document(step.documentName!!).set(step)
+    }
+
     fun lockEditing() {
 
         passCard.visibility = View.VISIBLE
