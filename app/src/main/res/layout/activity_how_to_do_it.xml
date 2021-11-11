@@ -163,7 +163,7 @@
         android:id="@+id/emptyPage"
         android:layout_width="321dp"
         android:layout_height="205dp"
-        android:text="Tryck på låset föt att lägga till bilder"
+        android:text="Tryck på låset för att lägga till bilder"
         android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="36dp"

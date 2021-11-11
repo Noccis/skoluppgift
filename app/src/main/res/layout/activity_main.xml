@@ -44,7 +44,7 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:backgroundTint="@color/tuesday"
-                android:text="Regisrering"
+                android:text="Registrering"
                 android:textColor="@color/white"
                 android:textStyle="bold"
                 app:cornerRadius="10dp" />
