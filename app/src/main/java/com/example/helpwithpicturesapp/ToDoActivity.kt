@@ -300,6 +300,15 @@ class ToDoActivity : AppCompatActivity() {
         }
     }
 
+    fun stepIsDone(step : Actions) {
+        val actionName = step.documentName
+        step.checkBox = true
+        val db = Firebase.firestore
+        db.collection("users").document(uid).collection("weekday")
+            .document(decision).collection("action").document(actionName!!).set(step)
+    }
+
+
     fun reward() {
         fadeIn()
         rewardSound()
