@@ -147,7 +147,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:backgroundTint="#BDEAC2"
-                    android:text="låsa"
+                    android:text="lås"
                     android:textColor="@color/black" />
 
                 <Button
@@ -155,7 +155,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
                     android:backgroundTint="#BDEAC2"
-                    android:text="låsa upp"
+                    android:text="lås upp"
                     android:textColor="@color/black" />
 
             </LinearLayout>
