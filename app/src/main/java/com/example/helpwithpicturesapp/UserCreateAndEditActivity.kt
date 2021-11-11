@@ -170,13 +170,10 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         Log.d(TAG, "uploadImage: ")
         if(choosenImageUrl != null || choosenImageBitmap == null) {
             uploadImageToStorage("uniqueString")
-            Log.d(TAG, "uploadImage: url")
 
         }
         else if(choosenImageBitmap != null || choosenImageUrl != null) {
            uploadImageAsBitmapToStorage()
-            Log.d(TAG, "uploadImage: bitmap")
-
 
         }
     }
@@ -208,16 +205,13 @@ class UserCreateAndEditActivity : AppCompatActivity() {
             if (task.isSuccessful) {
                 val downloadUri = task.result
 
-
                 choosenImageUrl = downloadUri.toString()
 
                 storeAction()
 
-
             }
 
         }
-
 
     }
 
@@ -244,10 +238,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        Log.d(
-            TAG,
-            "onActivityResult: 1 req$requestCode, res$resultCode, data$data, ${Activity.RESULT_OK}"
-        )
+
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_IMAGE_PICK) {
             data?.data?.let {
                 curFile = it
@@ -292,22 +283,11 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                     if (task.isSuccessful) {
                         val downloadUri = task.result
 
-
                         choosenImageUrl = downloadUri.toString()
-                        Log.d(TAG, "uploadImageToStorage: $choosenImageUrl")
-
 
                         storeAction()
-
-
-                        Log.d(TAG, "uploadImageToStorage: ${downloadUri}")
-
-
                     }
-                    Log.d(TAG, "uploadImageToStorage: Loggen körs")
                 }
-
-
             }
 
         } catch (e: Exception) {
@@ -327,7 +307,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                 .document(decision).collection("action").add(storageImage)
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Log.d(TAG, "storeAction: $storageImage")
+
                         Toast.makeText(
                             this@UserCreateAndEditActivity,
                             "Bild och instruktion är tillagd i ditt schema", Toast.LENGTH_SHORT
@@ -340,8 +320,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
                 this@UserCreateAndEditActivity,
                 "Välj bild och skriv en instruktion", Toast.LENGTH_SHORT
             ).show()
-            Log.d(TAG, "storeAction: $choosenImageUrl")
-            Log.d(TAG, "storeAction: ${editText.text.toString()}")
+
         }
     }
 
