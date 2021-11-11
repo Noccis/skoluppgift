@@ -52,6 +52,10 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
                     toDoActivity.reward()
                     toDoActivity.stepIsDone(action[actionsPosition])
                 }
+                else {
+                    val toDoActivity = context as ToDoActivity
+                    toDoActivity.uncheckCheckBox(action[actionsPosition])
+                }
             }
             stepsImage.visibility = View.GONE
         }

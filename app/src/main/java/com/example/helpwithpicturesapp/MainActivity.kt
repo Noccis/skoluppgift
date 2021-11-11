@@ -50,11 +50,15 @@ class MainActivity : AppCompatActivity() {
         createButton.visibility = View.GONE
 
         auth = Firebase.auth
-        if ( auth.currentUser?.uid != null ) {
+       /* if ( auth.currentUser?.uid != null ) {
             val intent = Intent ( this, WeekdaysActivity::class.java)
             startActivity(intent)
             finish()
         }
+        
+        */
+
+
 
         signUpButton.setOnClickListener {
             signup()
