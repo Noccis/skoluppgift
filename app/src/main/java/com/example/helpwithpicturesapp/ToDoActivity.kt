@@ -31,7 +31,6 @@ class ToDoActivity : AppCompatActivity() {
 
     lateinit var addButton: ImageView
     lateinit var homeButton : ImageView
-    lateinit var saveTemplate: ImageView
     lateinit var close: ImageView
     lateinit var logoutButton : ImageView
     lateinit var refreshButton: ImageView
@@ -49,7 +48,6 @@ class ToDoActivity : AppCompatActivity() {
     lateinit var myAdapter: ActionsRecycleViewAdapter
     lateinit var deletedCard: Actions
     lateinit var helpButton: ImageView
-    lateinit var loadButton: Button
     var pinkod = ""
     var decision = ""
     var shortAnimationDuration: Int = 400
@@ -66,12 +64,11 @@ class ToDoActivity : AppCompatActivity() {
         setContentView(R.layout.activity_to_do)
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-        loadButton = findViewById(R.id.loadTemplate)
+
         logoutButton = findViewById(R.id.logoutButton)
         refreshButton = findViewById(R.id.refreshButton)
         homeButton = findViewById(R.id.homeButton)
         menuCard = findViewById(R.id.menuCard)
-        saveTemplate = findViewById(R.id.saveTemplate)
         editPassword = findViewById(R.id.editPassword)
         passCard = findViewById(R.id.passCard)
         close = findViewById(R.id.close)
@@ -83,20 +80,11 @@ class ToDoActivity : AppCompatActivity() {
         recyclerView = findViewById(R.id.recyclerView)
         dayTextView = findViewById(R.id.dayTextView)
         backButton= findViewById(R.id.backButton)
+        helpButton = findViewById(R.id.helpButton)
 
         menuCard.visibility = View.GONE
         passCard.visibility = View.GONE
         rewardImageView.visibility = View.GONE
-
-        loadButton.setOnClickListener {
-           loadTemplate("nosteps")
-        }
-
-        helpButton = findViewById(R.id.helpButton)
-        helpButton.setOnClickListener {
-            val intent = Intent(this, InstructionsActivity::class.java)
-            startActivity(intent)
-        }
 
         pinkod = intent.getStringExtra(Constants.PINKOD).toString()
         decision = intent.getStringExtra(Constants.DAY_CHOSEN).toString()
@@ -106,6 +94,12 @@ class ToDoActivity : AppCompatActivity() {
         if (currentUser != null) {
             uid = currentUser.uid
             Log.d("!!!!", "onCreate: ToDoActivity userId $uid")
+        }
+
+
+        helpButton.setOnClickListener {
+            val intent = Intent(this, InstructionsActivity::class.java)
+            startActivity(intent)
         }
 
         backButton.setOnClickListener {
@@ -130,13 +124,6 @@ class ToDoActivity : AppCompatActivity() {
             startActivity(intent)
             finish()
         }
-
-        saveTemplate.setOnClickListener {
-            var dialog = TemplateDialogFragment(this)
-            dialog.show(supportFragmentManager, "templateDialog")
-        }
-
-           window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
         addButton.setOnClickListener {
             val intent = Intent(this, UserCreateAndEditActivity::class.java)
