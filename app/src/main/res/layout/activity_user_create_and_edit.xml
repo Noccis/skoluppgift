@@ -23,15 +23,15 @@
         android:id="@+id/userEditText"
         android:layout_width="180dp"
         android:layout_height="48dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="Instruktion till bilden"
-        android:textColorHint="@color/black"
         android:inputType="textPersonName"
+        android:textColorHint="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.069"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewButton" />
+        app:layout_constraintTop_toBottomOf="@+id/framelayout" />
 
     <Button
         android:id="@+id/uploadButton"
@@ -43,7 +43,6 @@
         android:text="Ladda upp bild"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageViewButton"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
@@ -56,7 +55,6 @@
         android:text="Lagrade bilder"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageViewButton"
         app:layout_constraintTop_toBottomOf="@+id/uploadButton"
         tools:ignore="TextContrastCheck" />
 
@@ -66,11 +64,10 @@
         android:layout_height="60dp"
         android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
-        android:text="Starta kamera"
         android:backgroundTint="#BDEAC2"
+        android:text="Starta kamera"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/imageViewButton"
         app:layout_constraintTop_toBottomOf="@+id/storeButton"
         tools:ignore="TextContrastCheck" />
 
@@ -84,22 +81,8 @@
         android:text="Lägg till i listan"
         android:textColor="@color/black"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.508"
-        app:layout_constraintStart_toEndOf="@+id/imageViewButton"
         app:layout_constraintTop_toBottomOf="@+id/startCameraButton"
         tools:ignore="TextContrastCheck" />
-
-    <ImageButton
-        android:id="@+id/imageViewButton"
-        android:layout_width="202dp"
-        android:layout_height="201dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/material_on_surface_stroke"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backImage"
-        tools:ignore="SpeakableTextPresentCheck"
-        tools:srcCompat="@tools:sample/avatars" />
 
     <ImageView
         android:id="@+id/backImage"
@@ -111,5 +94,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/back_button" />
+
+    <FrameLayout
+        android:id="@+id/framelayout"
+        android:layout_width="219dp"
+        android:layout_height="194dp"
+        android:layout_marginTop="12dp"
+        app:layout_constraintTop_toBottomOf="@+id/backImage"
+        tools:layout_editor_absoluteX="0dp">
+
+        <ImageButton
+            android:id="@+id/imageView_Button"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:srcCompat="@drawable/addpicture1" />
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

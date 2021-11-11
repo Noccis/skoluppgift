@@ -53,11 +53,11 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     lateinit var startCameraButton: Button
     lateinit var storeButton: Button
     lateinit var saveButton: Button
-    lateinit var imgeViewButton: ImageButton
+    lateinit var imageView_Button: ImageButton
     lateinit var imageAdapter: ImageAdapter
     lateinit var backImage: ImageView
     lateinit var editText: EditText
-    lateinit var pressMe_textView: TextView
+    lateinit var frameLayout: FrameLayout
 
 
     val TAG = "!!!"
@@ -78,14 +78,14 @@ class UserCreateAndEditActivity : AppCompatActivity() {
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
-       // pressMe_textView = findViewById(R.id.pressMe_textView)
+        frameLayout = findViewById(R.id.framelayout)
         recyclerView = findViewById(R.id.recyclerView)
         uploadButton = findViewById(R.id.uploadButton)
         storeButton = findViewById(R.id.storeButton)
         startCameraButton = findViewById(R.id.startCameraButton)
         saveButton = findViewById(R.id.saveButton)
         editText = findViewById(R.id.userEditText)
-        imgeViewButton = findViewById(R.id.imageViewButton)
+        imageView_Button = findViewById(R.id.imageView_Button)
         backImage = findViewById(R.id.backImage)
 
 
@@ -112,7 +112,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
             finish()
         }
 
-        imgeViewButton.setOnClickListener {
+        imageView_Button.setOnClickListener {
             Intent(Intent.ACTION_GET_CONTENT).also {
                 it.type = "image/*"
                 startActivityForResult(it, REQUEST_CODE_IMAGE_PICK)
@@ -188,7 +188,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
 
 
     fun uploadImageAsBitmapToStorage() {
-        val bitmap = (imgeViewButton.drawable as BitmapDrawable).bitmap
+        val bitmap = (imageView_Button.drawable as BitmapDrawable).bitmap
         val baos = ByteArrayOutputStream()
         bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos)
         val data = baos.toByteArray()
@@ -251,13 +251,13 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         if (resultCode == Activity.RESULT_OK && requestCode == REQUEST_CODE_IMAGE_PICK) {
             data?.data?.let {
                 curFile = it
-                imgeViewButton.setImageURI(it)
+                imageView_Button.setImageURI(it)
             }
         } else if (requestCode == START_REQUEST_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
             val takenImage = data.extras?.get("data") as Bitmap
 
 
-            imgeViewButton.setImageBitmap(takenImage)
+            imageView_Button.setImageBitmap(takenImage)
 
 
             choosenImageBitmap = takenImage
@@ -374,7 +374,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     //Sätter vald bild från rcViewn till imageView
     fun setImage(url: String) {
         choosenImageUrl = url // <- adressen kommer in
-        Glide.with(this).load(url).into(imgeViewButton)
+        Glide.with(this).load(url).into(imageView_Button)
     }
 
     fun View.hideKeyboard() {
