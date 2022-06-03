@@ -299,9 +299,9 @@ class ToDoActivity : AppCompatActivity() {
 
     fun reward() {
         fadeIn()
-        rewardSound()
+        playRewardSound()
         Handler(Looper.getMainLooper()).postDelayed({
-            hideReward()
+            hideRewardView()
         }, 1000)
     }
 
@@ -317,12 +317,12 @@ class ToDoActivity : AppCompatActivity() {
         }
     }
 
-    private fun rewardSound() {
+    private fun playRewardSound() {
         val mediaPlayer = MediaPlayer.create(this, R.raw.ra)
         mediaPlayer.start()
     }
 
-    private fun hideReward() {
+    private fun hideRewardView() {
         rewardImageView.visibility = View.GONE
     }
 
