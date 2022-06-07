@@ -1,4 +1,4 @@
-package com.example.helpwithpicturesapp
+package com.example.helpwithpicturesapp.adapters
 
 import android.content.Context
 import android.content.Intent
@@ -10,6 +10,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.helpwithpicturesapp.*
 import com.example.helpwithpicturesapp.activities.ToDoActivity
 import com.example.helpwithpicturesapp.model.Actions
 
@@ -31,7 +32,7 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions>,
 
         init {
             imageButtonView.setOnClickListener{
-                val intent = Intent(context,HowToDoItActivity::class.java)
+                val intent = Intent(context, HowToDoItActivity::class.java)
                 intent.putExtra(ACTIONS_POSITION_KEY, actionsPosition)
                 intent.putExtra(Constants.DAY_CHOSEN, decision)
                 intent.putExtra(ACTION_LOCATION, action[actionsPosition].documentName)
@@ -39,7 +40,7 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions>,
                 context.startActivity(intent)
             }
             stepsImage.setOnClickListener{
-                val intent = Intent(context,HowToDoItActivity::class.java)
+                val intent = Intent(context, HowToDoItActivity::class.java)
                 intent.putExtra(ACTIONS_POSITION_KEY, actionsPosition)
                 intent.putExtra(Constants.DAY_CHOSEN, decision)
                 intent.putExtra(ACTION_LOCATION, action[actionsPosition].documentName)
@@ -66,14 +67,14 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions>,
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup, viewType: Int): ActionsRecycleViewAdapter.ViewHolder {
+        parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = layoutInflater.inflate(R.layout.list_actions,parent,false)
 
 
         return ViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: ActionsRecycleViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val action = action[position]
 
         if ( action.steps){

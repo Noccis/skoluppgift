@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.helpwithpicturesapp.*
 import com.example.helpwithpicturesapp.R
+import com.example.helpwithpicturesapp.adapters.ActionsRecycleViewAdapter
 import com.example.helpwithpicturesapp.model.Actions
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth

@@ -11,6 +11,8 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.helpwithpicturesapp.activities.CreateAndEditActionSteps
+import com.example.helpwithpicturesapp.adapters.HowToDoItRecycleViewAdapter
 import com.example.helpwithpicturesapp.model.Actions
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth

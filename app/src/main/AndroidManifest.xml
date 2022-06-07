@@ -27,7 +27,7 @@
             android:name=".InstructionsActivity"
             android:exported="false" />
         <activity
-            android:name=".CreateAndEditActionSteps"
+            android:name=".activities.CreateAndEditActionSteps"
             android:exported="false"
             android:theme="@style/NoActionBarTheme" />
         <activity

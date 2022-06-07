@@ -1,4 +1,4 @@
-package com.example.helpwithpicturesapp
+package com.example.helpwithpicturesapp.activities
 
 import android.app.Activity
 import android.content.Context
@@ -18,6 +18,8 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.helpwithpicturesapp.*
+import com.example.helpwithpicturesapp.adapters.ImageAdapter2
 import com.example.helpwithpicturesapp.model.ActionSteps
 import com.example.helpwithpicturesapp.model.Actions
 import com.google.firebase.auth.FirebaseAuth

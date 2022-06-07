@@ -1,4 +1,4 @@
-package com.example.helpwithpicturesapp
+package com.example.helpwithpicturesapp.adapters
 
 import android.content.Context
 import android.graphics.ColorMatrix
@@ -11,6 +11,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.helpwithpicturesapp.HowToDoItActivity
+import com.example.helpwithpicturesapp.R
 import com.example.helpwithpicturesapp.model.Actions
 
 class HowToDoItRecycleViewAdapter (val context: Context, val actionStep: List<Actions> ):
@@ -49,12 +51,12 @@ class HowToDoItRecycleViewAdapter (val context: Context, val actionStep: List<Ac
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup, viewType: Int): HowToDoItRecycleViewAdapter.ViewHolder {
+        parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = layoutInflater.inflate(R.layout.how_to_do_it_list_item,parent,false)
         return ViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: HowToDoItRecycleViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val action = actionStep[position]
 
         Glide.with(context).load(action.imageId).into(holder.imageView)
