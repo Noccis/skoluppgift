@@ -39,7 +39,7 @@
             android:exported="true"
             android:theme="@style/NoActionBarTheme" />
         <activity
-            android:name=".ToDoActivity"
+            android:name=".activities.ToDoActivity"
             android:exported="true"
             android:theme="@style/NoActionBarTheme" />
         <activity

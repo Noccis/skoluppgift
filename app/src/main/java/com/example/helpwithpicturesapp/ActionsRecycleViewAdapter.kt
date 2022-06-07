@@ -10,10 +10,12 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.helpwithpicturesapp.activities.ToDoActivity
+import com.example.helpwithpicturesapp.model.Actions
 
 
-class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> ,
-                                val decision : String , val pinkod :String):
+class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions>,
+                                val decision : String, val pinkod :String):
     RecyclerView.Adapter<ActionsRecycleViewAdapter.ViewHolder>(){
 
     val layoutInflater = LayoutInflater.from(context)
