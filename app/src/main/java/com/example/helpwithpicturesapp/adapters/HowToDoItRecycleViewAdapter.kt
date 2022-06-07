@@ -11,8 +11,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
-import com.example.helpwithpicturesapp.HowToDoItActivity
 import com.example.helpwithpicturesapp.R
+import com.example.helpwithpicturesapp.activities.DailyListOfActionStepsActivity
 import com.example.helpwithpicturesapp.model.Actions
 
 class HowToDoItRecycleViewAdapter (val context: Context, val actionStep: List<Actions> ):
@@ -33,18 +33,18 @@ class HowToDoItRecycleViewAdapter (val context: Context, val actionStep: List<Ac
                 actionStep[actionsPosition].checkBox = checkBoxView.isChecked
                 if (actionStep[actionsPosition].checkBox) {
 
-                    val howtoDoActivity = context as HowToDoItActivity
+                    val dailyListOfActionStepsActivity = context as DailyListOfActionStepsActivity
                     val grey = ColorMatrix()
                     grey.setSaturation(0F)
                     val greyfilter = ColorMatrixColorFilter(grey)
                     imageView.colorFilter = greyfilter
-                    howtoDoActivity.stepIsDone(actionStep[actionsPosition])
+                    dailyListOfActionStepsActivity.stepIsDone(actionStep[actionsPosition])
 
 
                 } else {
                     imageView.colorFilter = null
-                    val howtoDoActivity = context as HowToDoItActivity
-                    howtoDoActivity.uncheckCheckBox(actionStep[actionsPosition])
+                    val dailyListOfActionStepsActivity = context as DailyListOfActionStepsActivity
+                    dailyListOfActionStepsActivity.uncheckCheckBox(actionStep[actionsPosition])
                 }
             }
         }

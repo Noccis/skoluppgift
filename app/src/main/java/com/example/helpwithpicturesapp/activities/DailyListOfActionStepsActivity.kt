@@ -1,4 +1,4 @@
-package com.example.helpwithpicturesapp
+package com.example.helpwithpicturesapp.activities
 
 import android.content.Context
 import android.content.Intent
@@ -11,9 +11,8 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.helpwithpicturesapp.activities.CreateAndEditActionSteps
-import com.example.helpwithpicturesapp.activities.InstructionsActivity
-import com.example.helpwithpicturesapp.activities.WeekdaysActivity
+import com.example.helpwithpicturesapp.MainActivity
+import com.example.helpwithpicturesapp.R
 import com.example.helpwithpicturesapp.adapters.HowToDoItRecycleViewAdapter
 import com.example.helpwithpicturesapp.model.Actions
 import com.example.helpwithpicturesapp.model.Constants
@@ -32,7 +31,7 @@ const val INSTRUCTIONS_POSITION_KEY = "INSTRUCTION_KEY"
 const val POSITION_NOT_SET = -1
 const val ACTION_LOCATION = "ACTION_LOCATION"
 
-class HowToDoItActivity : AppCompatActivity() {
+class DailyListOfActionStepsActivity : AppCompatActivity() {
 
     lateinit var homeButton : ImageView
     lateinit var logoutButton : ImageView
@@ -61,7 +60,7 @@ class HowToDoItActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_how_to_do_it)
+        setContentView(R.layout.activity_daily_list_of_action_steps)
 
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
@@ -238,27 +237,27 @@ class HowToDoItActivity : AppCompatActivity() {
         setNewOrder()
         super.onResume()
     }
-    
+
     fun setNewOrder () {
         var newOrder:Long = 1
 
-            for (step in actionStep) {
-                step.order = newOrder
-                val stepId = step.documentName.toString()
-                val db = Firebase.firestore
-                db.collection("users").document(uid).collection("weekday")
-                    .document(decision).collection("action").document(actionId).collection("steps")
-                    .document(stepId).set(step)
-                    .addOnSuccessListener {
+        for (step in actionStep) {
+            step.order = newOrder
+            val stepId = step.documentName.toString()
+            val db = Firebase.firestore
+            db.collection("users").document(uid).collection("weekday")
+                .document(decision).collection("action").document(actionId).collection("steps")
+                .document(stepId).set(step)
+                .addOnSuccessListener {
 
-                    }
-                newOrder++
-            }
+                }
+            newOrder++
         }
+    }
 
 
     fun stepIsDone(step : Actions) {
-     //   val stepName = step.documentName
+        //   val stepName = step.documentName
         step.checkBox = true
         val db = Firebase.firestore
         db.collection("users").document(uid).collection("weekday")
@@ -267,7 +266,7 @@ class HowToDoItActivity : AppCompatActivity() {
     }
 
     fun uncheckCheckBox(step : Actions){
-      //  val actionName = step.documentName
+        //  val actionName = step.documentName
         step.checkBox = false
         val db = Firebase.firestore
         db.collection("users").document(uid).collection("weekday")
@@ -316,7 +315,6 @@ class HowToDoItActivity : AppCompatActivity() {
         eventChangeListener()
     }
 
-    
+
 
 }
-

@@ -11,6 +11,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.helpwithpicturesapp.*
+import com.example.helpwithpicturesapp.activities.ACTIONS_POSITION_KEY
+import com.example.helpwithpicturesapp.activities.ACTION_LOCATION
+import com.example.helpwithpicturesapp.activities.DailyListOfActionStepsActivity
 import com.example.helpwithpicturesapp.activities.ToDoActivity
 import com.example.helpwithpicturesapp.model.Actions
 import com.example.helpwithpicturesapp.model.Constants
@@ -33,7 +36,7 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions>,
 
         init {
             imageButtonView.setOnClickListener{
-                val intent = Intent(context, HowToDoItActivity::class.java)
+                val intent = Intent(context, DailyListOfActionStepsActivity::class.java)
                 intent.putExtra(ACTIONS_POSITION_KEY, actionsPosition)
                 intent.putExtra(Constants.DAY_CHOSEN, decision)
                 intent.putExtra(ACTION_LOCATION, action[actionsPosition].documentName)
@@ -41,7 +44,7 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions>,
                 context.startActivity(intent)
             }
             stepsImage.setOnClickListener{
-                val intent = Intent(context, HowToDoItActivity::class.java)
+                val intent = Intent(context, DailyListOfActionStepsActivity::class.java)
                 intent.putExtra(ACTIONS_POSITION_KEY, actionsPosition)
                 intent.putExtra(Constants.DAY_CHOSEN, decision)
                 intent.putExtra(ACTION_LOCATION, action[actionsPosition].documentName)

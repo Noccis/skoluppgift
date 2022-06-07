@@ -19,6 +19,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.helpwithpicturesapp.activities.INSTRUCTIONS_POSITION_KEY
 import com.example.helpwithpicturesapp.adapters.ImageAdapter
 import com.example.helpwithpicturesapp.model.Actions
 import com.example.helpwithpicturesapp.model.Constants
