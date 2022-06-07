@@ -1,4 +1,4 @@
-package com.example.helpwithpicturesapp
+package com.example.helpwithpicturesapp.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,7 +6,9 @@ import android.os.Bundle
 import android.view.View
 import android.util.Log
 import android.widget.Button
-import com.example.helpwithpicturesapp.activities.ToDoActivity
+import com.example.helpwithpicturesapp.model.Constants
+import com.example.helpwithpicturesapp.R
+import com.example.helpwithpicturesapp.Usuari
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser

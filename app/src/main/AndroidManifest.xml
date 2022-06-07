@@ -24,7 +24,7 @@
             android:name=".BrowseTemplateActivity"
             android:exported="false" />
         <activity
-            android:name=".InstructionsActivity"
+            android:name=".activities.InstructionsActivity"
             android:exported="false" />
         <activity
             android:name=".activities.CreateAndEditActionSteps"
@@ -43,7 +43,7 @@
             android:exported="true"
             android:theme="@style/NoActionBarTheme" />
         <activity
-            android:name=".WeekdaysActivity"
+            android:name=".activities.WeekdaysActivity"
             android:exported="true"
             android:theme="@style/NoActionBarTheme" />
         <activity

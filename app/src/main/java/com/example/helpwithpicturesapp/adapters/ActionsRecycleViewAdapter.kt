@@ -13,6 +13,7 @@ import com.bumptech.glide.Glide
 import com.example.helpwithpicturesapp.*
 import com.example.helpwithpicturesapp.activities.ToDoActivity
 import com.example.helpwithpicturesapp.model.Actions
+import com.example.helpwithpicturesapp.model.Constants
 
 
 class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions>,

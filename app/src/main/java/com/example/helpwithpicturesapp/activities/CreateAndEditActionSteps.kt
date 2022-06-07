@@ -22,6 +22,7 @@ import com.example.helpwithpicturesapp.*
 import com.example.helpwithpicturesapp.adapters.ImageAdapter2
 import com.example.helpwithpicturesapp.model.ActionSteps
 import com.example.helpwithpicturesapp.model.Actions
+import com.example.helpwithpicturesapp.model.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore

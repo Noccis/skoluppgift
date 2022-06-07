@@ -12,8 +12,11 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.helpwithpicturesapp.activities.CreateAndEditActionSteps
+import com.example.helpwithpicturesapp.activities.InstructionsActivity
+import com.example.helpwithpicturesapp.activities.WeekdaysActivity
 import com.example.helpwithpicturesapp.adapters.HowToDoItRecycleViewAdapter
 import com.example.helpwithpicturesapp.model.Actions
+import com.example.helpwithpicturesapp.model.Constants
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser

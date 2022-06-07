@@ -1,8 +1,9 @@
-package com.example.helpwithpicturesapp
+package com.example.helpwithpicturesapp.activities
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import com.example.helpwithpicturesapp.R
 
 class InstructionsActivity : AppCompatActivity() {
 
