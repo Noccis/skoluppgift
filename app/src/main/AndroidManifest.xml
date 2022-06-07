@@ -30,12 +30,8 @@
             android:exported="false"
             android:theme="@style/NoActionBarTheme" />
         <activity
-            android:name=".UserCreateAndEditActivity"
+            android:name=".activities.UserCreateAndEditActivity"
             android:exported="false"
-            android:theme="@style/NoActionBarTheme" />
-        <activity
-            android:name=".HowToDoItActivity"
-            android:exported="true"
             android:theme="@style/NoActionBarTheme" />
         <activity
             android:name=".activities.ToDoActivity"

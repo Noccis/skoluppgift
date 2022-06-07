@@ -7,7 +7,7 @@ import android.widget.ImageButton
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.helpwithpicturesapp.R
-import com.example.helpwithpicturesapp.UserCreateAndEditActivity
+import com.example.helpwithpicturesapp.activities.UserCreateAndEditActivity
 
 class ImageAdapter(val activity: UserCreateAndEditActivity,
                    val urls: List<String>

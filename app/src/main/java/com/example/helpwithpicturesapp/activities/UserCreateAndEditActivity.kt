@@ -1,4 +1,4 @@
-package com.example.helpwithpicturesapp
+package com.example.helpwithpicturesapp.activities
 
 import android.app.Activity
 import android.content.Context
@@ -12,6 +12,7 @@ import android.net.Uri
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import com.example.helpwithpicturesapp.R
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.app.ActivityCompat
