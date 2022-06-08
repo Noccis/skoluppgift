@@ -26,7 +26,7 @@
             android:name=".activities.InstructionsActivity"
             android:exported="false" />
         <activity
-            android:name=".activities.CreateAndEditActionSteps"
+            android:name=".activities.CreateAndEditActionStepsActivity"
             android:exported="false"
             android:theme="@style/NoActionBarTheme" />
         <activity
@@ -34,7 +34,7 @@
             android:exported="false"
             android:theme="@style/NoActionBarTheme" />
         <activity
-            android:name=".activities.ToDoActivity"
+            android:name=".activities.DailyListOfActionsActivity"
             android:exported="true"
             android:theme="@style/NoActionBarTheme" />
         <activity

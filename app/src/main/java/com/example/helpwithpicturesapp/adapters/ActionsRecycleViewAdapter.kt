@@ -14,7 +14,7 @@ import com.example.helpwithpicturesapp.*
 import com.example.helpwithpicturesapp.activities.ACTIONS_POSITION_KEY
 import com.example.helpwithpicturesapp.activities.ACTION_LOCATION
 import com.example.helpwithpicturesapp.activities.DailyListOfActionStepsActivity
-import com.example.helpwithpicturesapp.activities.ToDoActivity
+import com.example.helpwithpicturesapp.activities.DailyListOfActionsActivity
 import com.example.helpwithpicturesapp.model.Actions
 import com.example.helpwithpicturesapp.model.Constants
 
@@ -56,13 +56,13 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions>,
                 action[actionsPosition].checkBox = checkBoxView.isChecked
                 if (action[actionsPosition].checkBox) {
 
-                    val toDoActivity = context as ToDoActivity
-                    toDoActivity.reward()
-                    toDoActivity.stepIsDone(action[actionsPosition])
+                    val dailyListOfActionsActivity = context as DailyListOfActionsActivity
+                    dailyListOfActionsActivity.reward()
+                    dailyListOfActionsActivity.stepIsDone(action[actionsPosition])
                 }
                 else {
-                    val toDoActivity = context as ToDoActivity
-                    toDoActivity.uncheckCheckBox(action[actionsPosition])
+                    val dailyListOfActionsActivity = context as DailyListOfActionsActivity
+                    dailyListOfActionsActivity.uncheckCheckBox(action[actionsPosition])
                 }
             }
             stepsImage.visibility = View.GONE

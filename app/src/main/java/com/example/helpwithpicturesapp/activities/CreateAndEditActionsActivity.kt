@@ -90,6 +90,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         actionId = intent.getStringExtra(INSTRUCTIONS_POSITION_KEY).toString()
 
 
+        Log.d("dodo", "UserCreateAndEditActivity körs!")
 
         gridLayoutManager =
             GridLayoutManager(applicationContext, 3, LinearLayoutManager.VERTICAL, false)

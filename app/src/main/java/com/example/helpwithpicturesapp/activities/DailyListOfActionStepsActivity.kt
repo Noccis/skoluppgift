@@ -128,7 +128,7 @@ class DailyListOfActionStepsActivity : AppCompatActivity() {
 
 
         addButton.setOnClickListener {
-            val intent = Intent(this, CreateAndEditActionSteps::class.java)
+            val intent = Intent(this, CreateAndEditActionStepsActivity::class.java)
             intent.putExtra(Constants.DAY_CHOSEN, decision)
             intent.putExtra(INSTRUCTIONS_POSITION_KEY, actionId)
             startActivity(intent)

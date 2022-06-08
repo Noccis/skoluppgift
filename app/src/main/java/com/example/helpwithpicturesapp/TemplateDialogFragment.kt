@@ -8,11 +8,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.DialogFragment
-import com.example.helpwithpicturesapp.activities.ToDoActivity
+import com.example.helpwithpicturesapp.activities.DailyListOfActionsActivity
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 
-class TemplateDialogFragment(val activity: ToDoActivity) : DialogFragment() {
+class TemplateDialogFragment(val activity: DailyListOfActionsActivity) : DialogFragment() {
     val db = Firebase.firestore
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

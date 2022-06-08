@@ -31,7 +31,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
 
-class ToDoActivity : AppCompatActivity() {
+class DailyListOfActionsActivity : AppCompatActivity() {
 
     lateinit var addButton: ImageView
     lateinit var homeButton: ImageView
@@ -96,7 +96,7 @@ class ToDoActivity : AppCompatActivity() {
         val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
             uid = currentUser.uid
-            Log.d("!!!!", "onCreate: ToDoActivity userId $uid")
+            Log.d("!!!!", "onCreate: DailyListOfActionsActivity userId $uid")
         }
 
 
