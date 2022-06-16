@@ -1,4 +1,4 @@
-package com.example.helpwithpicturesapp
+package com.example.helpwithpicturesapp.model
 
 object Constants {
 

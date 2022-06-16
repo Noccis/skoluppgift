@@ -1,4 +1,4 @@
-package com.example.helpwithpicturesapp
+package com.example.helpwithpicturesapp.activities
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.view.View
 import android.util.Log
 import android.widget.Button
+import com.example.helpwithpicturesapp.model.Constants
+import com.example.helpwithpicturesapp.R
+import com.example.helpwithpicturesapp.Usuari
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -67,49 +70,49 @@ class WeekdaysActivity : AppCompatActivity() {
 
 
         mondayButton.setOnClickListener {
-            val intent = Intent(this, ToDoActivity::class.java)
+            val intent = Intent(this, DailyListOfActionsActivity::class.java)
             intent.putExtra(Constants.DAY_CHOSEN, monday)
             intent.putExtra(Constants.PINKOD, pinkod1)
             startActivity(intent)
         }
 
         tuesdayButton.setOnClickListener {
-            val intent = Intent(this, ToDoActivity::class.java)
+            val intent = Intent(this, DailyListOfActionsActivity::class.java)
             intent.putExtra(Constants.DAY_CHOSEN, tuesday)
             intent.putExtra(Constants.PINKOD, pinkod1)
             startActivity(intent)
         }
 
         wednesdayButton.setOnClickListener {
-            val intent = Intent(this, ToDoActivity::class.java)
+            val intent = Intent(this, DailyListOfActionsActivity::class.java)
             intent.putExtra(Constants.DAY_CHOSEN, wednesday)
             intent.putExtra(Constants.PINKOD, pinkod1)
             startActivity(intent)
         }
 
         thursdayButton.setOnClickListener {
-            val intent = Intent(this, ToDoActivity::class.java)
+            val intent = Intent(this, DailyListOfActionsActivity::class.java)
             intent.putExtra(Constants.DAY_CHOSEN, thursday)
             intent.putExtra(Constants.PINKOD, pinkod1)
             startActivity(intent)
         }
 
         fridayButton.setOnClickListener {
-            val intent = Intent(this, ToDoActivity::class.java)
+            val intent = Intent(this, DailyListOfActionsActivity::class.java)
             intent.putExtra(Constants.DAY_CHOSEN, friday)
             intent.putExtra(Constants.PINKOD, pinkod1)
             startActivity(intent)
         }
 
         saturdayButton.setOnClickListener {
-            val intent = Intent(this, ToDoActivity::class.java)
+            val intent = Intent(this, DailyListOfActionsActivity::class.java)
             intent.putExtra(Constants.DAY_CHOSEN, saturday)
             intent.putExtra(Constants.PINKOD, pinkod1)
             startActivity(intent)
         }
 
         sundayButton.setOnClickListener {
-            val intent = Intent(this, ToDoActivity::class.java)
+            val intent = Intent(this, DailyListOfActionsActivity::class.java)
             intent.putExtra(Constants.DAY_CHOSEN, sunday)
             intent.putExtra(Constants.PINKOD, pinkod1)
             startActivity(intent)

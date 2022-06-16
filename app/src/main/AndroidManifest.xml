@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.helpwithpicturesapp" >
+    package="com.example.helpwithpicturesapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-
     <uses-permission android:name="android.permission.CAMERA" />
 
     <uses-feature android:name="android.hardware.camera.any" />
@@ -17,39 +15,36 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.HelpWithPicturesApp" >
-
-
+        android:theme="@style/Theme.HelpWithPicturesApp">
+        <activity
+            android:name=".activities.DailyListOfActionStepsActivity"
+            android:exported="false" />
         <activity
             android:name=".BrowseTemplateActivity"
             android:exported="false" />
         <activity
-            android:name=".InstructionsActivity"
+            android:name=".activities.InstructionsActivity"
             android:exported="false" />
         <activity
-            android:name=".CreateAndEditActionSteps"
+            android:name=".activities.CreateAndEditActionStepsActivity"
             android:exported="false"
             android:theme="@style/NoActionBarTheme" />
         <activity
-            android:name=".UserCreateAndEditActivity"
+            android:name=".activities.UserCreateAndEditActivity"
             android:exported="false"
             android:theme="@style/NoActionBarTheme" />
         <activity
-            android:name=".HowToDoItActivity"
+            android:name=".activities.DailyListOfActionsActivity"
             android:exported="true"
             android:theme="@style/NoActionBarTheme" />
         <activity
-            android:name=".ToDoActivity"
-            android:exported="true"
-            android:theme="@style/NoActionBarTheme" />
-        <activity
-            android:name=".WeekdaysActivity"
+            android:name=".activities.WeekdaysActivity"
             android:exported="true"
             android:theme="@style/NoActionBarTheme" />
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:theme="@style/NoActionBarTheme" >
+            android:theme="@style/NoActionBarTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

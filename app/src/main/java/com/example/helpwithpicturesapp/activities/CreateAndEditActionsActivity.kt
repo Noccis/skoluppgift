@@ -1,27 +1,29 @@
-package com.example.helpwithpicturesapp
+package com.example.helpwithpicturesapp.activities
 
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.graphics.drawable.BitmapDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.net.Uri
-import android.os.Environment
 import android.provider.MediaStore
 import android.util.Log
 import android.view.View
+import com.example.helpwithpicturesapp.R
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.core.app.ActivityCompat
-import androidx.core.content.FileProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.helpwithpicturesapp.activities.INSTRUCTIONS_POSITION_KEY
+import com.example.helpwithpicturesapp.adapters.ImageAdapter
+import com.example.helpwithpicturesapp.model.Actions
+import com.example.helpwithpicturesapp.model.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -33,13 +35,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 import java.io.ByteArrayOutputStream
-import java.io.File
-import java.io.IOException
 import java.lang.Exception
-import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.jvm.Throws
-import kotlin.math.log
 
 const val REQUEST_CODE_IMAGE_PICK = 0
 const val CAMERA_REQUEST_CODE = 1
@@ -64,7 +61,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     val imageRef = Firebase.storage.reference
     val db = FirebaseFirestore.getInstance()
     var decision = ""
-    val userImageUrl = mutableListOf<String>()
+    val userImageUrlList = mutableListOf<String>()
     var choosenImageUrl: String? = null
     var choosenImageBitmap: Bitmap? = null
     var curFile: Uri? = null
@@ -93,11 +90,12 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         actionId = intent.getStringExtra(INSTRUCTIONS_POSITION_KEY).toString()
 
 
+        Log.d("dodo", "UserCreateAndEditActivity körs!")
 
         gridLayoutManager =
             GridLayoutManager(applicationContext, 3, LinearLayoutManager.VERTICAL, false)
         recyclerView.setHasFixedSize(true)
-        imageAdapter = ImageAdapter(this, userImageUrl)
+        imageAdapter = ImageAdapter(this, userImageUrlList)
         recyclerView.layoutManager = gridLayoutManager
         recyclerView.adapter = imageAdapter
 
@@ -126,7 +124,7 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         }
         //Lagra bilderknapp
         storeButton.setOnClickListener {
-            listFiles()
+            listStoredImages()
         }
 
         startCameraButton.setOnClickListener {
@@ -162,8 +160,6 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         val takePicturesIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
         startActivityForResult(takePicturesIntent, START_REQUEST_CAMERA)
 
-
-
     }
 
     fun uploadImage() {
@@ -174,14 +170,8 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         }
         else if(choosenImageBitmap != null || choosenImageUrl != null) {
            uploadImageAsBitmapToStorage()
-
         }
     }
-
-
-
-
-
 
 
     fun uploadImageAsBitmapToStorage() {
@@ -247,12 +237,9 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         } else if (requestCode == START_REQUEST_CAMERA && resultCode == Activity.RESULT_OK && data != null) {
             val takenImage = data.extras?.get("data") as Bitmap
 
-
             imageView_Button.setImageBitmap(takenImage)
 
-
             choosenImageBitmap = takenImage
-           
 
         } else {
             super.onActivityResult(requestCode, resultCode, data)
@@ -264,14 +251,9 @@ class UserCreateAndEditActivity : AppCompatActivity() {
     private fun uploadImageToStorage(filename: String) = CoroutineScope(Dispatchers.IO).launch {
 
         try {
-
-
-
             curFile?.let {
                 val uniqeString = UUID.randomUUID().toString()
                 val uploadTask = imageRef.child("$uid/$uniqeString").putFile(it) // skapar en unik folder för inloggad användare
-
-
                 val urlTask = uploadTask.continueWithTask { task ->
                     if (!task.isSuccessful) {
                         task.exception?.let {
@@ -324,25 +306,29 @@ class UserCreateAndEditActivity : AppCompatActivity() {
         }
     }
 
-    private fun listFiles() = CoroutineScope(Dispatchers.IO).launch {
+    private fun listStoredImages() = CoroutineScope(Dispatchers.IO).launch {
         try {
-
             val userImages = imageRef.child(uid).listAll().await()
             val publicImages = imageRef.child("UploadedPictures").listAll().await()
 
-            // Laddar bilder från användarens folder på storage
+            // Loads private images from storage
             for (image in userImages.items) {
                 val url = image.downloadUrl.await()
-                userImageUrl.add(url.toString())
-
-            }   // Laddar publika bilder från storage
+                userImageUrlList.add(url.toString())
+                withContext(Dispatchers.Main) {
+                    recyclerView.adapter?.notifyDataSetChanged()
+                }
+                Log.d(TAG, "listStoredImages: private image loaded")
+            }   // loads public images from storage
             for (publicImage in publicImages.items) {
                 val publicUrl = publicImage.downloadUrl.await()
-                userImageUrl.add(publicUrl.toString())
+                userImageUrlList.add(publicUrl.toString())
+                withContext(Dispatchers.Main) {
+                    recyclerView.adapter?.notifyDataSetChanged()
+                }
+                Log.d(TAG, "listStoredImages: PUBLIC image loaded")
             }
-            withContext(Dispatchers.Main) {
-                recyclerView.adapter?.notifyDataSetChanged()
-            }
+
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
                 Toast.makeText(this@UserCreateAndEditActivity, "Error", Toast.LENGTH_SHORT).show()

@@ -1,4 +1,4 @@
-package com.example.helpwithpicturesapp
+package com.example.helpwithpicturesapp.adapters
 
 import android.content.Context
 import android.graphics.ColorMatrix
@@ -11,6 +11,9 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.helpwithpicturesapp.R
+import com.example.helpwithpicturesapp.activities.DailyListOfActionStepsActivity
+import com.example.helpwithpicturesapp.model.Actions
 
 class HowToDoItRecycleViewAdapter (val context: Context, val actionStep: List<Actions> ):
     RecyclerView.Adapter<HowToDoItRecycleViewAdapter.ViewHolder>() {
@@ -30,30 +33,30 @@ class HowToDoItRecycleViewAdapter (val context: Context, val actionStep: List<Ac
                 actionStep[actionsPosition].checkBox = checkBoxView.isChecked
                 if (actionStep[actionsPosition].checkBox) {
 
-                    val howtoDoActivity = context as HowToDoItActivity
+                    val dailyListOfActionStepsActivity = context as DailyListOfActionStepsActivity
                     val grey = ColorMatrix()
                     grey.setSaturation(0F)
                     val greyfilter = ColorMatrixColorFilter(grey)
                     imageView.colorFilter = greyfilter
-                    howtoDoActivity.stepIsDone(actionStep[actionsPosition])
+                    dailyListOfActionStepsActivity.stepIsDone(actionStep[actionsPosition])
 
 
                 } else {
                     imageView.colorFilter = null
-                    val howtoDoActivity = context as HowToDoItActivity
-                    howtoDoActivity.uncheckCheckBox(actionStep[actionsPosition])
+                    val dailyListOfActionStepsActivity = context as DailyListOfActionStepsActivity
+                    dailyListOfActionStepsActivity.uncheckCheckBox(actionStep[actionsPosition])
                 }
             }
         }
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup, viewType: Int): HowToDoItRecycleViewAdapter.ViewHolder {
+        parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = layoutInflater.inflate(R.layout.how_to_do_it_list_item,parent,false)
         return ViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: HowToDoItRecycleViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val action = actionStep[position]
 
         Glide.with(context).load(action.imageId).into(holder.imageView)

@@ -1,4 +1,4 @@
-package com.example.helpwithpicturesapp
+package com.example.helpwithpicturesapp.activities
 
 import android.app.Activity
 import android.content.Context
@@ -18,6 +18,11 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.helpwithpicturesapp.*
+import com.example.helpwithpicturesapp.adapters.ImageAdapter2
+import com.example.helpwithpicturesapp.model.ActionSteps
+import com.example.helpwithpicturesapp.model.Actions
+import com.example.helpwithpicturesapp.model.Constants
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
@@ -31,7 +36,7 @@ import kotlinx.coroutines.withContext
 import java.lang.Exception
 import java.util.*
 
-class CreateAndEditActionSteps : AppCompatActivity() {
+class CreateAndEditActionStepsActivity : AppCompatActivity() {
 
     lateinit var uploadButton: Button
     lateinit var startCameraButton: Button
@@ -99,7 +104,7 @@ class CreateAndEditActionSteps : AppCompatActivity() {
         }
 
         storeButton.setOnClickListener {
-            listFiles()
+            listStoredImages()
         }
 
         startCameraButton.setOnClickListener {
@@ -173,7 +178,7 @@ class CreateAndEditActionSteps : AppCompatActivity() {
                 }.addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         val downloadUri = task.result
-                        Toast.makeText(this@CreateAndEditActionSteps, "Bilden är sparad", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this@CreateAndEditActionStepsActivity, "Bilden är sparad", Toast.LENGTH_SHORT).show()
 
                         val actionsteps = ActionSteps(null, downloadUri.toString(), false, editText.text.toString())
                         db.collection("users").document(uid).collection("weekday").
@@ -185,7 +190,7 @@ class CreateAndEditActionSteps : AppCompatActivity() {
             }
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
-                Toast.makeText(this@CreateAndEditActionSteps, "Error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@CreateAndEditActionStepsActivity, "Error", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -201,7 +206,7 @@ class CreateAndEditActionSteps : AppCompatActivity() {
                 if (task.isSuccessful) {
                     Log.d(TAG, "storeAction: $actionstepsImage")
                     Toast.makeText(
-                        this@CreateAndEditActionSteps,
+                        this@CreateAndEditActionStepsActivity,
                         "Bilden och instruktionen är tillagda i listan", Toast.LENGTH_SHORT
                     ).show()
                     editText.setText("")
@@ -211,14 +216,14 @@ class CreateAndEditActionSteps : AppCompatActivity() {
                     stepRef.update("steps", true)
 
                 } else {
-                    Toast.makeText(this@CreateAndEditActionSteps,
+                    Toast.makeText(this@CreateAndEditActionStepsActivity,
                         "Välj en bild och skriv instruktionen", Toast.LENGTH_SHORT).show()
                 }
             }
 
     }
 
-    private fun listFiles() = CoroutineScope(Dispatchers.IO).launch {
+    private fun listStoredImages() = CoroutineScope(Dispatchers.IO).launch {
         try {
             val userImages = imageRef.child(uid).listAll().await()
             val publicImages = imageRef.child("UploadedPictures").listAll().await()
@@ -226,17 +231,23 @@ class CreateAndEditActionSteps : AppCompatActivity() {
             for (image in userImages.items) {
                 val url = image.downloadUrl.await()
                 userImageUrl.add(url.toString())
+                withContext(Dispatchers.Main) {
+                    recyclerView.adapter?.notifyDataSetChanged()
+                }
             }
             for(publicImage in publicImages.items ) {
                 val publicUrl = publicImage.downloadUrl.await()
                 userImageUrl.add(publicUrl.toString())
+                withContext(Dispatchers.Main) {
+                    recyclerView.adapter?.notifyDataSetChanged()
+                }
             }
             withContext(Dispatchers.Main) {
                 recyclerView.adapter?.notifyDataSetChanged()
             }
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
-                Toast.makeText(this@CreateAndEditActionSteps, "Error", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this@CreateAndEditActionStepsActivity, "Error", Toast.LENGTH_SHORT).show()
             }
         }
     }

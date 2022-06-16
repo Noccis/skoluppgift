@@ -1,4 +1,4 @@
-package com.example.helpwithpicturesapp
+package com.example.helpwithpicturesapp.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -6,8 +6,10 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.helpwithpicturesapp.activities.CreateAndEditActionStepsActivity
+import com.example.helpwithpicturesapp.R
 
-class ImageAdapter2(val activity: CreateAndEditActionSteps,
+class ImageAdapter2(val activity: CreateAndEditActionStepsActivity,
                     val urls: List<String>
 ): RecyclerView.Adapter<ImageAdapter2.ImageViewHolder>() {
 

@@ -1,4 +1,4 @@
-package com.example.helpwithpicturesapp
+package com.example.helpwithpicturesapp.adapters
 
 import android.content.Context
 import android.content.Intent
@@ -10,10 +10,17 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.example.helpwithpicturesapp.*
+import com.example.helpwithpicturesapp.activities.ACTIONS_POSITION_KEY
+import com.example.helpwithpicturesapp.activities.ACTION_LOCATION
+import com.example.helpwithpicturesapp.activities.DailyListOfActionStepsActivity
+import com.example.helpwithpicturesapp.activities.DailyListOfActionsActivity
+import com.example.helpwithpicturesapp.model.Actions
+import com.example.helpwithpicturesapp.model.Constants
 
 
-class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> ,
-                                val decision : String , val pinkod :String):
+class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions>,
+                                val decision : String, val pinkod :String):
     RecyclerView.Adapter<ActionsRecycleViewAdapter.ViewHolder>(){
 
     val layoutInflater = LayoutInflater.from(context)
@@ -29,7 +36,7 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
 
         init {
             imageButtonView.setOnClickListener{
-                val intent = Intent(context,HowToDoItActivity::class.java)
+                val intent = Intent(context, DailyListOfActionStepsActivity::class.java)
                 intent.putExtra(ACTIONS_POSITION_KEY, actionsPosition)
                 intent.putExtra(Constants.DAY_CHOSEN, decision)
                 intent.putExtra(ACTION_LOCATION, action[actionsPosition].documentName)
@@ -37,7 +44,7 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
                 context.startActivity(intent)
             }
             stepsImage.setOnClickListener{
-                val intent = Intent(context,HowToDoItActivity::class.java)
+                val intent = Intent(context, DailyListOfActionStepsActivity::class.java)
                 intent.putExtra(ACTIONS_POSITION_KEY, actionsPosition)
                 intent.putExtra(Constants.DAY_CHOSEN, decision)
                 intent.putExtra(ACTION_LOCATION, action[actionsPosition].documentName)
@@ -49,13 +56,13 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
                 action[actionsPosition].checkBox = checkBoxView.isChecked
                 if (action[actionsPosition].checkBox) {
 
-                    val toDoActivity = context as ToDoActivity
-                    toDoActivity.reward()
-                    toDoActivity.stepIsDone(action[actionsPosition])
+                    val dailyListOfActionsActivity = context as DailyListOfActionsActivity
+                    dailyListOfActionsActivity.reward()
+                    dailyListOfActionsActivity.stepIsDone(action[actionsPosition])
                 }
                 else {
-                    val toDoActivity = context as ToDoActivity
-                    toDoActivity.uncheckCheckBox(action[actionsPosition])
+                    val dailyListOfActionsActivity = context as DailyListOfActionsActivity
+                    dailyListOfActionsActivity.uncheckCheckBox(action[actionsPosition])
                 }
             }
             stepsImage.visibility = View.GONE
@@ -64,14 +71,14 @@ class ActionsRecycleViewAdapter(val context: Context, val action: List<Actions> 
     }
 
     override fun onCreateViewHolder(
-        parent: ViewGroup, viewType: Int): ActionsRecycleViewAdapter.ViewHolder {
+        parent: ViewGroup, viewType: Int): ViewHolder {
         val itemView = layoutInflater.inflate(R.layout.list_actions,parent,false)
 
 
         return ViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: ActionsRecycleViewAdapter.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val action = action[position]
 
         if ( action.steps){

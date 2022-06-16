@@ -1,4 +1,4 @@
-package com.example.helpwithpicturesapp
+package com.example.helpwithpicturesapp.activities
 
 import android.content.Context
 import android.content.Intent
@@ -16,6 +16,11 @@ import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.helpwithpicturesapp.*
+import com.example.helpwithpicturesapp.R
+import com.example.helpwithpicturesapp.adapters.ActionsRecycleViewAdapter
+import com.example.helpwithpicturesapp.model.Actions
+import com.example.helpwithpicturesapp.model.Constants
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -26,7 +31,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import java.util.*
 
-class ToDoActivity : AppCompatActivity() {
+class DailyListOfActionsActivity : AppCompatActivity() {
 
     lateinit var addButton: ImageView
     lateinit var homeButton: ImageView
@@ -91,7 +96,7 @@ class ToDoActivity : AppCompatActivity() {
         val currentUser: FirebaseUser? = FirebaseAuth.getInstance().currentUser
         if (currentUser != null) {
             uid = currentUser.uid
-            Log.d("!!!!", "onCreate: ToDoActivity userId $uid")
+            Log.d("!!!!", "onCreate: DailyListOfActionsActivity userId $uid")
         }
 
 
@@ -299,9 +304,9 @@ class ToDoActivity : AppCompatActivity() {
 
     fun reward() {
         fadeIn()
-        rewardSound()
+        playRewardSound()
         Handler(Looper.getMainLooper()).postDelayed({
-            hideReward()
+            hideRewardView()
         }, 1000)
     }
 
@@ -317,12 +322,12 @@ class ToDoActivity : AppCompatActivity() {
         }
     }
 
-    private fun rewardSound() {
+    private fun playRewardSound() {
         val mediaPlayer = MediaPlayer.create(this, R.raw.ra)
         mediaPlayer.start()
     }
 
-    private fun hideReward() {
+    private fun hideRewardView() {
         rewardImageView.visibility = View.GONE
     }
 
